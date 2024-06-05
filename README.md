@@ -84,8 +84,8 @@ Chat by default will _stream_ the results. If you do not want to stream you can 
 
   Message message = Message.user("What is a tsunami?");
         client.chat("llava", message).execute().forEach(response -> {
-        System.out.print(response.message().content());
-    });
+            System.out.print(response.message().content());
+        });
 ```
 
 ### Chat with images
@@ -98,4 +98,13 @@ Message message = Message.user("Describe this image??", Image.encode(Path.of("im
         .execute().forEach(r -> {
             System.out.println(r.message().content());
         });
+```
+
+### Embeddings
+
+```java
+    client.embeddings("nomic-embed-text", "What is a Tsunami?")
+        .execute()
+        .embedding()
+        .forEach(System.out::println);
 ```
