@@ -1,6 +1,8 @@
 # Ollama4j Java Library
 
-The Ollama4j Java library provides a fluent Java API for interacting with Ollama
+The Ollama4j Java library provides a fluent Java API for interacting with Ollama REST endpoints.
+
+See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
 
 ## Usage
 
@@ -98,7 +100,7 @@ Chat by default will _stream_ the results. If you do not want to stream you can 
 
 ```java
 
-Message message = Message.user("Describe this image??", Image.encode(Path.of("image.jpeg")));
+Message message = Message.user("Describe this image?", Image.encode(Path.of("image.jpg")));
         client.chat("llava", message)
         .batch()
         .execute().forEach(r -> {
