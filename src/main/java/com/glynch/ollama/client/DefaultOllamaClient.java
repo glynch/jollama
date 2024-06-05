@@ -274,6 +274,11 @@ public class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
+        public GenerateSpec batch() {
+            return stream(false);
+        }
+
+        @Override
         public GenerateSpec raw(boolean raw) {
             this.raw = raw;
             return this;

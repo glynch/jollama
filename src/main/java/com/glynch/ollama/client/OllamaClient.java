@@ -67,6 +67,8 @@ public interface OllamaClient {
 
         GenerateSpec stream();
 
+        GenerateSpec batch();
+
         GenerateSpec raw(boolean raw);
 
         GenerateSpec raw();
