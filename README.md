@@ -30,7 +30,6 @@ client.generate("llama3", "What is a tsunami?")
         .execute()
         .forEach(
             r -> {
-                context.addAll(r.context());
                 System.out.print(r.response());
             });
         System.out.println();
