@@ -76,6 +76,12 @@ client.generate("llama3", "What is a tsunami?")
     });
 ```
 
+### Show modefile
+
+```java
+    System.out.println(client.show("llama3"));
+```
+
 ### Chat
 
 Chat by default will _stream_ the results. If you do not want to stream you can call _batch()_ before executing.
