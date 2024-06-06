@@ -14,9 +14,14 @@ See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
 
 ```
 
+```java
+    OllamaClient client = OllamaClient.create("http://localhost:11434");
+
+```
+
 ### Ping
 
-Check if Ollama is up
+Check if Ollama is up.
 
 ```java
 
@@ -24,7 +29,9 @@ Check if Ollama is up
 
 ```
 
-### Load a model into memory
+### Load
+
+Load a model into memory.
 
 ```java
 
@@ -32,7 +39,9 @@ Check if Ollama is up
 
 ```
 
-### Get list of models
+### List
+
+Get a list of the current models.
 
 ```java
 
@@ -67,9 +76,9 @@ You can call _batch_ explicitly but it is the default
     System.out.println(generateResponse.response());
 ```
 
-### Generate (with Options)
+### Generate (Options)
 
-This eample also gives the same result each time since it uses the same seed and 0 temperature
+This eample also gives the same result each time since it uses the same _seed_ and _0_ temperature.
 
 ```java
     Options options = Options.builder().temperature(0f).seed(42).build();
@@ -80,7 +89,9 @@ This eample also gives the same result each time since it uses the same seed and
             .forEach(System.out::println);
 ```
 
-### Pull a model
+### Pull
+
+Pull a model.
 
 ```java
     client.pull("phi3").execute().forEach(response -> {
@@ -88,7 +99,7 @@ This eample also gives the same result each time since it uses the same seed and
     });
 ```
 
-### Pull a model (batch)
+### Pull (batch)
 
 ```java
 
@@ -97,7 +108,9 @@ This eample also gives the same result each time since it uses the same seed and
             });
 ```
 
-### Show modefile
+### Show
+
+Show the contents of a modelfile for an existing model.
 
 ```java
     System.out.println(client.show("llama3"));
@@ -115,7 +128,9 @@ Chat by default will _stream_ the results. If you do not want to stream you can 
         });
 ```
 
-### Chat with images
+### Chat (images)
+
+Chat with images. You need to ensure you use a multimodel model such as _lava_.
 
 ```java
 
@@ -127,7 +142,9 @@ Message message = Message.user("Describe this image?", Image.encode(Path.of("ima
         });
 ```
 
-### Chat with history
+### Chat (history)
+
+Chat with a model using the hsitory of previous messages.
 
 ```java
 
