@@ -10,7 +10,7 @@ See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
 
 ```java
 
-OllamaClient client = OllamaClient.create();
+    OllamaClient client = OllamaClient.create();
 
 ```
 
@@ -36,16 +36,16 @@ Check if Ollama is up
 
 ```java
 
-client.list().forEach(model -> {
-    System.out.println(model);
-})
+    client.list().forEach(model -> {
+            System.out.println(model);
+    })
 
 ```
 
 ### Generate (stream)
 
 ```java
-client.generate("llama3", "What is a tsunami?")
+    client.generate("llama3", "What is a tsunami?")
         .stream()
         .execute()
         .forEach(
@@ -88,7 +88,7 @@ This eample also gives the same result each time since it uses the same seed and
     });
 ```
 
-### Pulla Model (batch)
+### Pull a model (batch)
 
 ```java
 
