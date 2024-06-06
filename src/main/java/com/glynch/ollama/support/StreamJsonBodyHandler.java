@@ -7,6 +7,8 @@ import java.net.http.HttpResponse.ResponseInfo;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
+import com.glynch.ollama.support.Body.Mappers;
+
 public class StreamJsonBodyHandler<T> implements BodyHandler<Stream<T>> {
 
     private final Class<T> type;
@@ -24,7 +26,7 @@ public class StreamJsonBodyHandler<T> implements BodyHandler<Stream<T>> {
             return BodySubscribers.mapping(
                     upstream,
                     (lines) -> {
-                        return lines.map(Body.Mappers.exceptionally());
+                        return lines.map(Mappers.exceptionally(responseInfo));
                     });
         }
 
@@ -32,7 +34,7 @@ public class StreamJsonBodyHandler<T> implements BodyHandler<Stream<T>> {
                 upstream,
                 (lines) -> {
                     return lines.map(
-                            Body.Mappers.map(type));
+                            Mappers.map(type));
                 });
     }
 
