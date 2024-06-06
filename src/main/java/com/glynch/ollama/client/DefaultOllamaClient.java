@@ -158,8 +158,14 @@ public class DefaultOllamaClient implements OllamaClient {
 
     @Override
     public boolean ping() throws OllamaClientException {
-        HttpResponse<String> response = get(PING_PATH, BodyHandlers.ofString());
-        return response.statusCode() == 200;
+        boolean isUp = false;
+        try {
+            HttpResponse<String> response = get(PING_PATH, BodyHandlers.ofString());
+            isUp = response.statusCode() == 200;
+        } catch (Exception e) {
+            isUp = false;
+        }
+        return isUp;
     }
 
     @Override
@@ -168,20 +174,20 @@ public class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public boolean load(String model) {
+    public boolean load(String model) throws OllamaClientException {
         Objects.requireNonNull(model, "model must not be null");
         return LOAD.equals(generate(model, "").execute().findFirst().get().doneReason());
     }
 
     @Override
-    public boolean blobs(String digest) {
+    public boolean blobs(String digest) throws OllamaClientException {
         Objects.requireNonNull(digest, "digest must not be null");
         HttpResponse<Void> response = head(BLOBS_PATH + "/" + digest);
         return response.statusCode() == 200;
     }
 
     @Override
-    public ShowResponse show(String name) {
+    public ShowResponse show(String name) throws OllamaClientException {
         Objects.requireNonNull(name, "name must not be null");
         ShowRequest showRequest = new ShowRequest(name);
         return post(SHOW_PATH, showRequest, Body.Handlers.of(ShowResponse.class)).body();
@@ -448,7 +454,7 @@ public class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public Stream<CreateResponse> create(String name, String modelfile) {
+    public Stream<CreateResponse> create(String name, String modelfile) throws OllamaClientException {
         CreateRequest createRequest = new CreateRequest(name, modelfile, true, null);
         return stream(CREATE_PATH, createRequest, CreateResponse.class);
     }
@@ -475,6 +481,11 @@ public class DefaultOllamaClient implements OllamaClient {
         public PullSpec stream(boolean stream) {
             this.stream = stream;
             return this;
+        }
+
+        @Override
+        public PullSpec batch() {
+            return stream(false);
         }
 
         @Override

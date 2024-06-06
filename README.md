@@ -60,22 +60,41 @@ client.generate("llama3", "What is a tsunami?")
 You can call _batch_ explicitly but it is the default
 
 ```java
-client.generate("llama3", "What is a tsunami?")
-        .batch()
-        .execute()
-        .forEach(
-            r -> {
-                System.out.print(r.response());
-            });
-        System.out.println();
+    GenerateResponse generateResponse = client.generate("llama3", "What is a tsunami?")
+                    .batch()
+                    .execute()
+                    .findFirst().get();
+    System.out.println(generateResponse.response());
+```
+
+### Generate (with Options)
+
+This eample also gives the same result each time since it uses the same seed and 0 temperature
+
+```java
+    Options options = Options.builder().temperature(0f).seed(42).build();
+    client.generate("llama3", "Why is the sky blue?")
+            .options(options)
+            .batch()
+            .execute()
+            .forEach(System.out::println);
 ```
 
 ### Pull a model
 
 ```java
     client.pull("phi3").execute().forEach(response -> {
-        System.out.println(response);
+        System.out.println(response.status());
     });
+```
+
+### Pulla Model (batch)
+
+```java
+
+    client.pull("phi3").batch().execute().forEach(response -> {
+                System.out.println(response.status());
+            });
 ```
 
 ### Show modefile

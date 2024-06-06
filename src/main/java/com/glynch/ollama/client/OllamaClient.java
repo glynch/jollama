@@ -29,11 +29,11 @@ public interface OllamaClient {
 
     Models list() throws OllamaClientException;
 
-    boolean load(String model);
+    boolean load(String model) throws OllamaClientException;
 
-    boolean blobs(String digest);
+    boolean blobs(String digest) throws OllamaClientException;
 
-    ShowResponse show(String name);
+    ShowResponse show(String name) throws OllamaClientException;
 
     GenerateSpec generate(String model, String prompt);
 
@@ -41,7 +41,7 @@ public interface OllamaClient {
 
     EmbeddingsSpec embeddings(String model, String prompt);
 
-    Stream<CreateResponse> create(String name, String modelfile);
+    Stream<CreateResponse> create(String name, String modelfile) throws OllamaClientException;
 
     PullSpec pull(String name);
 
@@ -112,6 +112,8 @@ public interface OllamaClient {
         PullSpec insecure(boolean insecure);
 
         PullSpec stream(boolean stream);
+
+        PullSpec batch();
 
         Stream<PullResponse> execute() throws OllamaClientException;
     }
