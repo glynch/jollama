@@ -127,6 +127,19 @@ Message message = Message.user("Describe this image?", Image.encode(Path.of("ima
         });
 ```
 
+### Chat with history
+
+```java
+
+    Message question = Message.user("Why is the sky blue?");
+    Message answer = client.chat("llava", question).batch().execute().findFirst().get().message();
+    System.out.println(answer.content())
+    System.out.println(client
+                .chat("llava", question, answer, Message.user("How is that different than mie scattering?"))
+                .batch()
+                .execute().findFirst().get().message().content());
+```
+
 ### Embeddings
 
 ```java
