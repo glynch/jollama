@@ -24,7 +24,7 @@ public class StreamJsonBodyHandler<T> implements BodyHandler<Stream<T>> {
             return BodySubscribers.mapping(
                     upstream,
                     (lines) -> {
-                        return lines.map(Body.Mappers.exceptionally(type));
+                        return lines.map(Body.Mappers.exceptionally());
                     });
         }
 

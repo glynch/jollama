@@ -4,6 +4,7 @@ import java.io.UncheckedIOException;
 import java.net.http.HttpRequest.BodyPublisher;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandler;
+import java.net.http.HttpResponse.ResponseInfo;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.glynch.ollama.OllamaError;
 import com.glynch.ollama.client.OllamaClientException;
+import com.glynch.ollama.client.OllamaClientResponseException;
 
 public class Body {
 
@@ -74,7 +76,7 @@ public class Body {
             };
         }
 
-        public static <T> Function<String, T> exceptionally(Class<T> type) {
+        public static <T> Function<String, T> exceptionally() {
             return (body) -> {
                 try {
                     throw new OllamaClientException(objectMapper.readValue(body, OllamaError.class).error());
@@ -83,6 +85,18 @@ public class Body {
                 }
             };
         }
+
+        public static <T> Function<String, T> exceptionally(ResponseInfo responseInfo) {
+            return (body) -> {
+                try {
+                    throw new OllamaClientResponseException(objectMapper.readValue(body, OllamaError.class).error(),
+                            responseInfo.statusCode(), responseInfo.headers());
+                } catch (JsonProcessingException e) {
+                    throw new OllamaClientResponseException(body, responseInfo.statusCode(), responseInfo.headers());
+                }
+            };
+        }
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.glynch.ollama.client;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -9,6 +10,7 @@ import java.net.http.HttpResponse.BodyHandler;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import com.glynch.ollama.Format;
@@ -50,6 +52,7 @@ public class DefaultOllamaClient implements OllamaClient {
     private final String host;
 
     DefaultOllamaClient(String host) {
+        Objects.requireNonNull(host, "host must not be null");
         this.host = host;
     }
 
@@ -66,8 +69,19 @@ public class DefaultOllamaClient implements OllamaClient {
         return URI.create(this.host + path);
     }
 
-    private void onError(Throwable throwable) throws OllamaClientException {
-        throw new OllamaClientException(throwable.getMessage());
+    private void handleError(HttpRequest request, HttpResponse<?> response, Exception exception) {
+        final Throwable cause = exception.getCause();
+        final String message = cause.getMessage();
+
+        if (cause instanceof OllamaClientResponseException) {
+            throw (OllamaClientResponseException) cause;
+        } else if (cause instanceof IOException) {
+            throw new OllamaClientRequestException(message, cause, request.uri(), request.method());
+        } else if (cause instanceof InterruptedException) {
+            throw new OllamaClientException(message, cause);
+        } else {
+            throw new OllamaClientException(message, cause);
+        }
     }
 
     private <T> HttpResponse<T> get(String path, BodyHandler<T> bodyHandler) throws OllamaClientException {
@@ -82,7 +96,7 @@ public class DefaultOllamaClient implements OllamaClient {
         try {
             response = client.send(request, bodyHandler);
         } catch (Exception e) {
-            onError(e);
+            handleError(request, response, e);
         }
         return response;
     }
@@ -97,7 +111,7 @@ public class DefaultOllamaClient implements OllamaClient {
         try {
             response = client.send(request, BodyHandlers.discarding());
         } catch (Exception e) {
-            onError(e);
+            handleError(request, response, e);
         }
         return response;
     }
@@ -115,7 +129,7 @@ public class DefaultOllamaClient implements OllamaClient {
         try {
             response = client.send(request, bodyHandler);
         } catch (Exception e) {
-            onError(e);
+            handleError(request, response, e);
         }
         return response;
     }
@@ -133,7 +147,7 @@ public class DefaultOllamaClient implements OllamaClient {
         try {
             response = client.send(request, bodyHandler);
         } catch (Exception e) {
-            onError(e);
+            handleError(request, response, e);
         }
         return response;
     }
@@ -155,38 +169,48 @@ public class DefaultOllamaClient implements OllamaClient {
 
     @Override
     public boolean load(String model) {
+        Objects.requireNonNull(model, "model must not be null");
         return LOAD.equals(generate(model, "").execute().findFirst().get().doneReason());
     }
 
     @Override
     public boolean blobs(String digest) {
+        Objects.requireNonNull(digest, "digest must not be null");
         HttpResponse<Void> response = head(BLOBS_PATH + "/" + digest);
         return response.statusCode() == 200;
     }
 
     @Override
     public ShowResponse show(String name) {
+        Objects.requireNonNull(name, "name must not be null");
         ShowRequest showRequest = new ShowRequest(name);
         return post(SHOW_PATH, showRequest, Body.Handlers.of(ShowResponse.class)).body();
     }
 
     @Override
     public GenerateSpec generate(String model, String prompt) {
+        Objects.requireNonNull(model, "model must not be null");
+        Objects.requireNonNull(prompt, "prompt must not be null");
         return new DefaultGenerateSpec(this, model, prompt);
     }
 
     @Override
     public ChatSpec chat(String model, Message message, Message... messages) {
+        Objects.requireNonNull(model, "model must not be null");
+        Objects.requireNonNull(message, "message must not be null");
         return new DefaultChatSpec(this, model, message, messages);
     }
 
     @Override
     public EmbeddingsSpec embeddings(String model, String prompt) {
+        Objects.requireNonNull(model, "model must not be null");
+        Objects.requireNonNull(prompt, "prompt must not be null");
         return new DefaultEmbeddingsSpec(this, model, prompt);
     }
 
     @Override
     public PullSpec pull(String name) {
+        Objects.requireNonNull(name, "name must not be null");
         return new DefaultPullSpec(this, name);
     }
 
@@ -213,6 +237,7 @@ public class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public GenerateSpec images(String image, String... images) {
+            Objects.requireNonNull(image, "image must not be null");
             this.images.add(image);
             this.images.addAll(List.of(images));
             return this;
@@ -220,12 +245,14 @@ public class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public GenerateSpec image(String image) {
+            Objects.requireNonNull(image, "image must not be null");
             this.images.add(image);
             return this;
         }
 
         @Override
         public GenerateSpec format(Format format) {
+            Objects.requireNonNull(format, "format must not be null");
             this.format = format;
             return this;
         }
@@ -237,24 +264,28 @@ public class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public GenerateSpec options(Options options) {
+            Objects.requireNonNull(options, "options must not be null");
             this.options = options;
             return this;
         }
 
         @Override
         public GenerateSpec system(String system) {
+            Objects.requireNonNull(system, "system must not be null");
             this.system = system;
             return this;
         }
 
         @Override
         public GenerateSpec template(String template) {
+            Objects.requireNonNull(template, "template must not be null");
             this.template = template;
             return this;
         }
 
         @Override
         public GenerateSpec context(int context, int... contexts) {
+            Objects.requireNonNull(context, "context must not be null");
             this.context.add(context);
             for (int c : contexts) {
                 this.context.add(c);
@@ -291,6 +322,7 @@ public class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public GenerateSpec keepAlive(String keepAlive) {
+            Objects.requireNonNull(keepAlive, "keepAlive must not be null");
             this.keepAlive = keepAlive;
             return this;
         }
@@ -324,12 +356,14 @@ public class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public EmbeddingsSpec options(Options options) {
+            Objects.requireNonNull(options, "options must not be null");
             this.options = options;
             return this;
         }
 
         @Override
         public EmbeddingsSpec keepAlive(String keepAlive) {
+            Objects.requireNonNull(keepAlive, "keepAlive must not be null");
             this.keepAlive = keepAlive;
             return this;
         }
@@ -361,24 +395,28 @@ public class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public ChatSpec message(Message message) {
+            Objects.requireNonNull(message, "message must not be null");
             this.messages.add(message);
             return this;
         }
 
         @Override
         public ChatSpec message(String message) {
+            Objects.requireNonNull(message, "message must not be null");
             this.messages.add(Message.user(message));
             return this;
         }
 
         @Override
         public ChatSpec format(Format format) {
+            Objects.requireNonNull(format, "format must not be null");
             this.format = format;
             return this;
         }
 
         @Override
         public ChatSpec options(Options options) {
+            Objects.requireNonNull(options, "options must not be null");
             this.options = options;
             return this;
         }
@@ -396,6 +434,7 @@ public class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public ChatSpec keepAlive(String keepAlive) {
+            Objects.requireNonNull(keepAlive, "keepAlive must not be null");
             this.keepAlive = keepAlive;
             return this;
         }
