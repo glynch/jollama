@@ -11,6 +11,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.glynch.ollama.Format;
@@ -18,13 +19,18 @@ import com.glynch.ollama.Options;
 import com.glynch.ollama.chat.ChatRequest;
 import com.glynch.ollama.chat.ChatResponse;
 import com.glynch.ollama.chat.Message;
+import com.glynch.ollama.copy.CopyRequest;
 import com.glynch.ollama.create.CreateRequest;
 import com.glynch.ollama.create.CreateResponse;
+import com.glynch.ollama.delete.DeleteRequest;
 import com.glynch.ollama.embeddings.EmbeddingsRequest;
 import com.glynch.ollama.embeddings.EmbeddingsResponse;
 import com.glynch.ollama.generate.GenerateRequest;
 import com.glynch.ollama.generate.GenerateResponse;
-import com.glynch.ollama.list.Models;
+import com.glynch.ollama.list.ListModel;
+import com.glynch.ollama.list.ListModels;
+import com.glynch.ollama.process.ProcessModel;
+import com.glynch.ollama.process.ProcessModels;
 import com.glynch.ollama.pull.PullRequest;
 import com.glynch.ollama.pull.PullResponse;
 import com.glynch.ollama.show.ShowRequest;
@@ -42,11 +48,12 @@ public class DefaultOllamaClient implements OllamaClient {
     private static final String SHOW_PATH = "/api/show";
     private static final String COPY_PATH = "/api/copy";
     private static final String CREATE_PATH = "/api/create";
-    private static final String DELETE_PATH = "/api/copy";
+    private static final String DELETE_PATH = "/api/delete";
     private static final String PULL_PATH = "/api/pull";
     private static final String PUSH_PATH = "/api/push";
     private static final String BLOBS_PATH = "/api/blobs";
     private static final String EMBEDDINGS_PATH = "/api/embeddings";
+    private static final String PS_PATH = "/api/ps";
     private static final String LOAD = "load";
 
     private final String host;
@@ -116,6 +123,23 @@ public class DefaultOllamaClient implements OllamaClient {
         return response;
     }
 
+    private <T> HttpResponse<Void> delete(String path, Object body) throws OllamaClientException {
+        HttpResponse<Void> response = null;
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(getUri(path))
+                .version(HttpClient.Version.HTTP_2)
+                .method("DELETE", Body.Publishers.json(body))
+                .header("Accept", "application/json")
+                .header("Content-type", "application/json")
+                .build();
+        try {
+            response = client.send(request, BodyHandlers.discarding());
+        } catch (Exception e) {
+            handleError(request, response, e);
+        }
+        return response;
+    }
+
     private <T> HttpResponse<T> post(String path, Object body,
             BodyHandler<T> bodyHandler) throws OllamaClientException {
         HttpResponse<T> response = null;
@@ -169,8 +193,25 @@ public class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public Models list() throws OllamaClientException {
-        return get(LIST_PATH, Body.Handlers.of(Models.class)).body();
+    public ProcessModels ps() throws OllamaClientException {
+        return get(PS_PATH, Body.Handlers.of(ProcessModels.class)).body();
+    }
+
+    @Override
+    public Optional<ProcessModel> ps(String name) throws OllamaClientException {
+        Objects.requireNonNull(name, "name must not be null");
+        return ps().models().stream().filter(model -> model.name().equals(name)).findFirst();
+    }
+
+    @Override
+    public ListModels list() throws OllamaClientException {
+        return get(LIST_PATH, Body.Handlers.of(ListModels.class)).body();
+    }
+
+    @Override
+    public Optional<ListModel> list(String name) throws OllamaClientException {
+        Objects.requireNonNull(name, "name must not be null");
+        return list().models().stream().filter(model -> model.name().equals(name)).findFirst();
     }
 
     @Override
@@ -218,6 +259,21 @@ public class DefaultOllamaClient implements OllamaClient {
     public PullSpec pull(String name) {
         Objects.requireNonNull(name, "name must not be null");
         return new DefaultPullSpec(this, name);
+    }
+
+    @Override
+    public int copy(String source, String destination) throws OllamaClientException {
+        Objects.requireNonNull(source, "source must not be null");
+        Objects.requireNonNull(destination, "destination must not be null");
+        CopyRequest copyRequest = new CopyRequest(source, destination);
+        return post(COPY_PATH, copyRequest, BodyHandlers.discarding()).statusCode();
+    }
+
+    @Override
+    public int delete(String name) throws OllamaClientException {
+        Objects.requireNonNull(name, "name must not be null");
+        DeleteRequest deleteRequest = new DeleteRequest(name);
+        return delete(DELETE_PATH, deleteRequest).statusCode();
     }
 
     private class DefaultGenerateSpec implements GenerateSpec {
@@ -339,9 +395,12 @@ public class DefaultOllamaClient implements OllamaClient {
                     template,
                     context,
                     stream, raw, keepAlive);
-
-            System.out.println(generateRequest);
             return client.stream(GENERATE_PATH, generateRequest, GenerateResponse.class);
+        }
+
+        @Override
+        public GenerateResponse get() throws OllamaClientException {
+            return execute().findFirst().get();
         }
 
     }
@@ -451,6 +510,11 @@ public class DefaultOllamaClient implements OllamaClient {
             return ollamaClient.stream(CHAT_PATH, chatRequest, ChatResponse.class);
         }
 
+        @Override
+        public ChatResponse get() throws OllamaClientException {
+            return execute().findFirst().get();
+        }
+
     }
 
     @Override
@@ -492,6 +556,11 @@ public class DefaultOllamaClient implements OllamaClient {
         public Stream<PullResponse> execute() throws OllamaClientException {
             PullRequest pullRequest = new PullRequest(name, insecure, stream);
             return ollamaClient.stream(PULL_PATH, pullRequest, PullResponse.class);
+        }
+
+        @Override
+        public PullResponse get() throws OllamaClientException {
+            return execute().findFirst().get();
         }
 
     }

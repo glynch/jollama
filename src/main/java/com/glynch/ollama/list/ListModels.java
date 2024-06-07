@@ -2,5 +2,5 @@ package com.glynch.ollama.list;
 
 import java.util.List;
 
-public record Models(List<Model> models) {
+public record ListModels(List<ListModel> models) {
 }

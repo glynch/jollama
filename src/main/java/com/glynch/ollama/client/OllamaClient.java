@@ -1,5 +1,6 @@
 package com.glynch.ollama.client;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.glynch.ollama.Format;
@@ -9,7 +10,10 @@ import com.glynch.ollama.chat.Message;
 import com.glynch.ollama.create.CreateResponse;
 import com.glynch.ollama.embeddings.EmbeddingsResponse;
 import com.glynch.ollama.generate.GenerateResponse;
-import com.glynch.ollama.list.Models;
+import com.glynch.ollama.list.ListModel;
+import com.glynch.ollama.list.ListModels;
+import com.glynch.ollama.process.ProcessModel;
+import com.glynch.ollama.process.ProcessModels;
 import com.glynch.ollama.pull.PullResponse;
 import com.glynch.ollama.show.ShowResponse;
 
@@ -25,9 +29,15 @@ public interface OllamaClient {
 
     String getHost();
 
+    ProcessModels ps() throws OllamaClientException;
+
+    Optional<ProcessModel> ps(String name) throws OllamaClientException;
+
     boolean ping() throws OllamaClientException;
 
-    Models list() throws OllamaClientException;
+    ListModels list() throws OllamaClientException;
+
+    Optional<ListModel> list(String name) throws OllamaClientException;
 
     boolean load(String model) throws OllamaClientException;
 
@@ -44,6 +54,10 @@ public interface OllamaClient {
     Stream<CreateResponse> create(String name, String modelfile) throws OllamaClientException;
 
     PullSpec pull(String name);
+
+    int copy(String source, String destination) throws OllamaClientException;
+
+    int delete(String name) throws OllamaClientException;
 
     interface GenerateSpec {
 
@@ -77,6 +91,8 @@ public interface OllamaClient {
 
         Stream<GenerateResponse> execute() throws OllamaClientException;
 
+        GenerateResponse get() throws OllamaClientException;
+
     }
 
     interface ChatSpec {
@@ -97,6 +113,8 @@ public interface OllamaClient {
 
         Stream<ChatResponse> execute() throws OllamaClientException;
 
+        ChatResponse get() throws OllamaClientException;
+
     }
 
     interface EmbeddingsSpec {
@@ -116,6 +134,8 @@ public interface OllamaClient {
         PullSpec batch();
 
         Stream<PullResponse> execute() throws OllamaClientException;
+
+        PullResponse get() throws OllamaClientException;
     }
 
 }

@@ -51,6 +51,11 @@ Get a list of the current models.
 
 ```
 
+```java
+
+    client.list("llama3:latest").ifPresent(System.out::println);
+```
+
 ### Generate (stream)
 
 ```java
@@ -106,6 +111,26 @@ Pull a model.
     client.pull("phi3").batch().execute().forEach(response -> {
                 System.out.println(response.status());
             });
+```
+
+### Create
+
+CReate a model.
+
+### Copy
+
+Copy a model.
+
+```java
+    int statusCode = client.copy("llama3", "llama3-copy");
+
+```
+
+### Delete
+
+```java
+    int statucCode = client.delete("llama3-copy");
+
 ```
 
 ### Show
@@ -164,4 +189,17 @@ Chat with a model using the hsitory of previous messages.
         .execute()
         .embedding()
         .forEach(System.out::println);
+```
+
+### Process
+
+Show currently loaded models and associated model information.
+
+```java
+    client.ps().models().forEach(System.out::println);
+```
+
+```java
+    client.ps("llama3:latest").ifPresent(System.out::println);
+
 ```
