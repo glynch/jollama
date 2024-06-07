@@ -1,5 +1,6 @@
 package com.glynch.ollama.client;
 
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -12,6 +13,7 @@ import com.glynch.ollama.embeddings.EmbeddingsResponse;
 import com.glynch.ollama.generate.GenerateResponse;
 import com.glynch.ollama.list.ListModel;
 import com.glynch.ollama.list.ListModels;
+import com.glynch.ollama.modelfile.ModelFile;
 import com.glynch.ollama.process.ProcessModel;
 import com.glynch.ollama.process.ProcessModels;
 import com.glynch.ollama.pull.PullResponse;
@@ -41,7 +43,7 @@ public interface OllamaClient {
 
     boolean load(String model) throws OllamaClientException;
 
-    boolean blobs(String digest) throws OllamaClientException;
+    BlobsSpec blobs(String digest);
 
     ShowResponse show(String name) throws OllamaClientException;
 
@@ -51,13 +53,23 @@ public interface OllamaClient {
 
     EmbeddingsSpec embeddings(String model, String prompt);
 
-    Stream<CreateResponse> create(String name, String modelfile) throws OllamaClientException;
+    CreateSpec create(String name, String modelfile);
+
+    CreateSpec create(String name, Path path);
+
+    CreateSpec create(String name, ModelFile modelFile);
 
     PullSpec pull(String name);
 
     int copy(String source, String destination) throws OllamaClientException;
 
     int delete(String name) throws OllamaClientException;
+
+    interface BlobsSpec {
+        int exists() throws OllamaClientException;
+
+        int create() throws OllamaClientException;
+    }
 
     interface GenerateSpec {
 
@@ -136,6 +148,16 @@ public interface OllamaClient {
         Stream<PullResponse> execute() throws OllamaClientException;
 
         PullResponse get() throws OllamaClientException;
+    }
+
+    interface CreateSpec {
+        CreateSpec stream(boolean stream);
+
+        CreateSpec stream();
+
+        Stream<CreateResponse> execute() throws OllamaClientException;
+
+        CreateResponse get() throws OllamaClientException;
     }
 
 }

@@ -4,28 +4,6 @@ import java.util.List;
 
 public record Message(Role role, String content, List<String> images) {
 
-    // private final Role role;
-    // private final String content;
-    // private List<String> images;
-
-    // Message() {
-    // this(Role.USER, "");
-    // }
-
-    // Message(String content) {
-    // this(Role.USER, content);
-    // }
-
-    // Message(Role role, String content) {
-    // this(role, content, new ArrayList<>());
-    // }
-
-    // Message(Role role, String content, List<String> images) {
-    // this.role = role;
-    // this.content = content;
-    // this.images = images;
-    // }
-
     public static Message create(String content) {
         return new Message(Role.USER, content, List.of());
     }

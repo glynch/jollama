@@ -8,6 +8,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandler;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ import com.glynch.ollama.generate.GenerateRequest;
 import com.glynch.ollama.generate.GenerateResponse;
 import com.glynch.ollama.list.ListModel;
 import com.glynch.ollama.list.ListModels;
+import com.glynch.ollama.modelfile.ModelFile;
 import com.glynch.ollama.process.ProcessModel;
 import com.glynch.ollama.process.ProcessModels;
 import com.glynch.ollama.pull.PullRequest;
@@ -221,10 +223,9 @@ public class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public boolean blobs(String digest) throws OllamaClientException {
+    public BlobsSpec blobs(String digest) throws OllamaClientException {
         Objects.requireNonNull(digest, "digest must not be null");
-        HttpResponse<Void> response = head(BLOBS_PATH + "/" + digest);
-        return response.statusCode() == 200;
+        return new DefaultBlobsSpec(this, digest);
     }
 
     @Override
@@ -436,7 +437,7 @@ public class DefaultOllamaClient implements OllamaClient {
         @Override
         public EmbeddingsResponse execute() throws OllamaClientException {
             EmbeddingsRequest request = new EmbeddingsRequest(model, prompt, options, keepAlive);
-            return ollamaClient.post(EMBEDDINGS_PATH, request, Body.Handlers.of(EmbeddingsResponse.class)).body();
+            return post(EMBEDDINGS_PATH, request, Body.Handlers.of(EmbeddingsResponse.class)).body();
         }
 
     }
@@ -518,9 +519,74 @@ public class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public Stream<CreateResponse> create(String name, String modelfile) throws OllamaClientException {
-        CreateRequest createRequest = new CreateRequest(name, modelfile, true, null);
-        return stream(CREATE_PATH, createRequest, CreateResponse.class);
+    public CreateSpec create(String name, String modelfile) {
+        Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(modelfile, "modelfile must not be null");
+        return new DefaultCreateSpec(this, name, modelfile);
+    }
+
+    @Override
+    public CreateSpec create(String name, Path path) {
+        Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(path, "path must not be null");
+        return new DefaultCreateSpec(this, name, path);
+    }
+
+    @Override
+    public CreateSpec create(String name, ModelFile modelFile) {
+        Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(modelFile, "modelFile must not be null");
+        return new DefaultCreateSpec(this, name, modelFile);
+    }
+
+    private class DefaultCreateSpec implements CreateSpec {
+
+        private final DefaultOllamaClient ollamaClient;
+        private final String name;
+        private String modelfile;
+        private Path path;
+        private Boolean stream;
+
+        public DefaultCreateSpec(DefaultOllamaClient ollamaClient, String name, String modelfile) {
+            this.ollamaClient = ollamaClient;
+            this.name = name;
+            this.modelfile = modelfile;
+        }
+
+        public DefaultCreateSpec(DefaultOllamaClient ollamaClient, String name, Path path) {
+            this.ollamaClient = ollamaClient;
+            this.name = name;
+            this.path = path;
+        }
+
+        public DefaultCreateSpec(DefaultOllamaClient ollamaClient, String name, ModelFile modelFile) {
+            this.ollamaClient = ollamaClient;
+            this.name = name;
+            this.modelfile = modelFile.toString();
+        }
+
+        @Override
+        public CreateSpec stream(boolean stream) {
+            this.stream = stream;
+            return this;
+        }
+
+        @Override
+        public CreateSpec stream() {
+            return stream(true);
+        }
+
+        @Override
+        public Stream<CreateResponse> execute() throws OllamaClientException {
+            CreateRequest createRequest = new CreateRequest(name, modelfile, stream, path);
+            return ollamaClient.stream(CREATE_PATH, createRequest, CreateResponse.class);
+        }
+
+        @Override
+        public CreateResponse get() throws OllamaClientException {
+            return execute().findFirst().get();
+        }
+
     }
 
     private class DefaultPullSpec implements PullSpec {
@@ -561,6 +627,31 @@ public class DefaultOllamaClient implements OllamaClient {
         @Override
         public PullResponse get() throws OllamaClientException {
             return execute().findFirst().get();
+        }
+
+    }
+
+    private class DefaultBlobsSpec implements BlobsSpec {
+
+        private final DefaultOllamaClient ollamaClient;
+        private final String digest;
+
+        public DefaultBlobsSpec(DefaultOllamaClient ollamaClient, String digest) {
+            this.ollamaClient = ollamaClient;
+            this.digest = digest;
+        }
+
+        @Override
+        public int exists() throws OllamaClientException {
+            HttpResponse<Void> response = head(BLOBS_PATH + "/" + digest);
+            return response.statusCode();
+        }
+
+        @Override
+        public int create() throws OllamaClientException {
+            HttpResponse<Void> response = ollamaClient.post(BLOBS_PATH + "/" + digest, digest,
+                    BodyHandlers.discarding());
+            return response.statusCode();
         }
 
     }

@@ -76,8 +76,7 @@ You can call _batch_ explicitly but it is the default
 ```java
     GenerateResponse generateResponse = client.generate("llama3", "What is a tsunami?")
                     .batch()
-                    .execute()
-                    .findFirst().get();
+                    .get();
     System.out.println(generateResponse.response());
 ```
 
@@ -115,7 +114,28 @@ Pull a model.
 
 ### Create
 
-CReate a model.
+Create a model.
+
+```java
+
+    client.create("mario-test", "FROM llama3\nSYSTEM You are mario from Super Mario Bros.")
+        .execute().forEach(
+            System.out::println
+        );
+```
+
+```java
+    ModelFile modelFile = ModelFile.from("llama3")
+            .template("You are mario from Super MarioBros.")
+            .parameter(Key.TEMPERATURE, "0")
+            .parameter(Key.SEED, "42")
+            .build();
+
+    client.create("mario-test", modelFile)
+        .execute().forEach(
+            System.out::println
+        );
+```
 
 ### Copy
 
@@ -189,6 +209,17 @@ Chat with a model using the hsitory of previous messages.
         .execute()
         .embedding()
         .forEach(System.out::println);
+```
+
+### Blob (exists)
+
+Check if a blob exists.
+
+```java
+    System.out.println(
+            client.blobs("sha256:00e1317cbf74d901080d7100f57580ba8dd8de57203072dc6f668324ba545f29")
+            .exists()
+            );
 ```
 
 ### Process
