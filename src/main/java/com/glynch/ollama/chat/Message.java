@@ -60,19 +60,4 @@ public record Message(Role role, String content, List<String> images) {
         return create(message.role, message.content(), message.images());
     }
 
-    // public Role getRole() {
-    // return role;
-    // }
-
-    // public String getContent() {
-    // return content;
-    // }
-
-    // public List<String> getImages() {
-    // if (images == null) {
-    // images = new ArrayList<>();
-    // }
-    // return images;
-    // }
-
 }

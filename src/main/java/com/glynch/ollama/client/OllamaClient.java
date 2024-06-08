@@ -35,13 +35,13 @@ public interface OllamaClient {
 
     Optional<ProcessModel> ps(String name) throws OllamaClientException;
 
-    boolean ping() throws OllamaClientException;
+    void load(String model) throws OllamaClientException;
+
+    boolean ping();
 
     ListModels list() throws OllamaClientException;
 
     Optional<ListModel> list(String name) throws OllamaClientException;
-
-    boolean load(String model) throws OllamaClientException;
 
     BlobsSpec blobs(String digest);
 
@@ -89,21 +89,15 @@ public interface OllamaClient {
 
         GenerateSpec context(int context, int... contexts);
 
-        GenerateSpec stream(boolean stream);
-
-        GenerateSpec stream();
-
-        GenerateSpec batch();
-
         GenerateSpec raw(boolean raw);
 
         GenerateSpec raw();
 
         GenerateSpec keepAlive(String keepAlive);
 
-        Stream<GenerateResponse> execute() throws OllamaClientException;
+        Stream<GenerateResponse> stream() throws OllamaClientException;
 
-        GenerateResponse get() throws OllamaClientException;
+        GenerateResponse batch() throws OllamaClientException;
 
     }
 
@@ -117,15 +111,11 @@ public interface OllamaClient {
 
         ChatSpec options(Options options);
 
-        ChatSpec stream(boolean stream);
-
-        ChatSpec batch();
-
         ChatSpec keepAlive(String keepAlive);
 
-        Stream<ChatResponse> execute() throws OllamaClientException;
+        Stream<ChatResponse> stream() throws OllamaClientException;
 
-        ChatResponse get() throws OllamaClientException;
+        ChatResponse batch() throws OllamaClientException;
 
     }
 
@@ -135,29 +125,21 @@ public interface OllamaClient {
 
         EmbeddingsSpec keepAlive(String keepAlive);
 
-        EmbeddingsResponse execute() throws OllamaClientException;
+        EmbeddingsResponse get() throws OllamaClientException;
     }
 
     interface PullSpec {
         PullSpec insecure(boolean insecure);
 
-        PullSpec stream(boolean stream);
+        Stream<PullResponse> stream() throws OllamaClientException;
 
-        PullSpec batch();
-
-        Stream<PullResponse> execute() throws OllamaClientException;
-
-        PullResponse get() throws OllamaClientException;
+        PullResponse batch() throws OllamaClientException;
     }
 
     interface CreateSpec {
-        CreateSpec stream(boolean stream);
+        Stream<CreateResponse> stream() throws OllamaClientException;
 
-        CreateSpec stream();
-
-        Stream<CreateResponse> execute() throws OllamaClientException;
-
-        CreateResponse get() throws OllamaClientException;
+        CreateResponse batch() throws OllamaClientException;
     }
 
 }

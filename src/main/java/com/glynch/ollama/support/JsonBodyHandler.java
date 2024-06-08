@@ -20,6 +20,8 @@ public class JsonBodyHandler<T> implements BodyHandler<T> {
     public BodySubscriber<T> apply(ResponseInfo responseInfo) {
 
         BodySubscriber<String> upstream = BodySubscribers.ofString(StandardCharsets.UTF_8);
+        int statusCode = responseInfo.statusCode();
+        // Should checkfor 400, 500 ...
         if (responseInfo.statusCode() == 404) {
             return BodySubscribers.mapping(
                     upstream,

@@ -59,14 +59,13 @@ Get a list of the current models.
 ### Generate (stream)
 
 ```java
-    client.generate("llama3", "What is a tsunami?")
-        .stream()
-        .execute()
-        .forEach(
-            r -> {
-                System.out.print(r.response());
-            });
-        System.out.println();
+ client.generate("llama3", "What is a tsunami?")
+                    .stream()
+                    .forEach(
+                            r -> {
+                                System.out.print(r.response());
+                            });
+            System.out.println();
 ```
 
 ### Generate (batch)
@@ -86,11 +85,9 @@ This eample also gives the same result each time since it uses the same _seed_ a
 
 ```java
     Options options = Options.builder().temperature(0f).seed(42).build();
-    client.generate("llama3", "Why is the sky blue?")
+    System.out.println(client.generate("llama3", "Why is the sky blue?")
             .options(options)
-            .batch()
-            .execute()
-            .forEach(System.out::println);
+            .batch());
 ```
 
 ### Pull
@@ -98,7 +95,7 @@ This eample also gives the same result each time since it uses the same _seed_ a
 Pull a model.
 
 ```java
-    client.pull("phi3").execute().forEach(response -> {
+    client.pull("phi3").stream().forEach(response -> {
         System.out.println(response.status());
     });
 ```
@@ -107,9 +104,7 @@ Pull a model.
 
 ```java
 
-    client.pull("phi3").batch().execute().forEach(response -> {
-                System.out.println(response.status());
-            });
+    System.out.println(client.pull("phi3").batch());
 ```
 
 ### Create
@@ -118,8 +113,8 @@ Create a model.
 
 ```java
 
-    client.create("mario-test", "FROM llama3\nSYSTEM You are mario from Super Mario Bros.")
-        .execute().forEach(
+ client.create("mario-test", "FROM llama3\nSYSTEM You are mario from Super Mario Bros.")
+        .stream().forEach(
             System.out::println
         );
 ```
@@ -167,8 +162,8 @@ Chat by default will _stream_ the results. If you do not want to stream you can 
 
 ```java
 
-  Message message = Message.user("What is a tsunami?");
-        client.chat("llava", message).execute().forEach(response -> {
+   Message message = Message.user("What is a tsunami?");
+    client.chat("llama3", message).stream().forEach(response -> {
             System.out.print(response.message().content());
         });
 ```
@@ -179,12 +174,10 @@ Chat with images. You need to ensure you use a multimodel model such as _lava_.
 
 ```java
 
-Message message = Message.user("Describe this image?", Image.encode(Path.of("image.jpg")));
-        client.chat("llava", message)
-        .batch()
-        .execute().forEach(r -> {
-            System.out.println(r.message().content());
-        });
+ Message message = Message.user("Describe this image?",
+                    Image.encode(Path.of("image.png")));
+            System.out.println(client.chat("llava", message)
+                    .batch());
 ```
 
 ### Chat (history)
@@ -193,20 +186,20 @@ Chat with a model using the hsitory of previous messages.
 
 ```java
 
-    Message question = Message.user("Why is the sky blue?");
-    Message answer = client.chat("llava", question).batch().execute().findFirst().get().message();
-    System.out.println(answer.content())
-    System.out.println(client
-                .chat("llava", question, answer, Message.user("How is that different than mie scattering?"))
-                .batch()
-                .execute().findFirst().get().message().content());
+   Message question = Message.user("Why is the sky blue?");
+            Message answer = client.chat("llama3", question).batch().message();
+            System.out.println(answer.content());
+            System.out.println(client
+                    .chat("llava", question, answer, Message.user("How is that different than mie scattering?"))
+                    .batch()
+                    .message().content());
 ```
 
 ### Embeddings
 
 ```java
     client.embeddings("nomic-embed-text", "What is a Tsunami?")
-        .execute()
+        .get()
         .embedding()
         .forEach(System.out::println);
 ```

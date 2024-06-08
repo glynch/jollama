@@ -162,6 +162,7 @@ public class DefaultOllamaClient implements OllamaClient {
 
     private <T> HttpResponse<Stream<T>> stream(String path, Object body,
             BodyHandler<Stream<T>> bodyHandler) throws OllamaClientException {
+        System.out.println(body);
         HttpResponse<Stream<T>> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
@@ -217,13 +218,13 @@ public class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public boolean load(String model) throws OllamaClientException {
+    public void load(String model) throws OllamaClientException {
         Objects.requireNonNull(model, "model must not be null");
-        return LOAD.equals(generate(model, "").execute().findFirst().get().doneReason());
+        generate(model, "").batch();
     }
 
     @Override
-    public BlobsSpec blobs(String digest) throws OllamaClientException {
+    public BlobsSpec blobs(String digest) {
         Objects.requireNonNull(digest, "digest must not be null");
         return new DefaultBlobsSpec(this, digest);
     }
@@ -279,7 +280,7 @@ public class DefaultOllamaClient implements OllamaClient {
 
     private class DefaultGenerateSpec implements GenerateSpec {
 
-        private final DefaultOllamaClient client;
+        private final DefaultOllamaClient ollamaClient;
         private String model;
         private String prompt;
         private List<String> images = new ArrayList<>();
@@ -288,12 +289,11 @@ public class DefaultOllamaClient implements OllamaClient {
         private String system;
         private String template;
         private List<Integer> context = new ArrayList<>();
-        private Boolean stream;
         private Boolean raw;
         private String keepAlive;
 
         public DefaultGenerateSpec(DefaultOllamaClient ollamaClient, String model, String prompt) {
-            this.client = ollamaClient;
+            this.ollamaClient = ollamaClient;
             this.model = model;
             this.prompt = prompt;
         }
@@ -357,22 +357,6 @@ public class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public GenerateSpec stream(boolean stream) {
-            this.stream = stream;
-            return this;
-        }
-
-        @Override
-        public GenerateSpec stream() {
-            return stream(true);
-        }
-
-        @Override
-        public GenerateSpec batch() {
-            return stream(false);
-        }
-
-        @Override
         public GenerateSpec raw(boolean raw) {
             this.raw = raw;
             return this;
@@ -391,17 +375,21 @@ public class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public Stream<GenerateResponse> execute() throws OllamaClientException {
+        public Stream<GenerateResponse> stream() {
             GenerateRequest generateRequest = new GenerateRequest(model, prompt, images, format, options, system,
                     template,
                     context,
-                    stream, raw, keepAlive);
-            return client.stream(GENERATE_PATH, generateRequest, GenerateResponse.class);
+                    true, raw, keepAlive);
+            return ollamaClient.stream(GENERATE_PATH, generateRequest, GenerateResponse.class);
         }
 
         @Override
-        public GenerateResponse get() throws OllamaClientException {
-            return execute().findFirst().get();
+        public GenerateResponse batch() {
+            GenerateRequest generateRequest = new GenerateRequest(model, prompt, images, format, options, system,
+                    template,
+                    context,
+                    false, raw, keepAlive);
+            return ollamaClient.post(GENERATE_PATH, generateRequest, Body.Handlers.of(GenerateResponse.class)).body();
         }
 
     }
@@ -435,9 +423,9 @@ public class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public EmbeddingsResponse execute() throws OllamaClientException {
+        public EmbeddingsResponse get() throws OllamaClientException {
             EmbeddingsRequest request = new EmbeddingsRequest(model, prompt, options, keepAlive);
-            return post(EMBEDDINGS_PATH, request, Body.Handlers.of(EmbeddingsResponse.class)).body();
+            return ollamaClient.post(EMBEDDINGS_PATH, request, Body.Handlers.of(EmbeddingsResponse.class)).body();
         }
 
     }
@@ -449,7 +437,6 @@ public class DefaultOllamaClient implements OllamaClient {
         private final List<Message> messages = new ArrayList<>();
         private Format format;
         private Options options;
-        private Boolean stream;
         private String keepAlive;
 
         public DefaultChatSpec(DefaultOllamaClient ollamaClient, String model, Message message, Message... messages) {
@@ -488,17 +475,6 @@ public class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public ChatSpec stream(boolean stream) {
-            this.stream = stream;
-            return this;
-        }
-
-        @Override
-        public ChatSpec batch() {
-            return stream(false);
-        }
-
-        @Override
         public ChatSpec keepAlive(String keepAlive) {
             Objects.requireNonNull(keepAlive, "keepAlive must not be null");
             this.keepAlive = keepAlive;
@@ -506,14 +482,15 @@ public class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public Stream<ChatResponse> execute() throws OllamaClientException {
-            ChatRequest chatRequest = new ChatRequest(model, messages, format, options, stream, keepAlive);
+        public Stream<ChatResponse> stream() throws OllamaClientException {
+            ChatRequest chatRequest = new ChatRequest(model, messages, format, options, true, keepAlive);
             return ollamaClient.stream(CHAT_PATH, chatRequest, ChatResponse.class);
         }
 
         @Override
-        public ChatResponse get() throws OllamaClientException {
-            return execute().findFirst().get();
+        public ChatResponse batch() throws OllamaClientException {
+            ChatRequest chatRequest = new ChatRequest(model, messages, format, options, false, keepAlive);
+            return ollamaClient.post(CHAT_PATH, chatRequest, Body.Handlers.of(ChatResponse.class)).body();
         }
 
     }
@@ -545,7 +522,6 @@ public class DefaultOllamaClient implements OllamaClient {
         private final String name;
         private String modelfile;
         private Path path;
-        private Boolean stream;
 
         public DefaultCreateSpec(DefaultOllamaClient ollamaClient, String name, String modelfile) {
             this.ollamaClient = ollamaClient;
@@ -566,25 +542,16 @@ public class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public CreateSpec stream(boolean stream) {
-            this.stream = stream;
-            return this;
-        }
-
-        @Override
-        public CreateSpec stream() {
-            return stream(true);
-        }
-
-        @Override
-        public Stream<CreateResponse> execute() throws OllamaClientException {
-            CreateRequest createRequest = new CreateRequest(name, modelfile, stream, path);
+        public Stream<CreateResponse> stream() {
+            CreateRequest createRequest = new CreateRequest(name, modelfile, true, path);
             return ollamaClient.stream(CREATE_PATH, createRequest, CreateResponse.class);
         }
 
         @Override
-        public CreateResponse get() throws OllamaClientException {
-            return execute().findFirst().get();
+        public CreateResponse batch() {
+            CreateRequest createRequest = new CreateRequest(name, modelfile, false, path);
+
+            return ollamaClient.post(CREATE_PATH, createRequest, Body.Handlers.of(CreateResponse.class)).body();
         }
 
     }
@@ -594,7 +561,6 @@ public class DefaultOllamaClient implements OllamaClient {
         private final DefaultOllamaClient ollamaClient;
         private final String name;
         private Boolean insecure;
-        private Boolean stream;
 
         public DefaultPullSpec(DefaultOllamaClient ollamaClient, String name) {
             this.ollamaClient = ollamaClient;
@@ -608,25 +574,15 @@ public class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public PullSpec stream(boolean stream) {
-            this.stream = stream;
-            return this;
-        }
-
-        @Override
-        public PullSpec batch() {
-            return stream(false);
-        }
-
-        @Override
-        public Stream<PullResponse> execute() throws OllamaClientException {
-            PullRequest pullRequest = new PullRequest(name, insecure, stream);
+        public Stream<PullResponse> stream() throws OllamaClientException {
+            PullRequest pullRequest = new PullRequest(name, insecure, true);
             return ollamaClient.stream(PULL_PATH, pullRequest, PullResponse.class);
         }
 
         @Override
-        public PullResponse get() throws OllamaClientException {
-            return execute().findFirst().get();
+        public PullResponse batch() throws OllamaClientException {
+            return ollamaClient.post(PULL_PATH, new PullRequest(name, insecure, false),
+                    Body.Handlers.of(PullResponse.class)).body();
         }
 
     }
