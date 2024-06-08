@@ -39,9 +39,8 @@ import com.glynch.ollama.show.ShowRequest;
 import com.glynch.ollama.show.ShowResponse;
 import com.glynch.ollama.support.Body;
 
-public class DefaultOllamaClient implements OllamaClient {
+final class DefaultOllamaClient implements OllamaClient {
 
-    private static final HttpClient client = HttpClient.newHttpClient();
     private static final String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
     private static final String PING_PATH = "";
     private static final String LIST_PATH = "/api/tags";
@@ -59,14 +58,15 @@ public class DefaultOllamaClient implements OllamaClient {
     private static final String LOAD = "load";
 
     private final String host;
+    private final HttpClient client;
 
-    DefaultOllamaClient(String host) {
-        Objects.requireNonNull(host, "host must not be null");
+    DefaultOllamaClient(HttpClient client, String host) {
         this.host = host;
+        this.client = client;
     }
 
-    DefaultOllamaClient() {
-        this(DEFAULT_OLLAMA_HOST);
+    DefaultOllamaClient(HttpClient client) {
+        this(client, DEFAULT_OLLAMA_HOST);
     }
 
     @Override
@@ -97,7 +97,6 @@ public class DefaultOllamaClient implements OllamaClient {
         HttpResponse<T> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
-                .version(HttpClient.Version.HTTP_2)
                 .header("Accept", "application/json")
                 .header("Content-type", "application/json")
                 .GET()
@@ -114,7 +113,6 @@ public class DefaultOllamaClient implements OllamaClient {
         HttpResponse<Void> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
-                .version(HttpClient.Version.HTTP_2)
                 .method("HEAD", BodyPublishers.noBody())
                 .build();
         try {
@@ -129,7 +127,6 @@ public class DefaultOllamaClient implements OllamaClient {
         HttpResponse<Void> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
-                .version(HttpClient.Version.HTTP_2)
                 .method("DELETE", Body.Publishers.json(body))
                 .header("Accept", "application/json")
                 .header("Content-type", "application/json")
@@ -147,7 +144,6 @@ public class DefaultOllamaClient implements OllamaClient {
         HttpResponse<T> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
-                .version(HttpClient.Version.HTTP_2)
                 .header("Accept", "application/json")
                 .header("Content-type", "application/json")
                 .POST(Body.Publishers.json(body))
@@ -166,7 +162,6 @@ public class DefaultOllamaClient implements OllamaClient {
         HttpResponse<Stream<T>> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
-                .version(HttpClient.Version.HTTP_2)
                 .header("Accept", "application/json")
                 .header("Content-type", "application/json")
                 .POST(Body.Publishers.json(body))
@@ -190,7 +185,7 @@ public class DefaultOllamaClient implements OllamaClient {
             HttpResponse<String> response = get(PING_PATH, BodyHandlers.ofString());
             isUp = response.statusCode() == 200;
         } catch (Exception e) {
-            isUp = false;
+
         }
         return isUp;
     }

@@ -1,6 +1,7 @@
 package com.glynch.ollama.client;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -22,11 +23,29 @@ import com.glynch.ollama.show.ShowResponse;
 public interface OllamaClient {
 
     static OllamaClient create() {
-        return new DefaultOllamaClient();
+        return builder().build();
     }
 
     static OllamaClient create(String host) {
-        return new DefaultOllamaClient(host);
+        return builder(host).build();
+    }
+
+    static Builder builder() {
+        return new DefaultOllamaClientBuilder();
+    }
+
+    static Builder builder(String host) {
+        return new DefaultOllamaClientBuilder();
+    }
+
+    interface Builder {
+
+        Builder followRedirects();
+
+        Builder connectTimeout(Duration duration);
+
+        OllamaClient build();
+
     }
 
     String getHost();
