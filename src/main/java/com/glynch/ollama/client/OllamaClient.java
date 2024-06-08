@@ -35,7 +35,7 @@ public interface OllamaClient {
     }
 
     static Builder builder(String host) {
-        return new DefaultOllamaClientBuilder();
+        return new DefaultOllamaClientBuilder(host);
     }
 
     interface Builder {
