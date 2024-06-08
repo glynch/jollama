@@ -19,6 +19,11 @@ See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
 
 ```
 
+```java
+        OllamaClient client = OllamaClient.builder().followRedirects().connectTimeout(Duration.ofSeconds(5)).build();
+
+```
+
 ### Ping
 
 Check if Ollama is up.
