@@ -17,9 +17,9 @@ import com.glynch.ollama.chat.Message;
 import com.glynch.ollama.chat.Role;
 import com.glynch.ollama.show.ShowResponse;
 
-public record ModelFile(String from, String template, Map<String, Object> parameters, String system,
-        String adapter,
-        String license, List<Message> messages) {
+public record ModelFile(String from, String adapter, String template, String system, List<Message> messages,
+        Map<String, Object> parameters,
+        String license) {
 
     private static final Pattern FROM_PATTERN = Pattern.compile("^FROM\\s+(.*?)$", Pattern.MULTILINE);
     private static final Pattern TEMPLATE_PATTERN = Pattern.compile(
@@ -39,8 +39,18 @@ public record ModelFile(String from, String template, Map<String, Object> parame
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("FROM ").append(from).append("\n");
+        if (adapter != null) {
+            builder.append("ADAPTER ").append(adapter).append("\n");
+        }
         if (template != null) {
             builder.append("TEMPLATE ").append(template).append("\n");
+        }
+        if (system != null) {
+            builder.append("SYSTEM ").append(system).append("\n");
+        }
+        if (messages != null) {
+            messages.forEach(
+                    m -> builder.append("MESSAGE ").append(m.role()).append(" ").append(m.content()).append("\n"));
         }
         if (parameters != null) {
             parameters.forEach((k, v) -> {
@@ -55,19 +65,11 @@ public record ModelFile(String from, String template, Map<String, Object> parame
                 builder.append("PARAMETER ").append(k).append(" ").append(v).append("\n");
             });
         }
-        if (system != null) {
-            builder.append("SYSTEM ").append(system).append("\n");
-        }
-        if (adapter != null) {
-            builder.append("ADAPTER ").append(adapter).append("\n");
-        }
+
         if (license != null) {
             builder.append("LICENSE ").append(license).append("\n");
         }
-        if (messages != null) {
-            messages.forEach(
-                    m -> builder.append("MESSAGE ").append(m.role()).append(" ").append(m.content()).append("\n"));
-        }
+
         return builder.toString();
     }
 
@@ -171,7 +173,7 @@ public record ModelFile(String from, String template, Map<String, Object> parame
             throw new InvalidModelFileException("FROM is required");
         }
 
-        return new ModelFile(from, template, parameters, system, adapter, license, messages);
+        return new ModelFile(from, adapter, template, system, messages, parameters, license);
     }
 
     public static ModelFile parse(Path path) throws InvalidModelFileException, IOException {
@@ -371,7 +373,7 @@ public record ModelFile(String from, String template, Map<String, Object> parame
 
         @Override
         public ModelFile build() {
-            return new ModelFile(from, template, parameters, system, adapter, license, messages);
+            return new ModelFile(from, adapter, template, system, messages, parameters, license);
         }
 
     }
