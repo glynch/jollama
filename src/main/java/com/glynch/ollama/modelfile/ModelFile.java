@@ -30,7 +30,7 @@ public record ModelFile(String from, String template, Map<String, Object> parame
     private static final Pattern PARAMETER_PATTERN = Pattern.compile("^PARAMETER\\s+([a-zA-z0-9.]+)?\\s+(.*)$",
             Pattern.MULTILINE);
     private static final Pattern LICENSE_PATTERN = Pattern.compile(
-            "^(LICENSE)(\\s+)(.*?)(\\s+)(?=(^PARAMETER|^MESSAGE^|^SYSTEM|^TEMPLATE|^FROM|^ADAPTER))",
+            "^LICENSE(\\s+?)(.*)(?=((^PARAMETER|^MESSAGE^|^SYSTEM|^TEMPLATE|^FROM|^ADAPTER))|$)",
             Pattern.DOTALL | Pattern.MULTILINE);
     private static final Pattern SYSTEM_PATTERN = Pattern.compile("^SYSTEM\\s+(.*?)$", Pattern.MULTILINE);
     private static final Pattern ADAPTER_PATTERN = Pattern.compile("^ADAPTER\\s+(.*?)$", Pattern.MULTILINE);
@@ -152,7 +152,7 @@ public record ModelFile(String from, String template, Map<String, Object> parame
 
         Matcher licenseMatcher = LICENSE_PATTERN.matcher(modelfile);
         if (licenseMatcher.find()) {
-            license = licenseMatcher.group(3).replaceAll("\"", "");
+            license = licenseMatcher.group(2).replaceAll("\"", "");
         }
 
         Matcher systemMatcher = SYSTEM_PATTERN.matcher(modelfile);
