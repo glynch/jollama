@@ -221,10 +221,11 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public ShowResponse show(String name) throws OllamaClientException {
+    public ModelFile show(String name) throws OllamaClientException, InvalidModelFileException {
         Objects.requireNonNull(name, "name must not be null");
         ShowRequest showRequest = new ShowRequest(name);
-        return post(SHOW_PATH, showRequest, Body.Handlers.of(ShowResponse.class)).body();
+        ShowResponse showResponse = post(SHOW_PATH, showRequest, Body.Handlers.of(ShowResponse.class)).body();
+        return ModelFile.parse(showResponse.modelfile());
     }
 
     @Override

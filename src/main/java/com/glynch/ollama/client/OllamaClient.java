@@ -20,7 +20,6 @@ import com.glynch.ollama.modelfile.ModelFile;
 import com.glynch.ollama.process.ProcessModel;
 import com.glynch.ollama.process.ProcessModels;
 import com.glynch.ollama.pull.PullResponse;
-import com.glynch.ollama.show.ShowResponse;
 
 public interface OllamaClient {
     String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
@@ -67,7 +66,7 @@ public interface OllamaClient {
 
     BlobsSpec blobs(String digest);
 
-    ShowResponse show(String name) throws OllamaClientException;
+    ModelFile show(String name) throws OllamaClientException, InvalidModelFileException;
 
     GenerateSpec generate(String model, String prompt);
 

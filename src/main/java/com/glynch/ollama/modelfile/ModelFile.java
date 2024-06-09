@@ -167,6 +167,10 @@ public record ModelFile(String from, String template, Map<String, Object> parame
 
         parameters.put(Key.STOP.getValue(), stops);
 
+        if (from == null) {
+            throw new InvalidModelFileException("FROM is required");
+        }
+
         return new ModelFile(from, template, parameters, system, adapter, license, messages);
     }
 
