@@ -129,8 +129,8 @@ Create a model.
 ```java
     ModelFile modelFile = ModelFile.from("llama3")
             .template("You are mario from Super MarioBros.")
-            .parameter(Key.TEMPERATURE, "0")
-            .parameter(Key.SEED, "42")
+            .temperature(0f)
+            .seed(42)
             .build();
 
     client.create("mario-test", modelFile)
