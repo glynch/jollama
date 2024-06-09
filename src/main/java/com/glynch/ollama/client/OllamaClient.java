@@ -1,5 +1,6 @@
 package com.glynch.ollama.client;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import com.glynch.ollama.embeddings.EmbeddingsResponse;
 import com.glynch.ollama.generate.GenerateResponse;
 import com.glynch.ollama.list.ListModel;
 import com.glynch.ollama.list.ListModels;
+import com.glynch.ollama.modelfile.InvalidModelFileException;
 import com.glynch.ollama.modelfile.ModelFile;
 import com.glynch.ollama.process.ProcessModel;
 import com.glynch.ollama.process.ProcessModels;
@@ -73,9 +75,9 @@ public interface OllamaClient {
 
     EmbeddingsSpec embeddings(String model, String prompt);
 
-    CreateSpec create(String name, String modelfile);
+    CreateSpec create(String name, String modelfile) throws InvalidModelFileException;
 
-    CreateSpec create(String name, Path path);
+    CreateSpec create(String name, Path path) throws InvalidModelFileException, IOException;
 
     CreateSpec create(String name, ModelFile modelFile);
 

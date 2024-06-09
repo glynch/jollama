@@ -9,16 +9,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.glynch.ollama.chat.Message;
 import com.glynch.ollama.chat.Role;
+import com.glynch.ollama.show.ShowResponse;
 
-public record ModelFile(String from, String template, Map<Key, Object> parameters, String system,
+public record ModelFile(String from, String template, Map<String, Object> parameters, String system,
         String adapter,
         String license, List<Message> messages) {
+
+    private static final Pattern FROM_PATTERN = Pattern.compile("^FROM\\s+(.*?)$", Pattern.MULTILINE);
+    private static final Pattern TEMPLATE_PATTERN = Pattern.compile(
+            "^(TEMPLATE)(\\s+)(.*?)(\\s+)(?=(^PARAMETER|^MESSAGE^|^SYSTEM|^LICENSE|^FROM|^ADAPTER))",
+            Pattern.DOTALL | Pattern.MULTILINE);
+    private static final Pattern MESSAGE_PATTERN = Pattern.compile("^MESSAGE\\s+(user|system|assistant)?\\s+(.*)$",
+            Pattern.MULTILINE);
+    private static final Pattern PARAMETER_PATTERN = Pattern.compile("^PARAMETER\\s+([a-zA-z0-9.]+)?\\s+(.*)$",
+            Pattern.MULTILINE);
+    private static final Pattern LICENSE_PATTERN = Pattern.compile(
+            "^(LICENSE)(\\s+)(.*?)(\\s+)(?=(^PARAMETER|^MESSAGE^|^SYSTEM|^TEMPLATE|^FROM|^ADAPTER))",
+            Pattern.DOTALL | Pattern.MULTILINE);
+    private static final Pattern SYSTEM_PATTERN = Pattern.compile("^SYSTEM\\s+(.*?)$", Pattern.MULTILINE);
+    private static final Pattern ADAPTER_PATTERN = Pattern.compile("^ADAPTER\\s+(.*?)$", Pattern.MULTILINE);
 
     @Override
     public String toString() {
@@ -29,10 +44,12 @@ public record ModelFile(String from, String template, Map<Key, Object> parameter
         }
         if (parameters != null) {
             parameters.forEach((k, v) -> {
-                if (k == Key.STOP) {
+                Key key = Key.of(k);
+                if (key != null && key == Key.STOP) {
                     @SuppressWarnings("unchecked")
                     List<String> stops = (List<String>) v;
-                    stops.forEach(stop -> builder.append("PARAMETER ").append(k).append(" ").append(stop).append("\n"));
+                    stops.forEach(
+                            stop -> builder.append("PARAMETER ").append(key).append(" ").append(stop).append("\n"));
                     return;
                 }
                 builder.append("PARAMETER ").append(k).append(" ").append(v).append("\n");
@@ -93,75 +110,72 @@ public record ModelFile(String from, String template, Map<Key, Object> parameter
     }
 
     public static ModelFile parse(String modelfile) {
-        return parse(modelfile.lines());
-    }
-
-    public static ModelFile parse(Path path) throws InvalidModelFileException, IOException {
-        return parse(Files.readAllLines(path).stream());
-    }
-
-    private static ModelFile parse(Stream<String> lines) {
+        System.out.println(modelfile);
         String from = null;
-        Map<Key, Object> parameters = new HashMap<>();
         String template = null;
+        Map<String, Object> parameters = new HashMap<>();
+        List<String> stops = new ArrayList<>();
         String system = null;
         String adapter = null;
         String license = null;
         List<Message> messages = new ArrayList<>();
-        List<String> stop = new ArrayList<>();
 
-        for (String line : lines.collect(Collectors.toList())) {
-            String[] parts = line.split(" ", 2);
-            if (parts.length < 2) {
-                continue;
-            }
-            String key = parts[0];
-            String value = parts[1];
-            switch (key) {
-                case "FROM":
-                    from = value;
-                    break;
-                case "TEMPLATE":
-                    template = value;
-                    break;
-                case "SYSTEM":
-                    system = value;
-                    break;
-                case "ADAPTER":
-                    adapter = value;
-                    break;
-                case "LICENSE":
-                    license = value;
-                    break;
-                case "MESSAGE":
-                    String[] messageParts = value.split(" ", 2);
-                    if (messageParts.length == 2) {
-                        Role role = Role.of(messageParts[0]);
-                        messages.add(new Message(role, messageParts[1], List.of()));
-                    }
-                    break;
-                case "PARAMETER":
-                    String[] parameterParts = value.split(" ", 2);
-                    if (parameterParts.length == 2) {
-                        Key parameterKey = Key.of(parameterParts[0]);
-                        if (parameterKey == Key.STOP) {
-                            stop.add(parameterParts[1]);
-                        } else {
-                            Object parameterValue = parameterParts[1];
-                            parameters.put(parameterKey, parameterValue);
-                        }
+        Matcher fromMatcher = FROM_PATTERN.matcher(modelfile);
+        if (fromMatcher.find()) {
+            from = fromMatcher.group(1);
+        }
 
-                    }
-                    break;
-                default:
-                    break;
+        Matcher templateMatcher = TEMPLATE_PATTERN.matcher(modelfile);
+        if (templateMatcher.find()) {
+            template = templateMatcher.group(3).replaceAll("\"", "");
+        }
+
+        Matcher messageMatcher = MESSAGE_PATTERN.matcher(modelfile);
+        while (messageMatcher.find()) {
+            Role role = Role.of(messageMatcher.group(1));
+            if (role != null) {
+                messages.add(new Message(role, messageMatcher.group(2), List.of()));
             }
         }
-        if (from == null) {
-            throw new InvalidModelFileException("FROM not found");
+
+        Matcher parameterMatcher = PARAMETER_PATTERN.matcher(modelfile);
+        while (parameterMatcher.find()) {
+            Key key = Key.of(parameterMatcher.group(1));
+            if (key != null) {
+                if (key == Key.STOP) {
+                    stops.add(parameterMatcher.group(2));
+                } else {
+                    parameters.put(parameterMatcher.group(1), parameterMatcher.group(2));
+                }
+            }
         }
-        parameters.put(Key.STOP, stop);
+
+        Matcher licenseMatcher = LICENSE_PATTERN.matcher(modelfile);
+        if (licenseMatcher.find()) {
+            license = licenseMatcher.group(3).replaceAll("\"", "");
+        }
+
+        Matcher systemMatcher = SYSTEM_PATTERN.matcher(modelfile);
+        if (systemMatcher.find()) {
+            system = systemMatcher.group(1);
+        }
+
+        Matcher adapterMatcher = ADAPTER_PATTERN.matcher(modelfile);
+        if (adapterMatcher.find()) {
+            adapter = adapterMatcher.group(1);
+        }
+
+        parameters.put(Key.STOP.getValue(), stops);
+
         return new ModelFile(from, template, parameters, system, adapter, license, messages);
+    }
+
+    public static ModelFile parse(Path path) throws InvalidModelFileException, IOException {
+        return parse(Files.readString(path));
+    }
+
+    public static ModelFile of(ShowResponse showResponse) {
+        return parse(showResponse.modelfile());
     }
 
     public static Builder from(String from) {
@@ -213,7 +227,7 @@ public record ModelFile(String from, String template, Map<Key, Object> parameter
 
         private final String from;
         private String template;
-        private Map<Key, Object> parameters = new HashMap<>();
+        private Map<String, Object> parameters = new HashMap<>();
         private String system;
         private String adapter;
         private String license;
@@ -269,77 +283,77 @@ public record ModelFile(String from, String template, Map<Key, Object> parameter
         @Override
         public Builder seed(Integer seed) {
             Objects.requireNonNull(seed, "seed cannot be null");
-            parameters.put(Key.SEED, seed);
+            parameters.put(Key.SEED.getValue(), seed);
             return this;
         }
 
         @Override
         public Builder mirostat(Float mirostat) {
             Objects.requireNonNull(mirostat, "mirostat cannot be null");
-            parameters.put(Key.MIROSTAT, mirostat);
+            parameters.put(Key.MIROSTAT.getValue(), mirostat);
             return this;
         }
 
         @Override
         public Builder mirostatTau(Float mirostatTau) {
             Objects.requireNonNull(mirostatTau, "mirostatTau cannot be null");
-            parameters.put(Key.MIROSTAT_TAU, mirostatTau);
+            parameters.put(Key.MIROSTAT_TAU.getValue(), mirostatTau);
             return this;
         }
 
         @Override
         public Builder mirostatEta(Float mirostatEta) {
             Objects.requireNonNull(mirostatEta, "mirostatEta cannot be null");
-            parameters.put(Key.MIROSTAT_ETA, mirostatEta);
+            parameters.put(Key.MIROSTAT_ETA.getValue(), mirostatEta);
             return this;
         }
 
         @Override
         public Builder numCtx(Integer numCtx) {
             Objects.requireNonNull(numCtx, "numCtx cannot be null");
-            parameters.put(Key.NUM_CTX, numCtx);
+            parameters.put(Key.NUM_CTX.getValue(), numCtx);
             return this;
         }
 
         @Override
         public Builder repeatLastN(Integer repeatLastN) {
             Objects.requireNonNull(repeatLastN, "repeatLastN cannot be null");
-            parameters.put(Key.REPEAT_LAST_N, repeatLastN);
+            parameters.put(Key.REPEAT_LAST_N.getValue(), repeatLastN);
             return this;
         }
 
         @Override
         public Builder repeatPenalty(Float repeatPenalty) {
             Objects.requireNonNull(repeatPenalty, "repeatPenalty cannot be null");
-            parameters.put(Key.REPEAT_PENALTY, repeatPenalty);
+            parameters.put(Key.REPEAT_PENALTY.getValue(), repeatPenalty);
             return this;
         }
 
         @Override
         public Builder temperature(Float temperature) {
             Objects.requireNonNull(temperature, "temperature cannot be null");
-            parameters.put(Key.TEMPERATURE, temperature);
+            parameters.put(Key.TEMPERATURE.getValue(), temperature);
             return this;
         }
 
         @Override
         public Builder topK(Integer topK) {
             Objects.requireNonNull(topK, "topK cannot be null");
-            parameters.put(Key.TOP_K, topK);
+            parameters.put(Key.TOP_K.getValue(), topK);
             return this;
         }
 
         @Override
         public Builder topP(Float topP) {
             Objects.requireNonNull(topP, "topP cannot be null");
-            parameters.put(Key.TOP_P, topP);
+            parameters.put(Key.TOP_P.getValue(), topP);
             return this;
         }
 
         @Override
         public Builder tfsZ(Float tfsZ) {
             Objects.requireNonNull(tfsZ, "tfsZ cannot be null");
-            parameters.put(Key.TFS_Z, tfsZ);
+            parameters.put(Key.TFS_Z.getValue(), tfsZ);
             return this;
         }
 
@@ -347,7 +361,7 @@ public record ModelFile(String from, String template, Map<Key, Object> parameter
         public Builder stop(String stop) {
             Objects.requireNonNull(stop, "stop cannot be null");
             stops.add(stop);
-            parameters.put(Key.STOP, stops);
+            parameters.put(Key.STOP.getValue(), stops);
             return this;
         }
 

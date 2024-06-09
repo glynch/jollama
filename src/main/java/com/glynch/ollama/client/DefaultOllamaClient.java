@@ -30,6 +30,7 @@ import com.glynch.ollama.generate.GenerateRequest;
 import com.glynch.ollama.generate.GenerateResponse;
 import com.glynch.ollama.list.ListModel;
 import com.glynch.ollama.list.ListModels;
+import com.glynch.ollama.modelfile.InvalidModelFileException;
 import com.glynch.ollama.modelfile.ModelFile;
 import com.glynch.ollama.process.ProcessModel;
 import com.glynch.ollama.process.ProcessModels;
@@ -55,7 +56,6 @@ final class DefaultOllamaClient implements OllamaClient {
     private static final String BLOBS_PATH = "/api/blobs";
     private static final String EMBEDDINGS_PATH = "/api/embeddings";
     private static final String PS_PATH = "/api/ps";
-    private static final String LOAD = "load";
 
     private final String host;
     private final HttpClient client;
@@ -487,17 +487,18 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public CreateSpec create(String name, String modelfile) {
+    public CreateSpec create(String name, String modelfile) throws InvalidModelFileException {
         Objects.requireNonNull(name, "name must not be null");
         Objects.requireNonNull(modelfile, "modelfile must not be null");
-        return new DefaultCreateSpec(this, name, modelfile);
+
+        return new DefaultCreateSpec(this, name, ModelFile.parse(modelfile));
     }
 
     @Override
-    public CreateSpec create(String name, Path path) {
+    public CreateSpec create(String name, Path path) throws InvalidModelFileException, IOException {
         Objects.requireNonNull(name, "name must not be null");
         Objects.requireNonNull(path, "path must not be null");
-        return new DefaultCreateSpec(this, name, path);
+        return new DefaultCreateSpec(this, name, ModelFile.parse(path));
     }
 
     @Override
