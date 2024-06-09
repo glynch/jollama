@@ -41,7 +41,7 @@ import com.glynch.ollama.support.Body;
 
 final class DefaultOllamaClient implements OllamaClient {
 
-    private static final String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
+    String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
     private static final String PING_PATH = "";
     private static final String LIST_PATH = "/api/tags";
     private static final String GENERATE_PATH = "/api/generate";
@@ -63,10 +63,6 @@ final class DefaultOllamaClient implements OllamaClient {
     DefaultOllamaClient(HttpClient client, String host) {
         this.host = host;
         this.client = client;
-    }
-
-    DefaultOllamaClient(HttpClient client) {
-        this(client, DEFAULT_OLLAMA_HOST);
     }
 
     @Override

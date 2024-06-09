@@ -1,17 +1,20 @@
 package com.glynch.ollama;
 
 import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.glynch.ollama.modelfile.ModelFile;
 
-public class Options extends AbstractMap<Options.Key, Object> {
+public class Options extends AbstractMap<String, Object> {
 
-    private final Map<Options.Key, Object> options = new HashMap<>();
+    private final Map<String, Object> options = new HashMap<>();
 
-    public Options() {
+    private Options(Map<String, Object> options) {
+        this.options.putAll(options);
     }
 
     public Options(Options options) {
@@ -19,410 +22,288 @@ public class Options extends AbstractMap<Options.Key, Object> {
     }
 
     @Override
-    public Set<Entry<Options.Key, Object>> entrySet() {
+    public Set<Entry<String, Object>> entrySet() {
         return options.entrySet();
     }
 
     @Override
-    public Object put(Options.Key key, Object value) {
+    public Object put(String key, Object value) {
         throw new UnsupportedOperationException("'put' is not supported on Options");
     }
 
     public Integer getNumKeep() {
-        return (Integer) options.get(Key.NUM_KEEP);
-    }
-
-    public void setNumKeep(Integer numKeep) {
-        options.put(Key.NUM_KEEP, numKeep);
+        return (Integer) options.get(Key.NUM_KEEP.getValue());
     }
 
     public Integer getSeed() {
-        return (Integer) options.get(Key.SEED);
-    }
-
-    public void setSeed(Integer seed) {
-        options.put(Key.SEED, seed);
+        return (Integer) options.get(ModelFile.Key.SEED.getValue());
     }
 
     public Integer getNumPredict() {
-        return (Integer) options.get(Key.NUM_PREDICT);
-    }
-
-    public void setNumPredict(Integer numPredict) {
-        options.put(Key.NUM_PREDICT, numPredict);
+        return (Integer) options.get(ModelFile.Key.NUM_PREDICT.getValue());
     }
 
     public Integer getTopK() {
-        return (Integer) options.get(Key.TOP_K);
-    }
-
-    public void setTopK(Integer topK) {
-        options.put(Key.TOP_K, topK);
+        return (Integer) options.get(ModelFile.Key.TOP_K.getValue());
     }
 
     public Float getTopP() {
-        return (Float) options.get(Key.TOP_P);
-    }
-
-    public void setTopP(Float topP) {
-        options.put(Key.TOP_P, topP);
+        return (Float) options.get(ModelFile.Key.TOP_P.getValue());
     }
 
     public Float getTfsZ() {
-        return (Float) options.get(Key.TFS_Z);
-    }
-
-    public void setTfsZ(Float tfsZ) {
-        options.put(Key.TFS_Z, tfsZ);
+        return (Float) options.get(ModelFile.Key.TFS_Z.getValue());
     }
 
     public Float getTypicalP() {
-        return (Float) options.get(Key.TYPICAL_P);
-    }
-
-    public void setTypicalP(Float typicalP) {
-        options.put(Key.TYPICAL_P, typicalP);
+        return (Float) options.get(Key.TYPICAL_P.getValue());
     }
 
     public Integer getRepeatLastN() {
-        return (Integer) options.get(Key.REPEAT_LAST_N);
-    }
-
-    public void setRepeatLastN(Integer repeatLastN) {
-        options.put(Key.REPEAT_LAST_N, repeatLastN);
+        return (Integer) options.get(ModelFile.Key.REPEAT_LAST_N.getValue());
     }
 
     public Float getTemperature() {
-        return (Float) options.get(Key.TEMPERATURE);
-    }
-
-    public void setTemperature(Float temperature) {
-        options.put(Key.TEMPERATURE, temperature);
+        return (Float) options.get(ModelFile.Key.TEMPERATURE.getValue());
     }
 
     public Float getRepeatPenalty() {
-        return (Float) options.get(Key.REPEAT_PENALTY);
-    }
-
-    public void setRepeatPenalty(Float repeatPenalty) {
-        options.put(Key.REPEAT_PENALTY, repeatPenalty);
+        return (Float) options.get(ModelFile.Key.REPEAT_PENALTY.getValue());
     }
 
     public Float getPresencePenalty() {
-        return (Float) options.get(Key.PRESENCE_PENALTY);
-    }
-
-    public void setPresencePenalty(Float presencePenalty) {
-        options.put(Key.PRESENCE_PENALTY, presencePenalty);
+        return (Float) options.get(Key.PRESENCE_PENALTY.getValue());
     }
 
     public Float getFrequencyPenalty() {
-        return (Float) options.get(Key.FREQUENCY_PENALTY);
-    }
-
-    public void setFrequencyPenalty(Float frequencyPenalty) {
-        options.put(Key.FREQUENCY_PENALTY, frequencyPenalty);
+        return (Float) options.get(Key.FREQUENCY_PENALTY.getValue());
     }
 
     public Integer getMiroStat() {
-        return (Integer) options.get(Key.MIROSTAT);
-    }
-
-    public void setMiroStat(Integer miroStat) {
-        options.put(Key.MIROSTAT, miroStat);
+        return (Integer) options.get(ModelFile.Key.MIROSTAT.getValue());
     }
 
     public Float getMiroStatTau() {
-        return (Float) options.get(Key.MIROSTAT_TAU);
-    }
-
-    public void setMiroStatTau(Float miroStatTau) {
-        options.put(Key.MIROSTAT_TAU, miroStatTau);
+        return (Float) options.get(ModelFile.Key.MIROSTAT_TAU.getValue());
     }
 
     public Boolean getPenalizeNewline() {
-        return (Boolean) options.get(Key.PENALIZE_NEWLINE);
-    }
-
-    public void setPenalizeNewline(Boolean penalizeNewline) {
-        options.put(Key.PENALIZE_NEWLINE, penalizeNewline);
+        return (Boolean) options.get(Key.PENALIZE_NEWLINE.getValue());
     }
 
     String getStop() {
-        return (String) options.get(Key.STOP);
-    }
-
-    void setStop(String stop) {
-        options.put(Key.STOP, stop);
+        return (String) options.get(ModelFile.Key.STOP.getValue());
     }
 
     public Boolean getNuma() {
-        return (Boolean) options.get(Key.NUMA);
-    }
-
-    public void setNuma(Boolean numa) {
-        options.put(Key.NUMA, numa);
+        return (Boolean) options.get(Key.NUMA.getValue());
     }
 
     public Integer getNumCtx() {
-        return (Integer) options.get(Key.NUM_CTX);
-    }
-
-    public void setNumCtx(Integer numCtx) {
-        options.put(Key.NUM_CTX, numCtx);
+        return (Integer) options.get(ModelFile.Key.NUM_CTX.getValue());
     }
 
     public Integer getNumBatch() {
-        return (Integer) options.get(Key.NUM_BATCH);
-    }
-
-    public void setNumBatch(Integer numBatch) {
-        options.put(Key.NUM_BATCH, numBatch);
+        return (Integer) options.get(Key.NUM_BATCH.getValue());
     }
 
     public Integer getNumGpu() {
-        return (Integer) options.get(Key.NUM_GPU);
-    }
-
-    public void setNumGpu(Integer numGpu) {
-        options.put(Key.NUM_GPU, numGpu);
+        return (Integer) options.get(Key.NUM_GPU.getValue());
     }
 
     public Integer getMainGpu() {
-        return (Integer) options.get(Key.MAIN_GPU);
-    }
-
-    public void setMainGpu(Integer mainGpu) {
-        options.put(Key.MAIN_GPU, mainGpu);
+        return (Integer) options.get(Key.MAIN_GPU.getValue());
     }
 
     public Boolean getLowVram() {
-        return (Boolean) options.get(Key.LOW_VRAM);
-    }
-
-    public void setLowVram(Boolean lowVram) {
-        options.put(Key.LOW_VRAM, lowVram);
+        return (Boolean) options.get(Key.LOW_VRAM.getValue());
     }
 
     public Boolean getF16Kv() {
-        return (Boolean) options.get(Key.F16_KV);
-    }
-
-    public void setF16Kv(Boolean f16Kv) {
-        options.put(Key.F16_KV, f16Kv);
+        return (Boolean) options.get(Key.F16_KV.getValue());
     }
 
     public Boolean getVocabOnly() {
-        return (Boolean) options.get(Key.VOCAB_ONLY);
-    }
-
-    public void setVocabOnly(Boolean vocabOnly) {
-        options.put(Key.VOCAB_ONLY, vocabOnly);
+        return (Boolean) options.get(Key.VOCAB_ONLY.getValue());
     }
 
     public Boolean getUseMmap() {
-        return (Boolean) options.get(Key.USE_MMAP);
-    }
-
-    public void setUseMmap(Boolean useMmap) {
-        options.put(Key.USE_MMAP, useMmap);
+        return (Boolean) options.get(Key.USE_MMAP.getValue());
     }
 
     public Boolean getUseMlock() {
-        return (Boolean) options.get(Key.USE_MLOCK);
-    }
-
-    public void setUseMlock(Boolean useMlock) {
-        options.put(Key.USE_MLOCK, useMlock);
+        return (Boolean) options.get(Key.USE_MLOCK.getValue());
     }
 
     public Integer getNumThread() {
-        return (Integer) options.get(Key.NUM_THREAD);
-    }
-
-    public void setNumThread(Integer numThread) {
-        options.put(Key.NUM_THREAD, numThread);
+        return (Integer) options.get(Key.NUM_THREAD.getValue());
     }
 
     public static Builder builder() {
         return new Builder();
     }
 
-    public static Builder builder(Options options) {
-        return new Builder(options);
-    }
-
     public static class Builder {
-        private final Options options;
+        private final Map<String, Object> options = new HashMap<>();
 
         public Builder() {
-            this.options = new Options();
+
         }
 
         public Builder(Options options) {
-            this.options = new Options(options);
+            this.options.putAll(options);
         }
 
         public Builder numKeep(Integer numKeep) {
-            options.setNumKeep(numKeep);
+            options.put(Key.NUM_KEEP.getValue(), numKeep);
             return this;
         }
 
         public Builder seed(Integer seed) {
-            options.setSeed(seed);
+            options.put(ModelFile.Key.SEED.getValue(), seed);
             return this;
         }
 
         public Builder numPredict(Integer numPredict) {
-            options.setNumPredict(numPredict);
+            options.put(ModelFile.Key.NUM_PREDICT.getValue(), numPredict);
             return this;
         }
 
         public Builder topK(Integer topK) {
-            options.setTopK(topK);
+            options.put(ModelFile.Key.TOP_K.getValue(), topK);
             return this;
         }
 
         public Builder topP(Float topP) {
-            options.setTopP(topP);
+            options.put(ModelFile.Key.TOP_P.getValue(), topP);
             return this;
         }
 
         public Builder tfsZ(Float tfsZ) {
-            options.setTfsZ(tfsZ);
+            options.put(ModelFile.Key.TFS_Z.getValue(), tfsZ);
             return this;
         }
 
         public Builder typicalP(Float typicalP) {
-            options.setTypicalP(typicalP);
+            options.put(Key.TYPICAL_P.getValue(), typicalP);
             return this;
         }
 
         public Builder repeatLastN(Integer repeatLastN) {
-            options.setRepeatLastN(repeatLastN);
+            options.put(ModelFile.Key.REPEAT_LAST_N.getValue(), repeatLastN);
             return this;
         }
 
         public Builder temperature(Float temperature) {
-            options.setTemperature(temperature);
+            options.put(ModelFile.Key.TEMPERATURE.getValue(), temperature);
             return this;
         }
 
         public Builder repeatPenalty(Float repeatPenalty) {
-            options.setRepeatPenalty(repeatPenalty);
+            options.put(ModelFile.Key.REPEAT_PENALTY.getValue(), repeatPenalty);
             return this;
         }
 
         public Builder presencePenalty(Float presencePenalty) {
-            options.setPresencePenalty(presencePenalty);
+            options.put(Key.PRESENCE_PENALTY.getValue(), presencePenalty);
             return this;
         }
 
         public Builder frequencyPenalty(Float frequencyPenalty) {
-            options.setFrequencyPenalty(frequencyPenalty);
+            options.put(Key.FREQUENCY_PENALTY.getValue(), frequencyPenalty);
             return this;
         }
 
         public Builder miroStat(Integer miroStat) {
-            options.setMiroStat(miroStat);
+            options.put(ModelFile.Key.MIROSTAT.getValue(), miroStat);
             return this;
         }
 
         public Builder miroStatTau(Float miroStatTau) {
-            options.setMiroStatTau(miroStatTau);
+            options.put(ModelFile.Key.MIROSTAT_TAU.getValue(), miroStatTau);
             return this;
         }
 
         public Builder penalizeNewline(Boolean penalizeNewline) {
-            options.setPenalizeNewline(penalizeNewline);
+            options.put(Key.PENALIZE_NEWLINE.getValue(), penalizeNewline);
             return this;
         }
 
         public Builder stop(String stop) {
-            options.setStop(stop);
+            options.put(ModelFile.Key.STOP.getValue(), stop);
             return this;
         }
 
         public Builder numa(Boolean numa) {
-            options.setNuma(numa);
+            options.put(Key.NUMA.getValue(), numa);
             return this;
         }
 
         public Builder numCtx(Integer numCtx) {
-            options.setNumCtx(numCtx);
+            options.put(ModelFile.Key.NUM_CTX.getValue(), numCtx);
             return this;
         }
 
         public Builder numBatch(Integer numBatch) {
-            options.setNumBatch(numBatch);
+            options.put(Key.NUM_BATCH.getValue(), numBatch);
             return this;
         }
 
         public Builder numGpu(Integer numGpu) {
-            options.setNumGpu(numGpu);
+            options.put(Key.NUM_GPU.getValue(), numGpu);
             return this;
         }
 
         public Builder mainGpu(Integer mainGpu) {
-            options.setMainGpu(mainGpu);
+            options.put(Key.MAIN_GPU.getValue(), mainGpu);
             return this;
         }
 
         public Builder lowVram(Boolean lowVram) {
-            options.setLowVram(lowVram);
+            options.put(Key.LOW_VRAM.getValue(), lowVram);
             return this;
         }
 
         public Builder f16Kv(Boolean f16Kv) {
-            options.setF16Kv(f16Kv);
+            options.put(Key.F16_KV.getValue(), f16Kv);
             return this;
         }
 
         public Builder vocabOnly(Boolean vocabOnly) {
-            options.setVocabOnly(vocabOnly);
+            options.put(Key.VOCAB_ONLY.getValue(), vocabOnly);
             return this;
         }
 
         public Builder useMmap(Boolean useMmap) {
-            options.setUseMmap(useMmap);
+            options.put(Key.USE_MMAP.getValue(), useMmap);
             return this;
         }
 
         public Builder useMlock(Boolean useMlock) {
-            options.setUseMlock(useMlock);
+            options.put(Key.USE_MLOCK.getValue(), useMlock);
             return this;
         }
 
         public Builder numThread(Integer numThread) {
-            options.setNumThread(numThread);
+            options.put(Key.NUM_THREAD.getValue(), numThread);
             return this;
         }
 
         public Options build() {
-            return options;
+            return new Options(options);
         }
 
     }
 
     public enum Key {
         NUM_KEEP("num_keep"),
-        SEED("seed"),
         NUM_PREDICT("num_predict"),
-        TOP_K("top_k"),
-        TOP_P("top_p"),
-        TFS_Z("tfs_z"),
         TYPICAL_P("typical_p"),
-        REPEAT_LAST_N("repeat_last_n"),
-        TEMPERATURE("temperature"),
-        REPEAT_PENALTY("repeat_penalty"),
         PRESENCE_PENALTY("presence_penalty"),
         FREQUENCY_PENALTY("frequency_penalty"),
-        MIROSTAT("mirostat"),
-        MIROSTAT_TAU("mirostat_tau"),
         PENALIZE_NEWLINE("penalize_newline"),
         STOP("stop"),
         NUMA("numa"),
-        NUM_CTX("num_ctx"),
         NUM_BATCH("num_batch"),
         NUM_GPU("num_gpu"),
         MAIN_GPU("main_gpu"),
@@ -447,6 +328,11 @@ public class Options extends AbstractMap<Options.Key, Object> {
         @Override
         public String toString() {
             return value;
+        }
+
+        public static Key of(String value) {
+            return Arrays.stream(values()).filter(v -> v.getValue().equals(value)).findFirst()
+                    .orElse(null);
         }
     }
 

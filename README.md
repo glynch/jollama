@@ -79,8 +79,6 @@ Get a list of the current models.
 
 ### Generate (batch)
 
-You can call _batch_ explicitly but it is the default
-
 ```java
     GenerateResponse generateResponse = client.generate("llama3", "What is a tsunami?")
                     .batch()

@@ -11,11 +11,6 @@ final class DefaultOllamaClientBuilder implements OllamaClient.Builder {
     private final HttpClient.Builder clientBuilder = HttpClient.newBuilder();
     private String host;
 
-    DefaultOllamaClientBuilder() {
-        clientBuilder.version(HttpClient.Version.HTTP_2);
-
-    }
-
     DefaultOllamaClientBuilder(String host) {
         this.host = host;
         clientBuilder.version(HttpClient.Version.HTTP_2);
@@ -37,8 +32,7 @@ final class DefaultOllamaClientBuilder implements OllamaClient.Builder {
 
     @Override
     public OllamaClient build() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'build'");
+        return new DefaultOllamaClient(clientBuilder.build(), host);
     }
 
 }

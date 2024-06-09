@@ -24,4 +24,13 @@ public enum Role {
         return value;
     }
 
+    public static Role of(String value) {
+        for (Role role : Role.values()) {
+            if (role.value.equals(value)) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Invalid role: " + value);
+    }
+
 }

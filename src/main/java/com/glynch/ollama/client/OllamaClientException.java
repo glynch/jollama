@@ -1,6 +1,8 @@
 package com.glynch.ollama.client;
 
-public class OllamaClientException extends RuntimeException {
+import com.glynch.ollama.NestedRuntimeException;
+
+public class OllamaClientException extends NestedRuntimeException {
 
     private static final long serialVersionUID = 1L;
 
@@ -12,20 +14,4 @@ public class OllamaClientException extends RuntimeException {
         super(message, cause);
     }
 
-    public Throwable getRootCause() {
-        Throwable cause = getCause();
-        if (cause == null) {
-            return this;
-        }
-        Throwable nextCause = cause;
-        while ((nextCause = nextCause.getCause()) != null) {
-            cause = nextCause;
-        }
-        return cause;
-    }
-
-    public Throwable getMostSpecificCause() {
-        Throwable rootCause = getRootCause();
-        return (rootCause != null ? rootCause : this);
-    }
 }

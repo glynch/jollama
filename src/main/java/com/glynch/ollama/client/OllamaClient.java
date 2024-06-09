@@ -21,6 +21,7 @@ import com.glynch.ollama.pull.PullResponse;
 import com.glynch.ollama.show.ShowResponse;
 
 public interface OllamaClient {
+    String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
 
     static OllamaClient create() {
         return builder().build();
@@ -31,7 +32,7 @@ public interface OllamaClient {
     }
 
     static Builder builder() {
-        return new DefaultOllamaClientBuilder();
+        return new DefaultOllamaClientBuilder(DEFAULT_OLLAMA_HOST);
     }
 
     static Builder builder(String host) {
