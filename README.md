@@ -128,13 +128,13 @@ Create a model.
 
 ```java
     ModelFile modelFile = ModelFile.from("llama3")
-            .template("You are mario from Super MarioBros.")
+            .system("You are mario from Super MarioBros.")
             .temperature(0f)
             .seed(42)
             .build();
 
     client.create("mario-test", modelFile)
-        .execute().forEach(
+        .stream().forEach(
             System.out::println
         );
 ```
