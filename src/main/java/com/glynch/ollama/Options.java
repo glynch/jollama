@@ -3,6 +3,7 @@ package com.glynch.ollama;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -87,12 +88,17 @@ public class Options extends AbstractMap<String, Object> {
         return (Float) options.get(ModelFile.Key.MIROSTAT_TAU.getValue());
     }
 
+    public Float getMiroStatEta() {
+        return (Float) options.get(ModelFile.Key.MIROSTAT_ETA.getValue());
+    }
+
     public Boolean getPenalizeNewline() {
         return (Boolean) options.get(Key.PENALIZE_NEWLINE.getValue());
     }
 
-    String getStop() {
-        return (String) options.get(ModelFile.Key.STOP.getValue());
+    @SuppressWarnings("unchecked")
+    List<String> getStop() {
+        return (List<String>) options.get(ModelFile.Key.STOP.getValue());
     }
 
     public Boolean getNuma() {
@@ -224,12 +230,17 @@ public class Options extends AbstractMap<String, Object> {
             return this;
         }
 
+        public Builder miroStatEta(Float miroStatEta) {
+            options.put(ModelFile.Key.MIROSTAT_ETA.getValue(), miroStatEta);
+            return this;
+        }
+
         public Builder penalizeNewline(Boolean penalizeNewline) {
             options.put(Key.PENALIZE_NEWLINE.getValue(), penalizeNewline);
             return this;
         }
 
-        public Builder stop(String stop) {
+        public Builder stop(List<String> stop) {
             options.put(ModelFile.Key.STOP.getValue(), stop);
             return this;
         }

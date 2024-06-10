@@ -1,6 +1,7 @@
 package com.glynch.ollama.modelfile;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.regex.Pattern;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.glynch.ollama.chat.Message;
 import com.glynch.ollama.chat.Role;
-import com.glynch.ollama.show.ShowResponse;
 
 public record ModelFile(String from, String adapter, String template, String system, List<Message> messages,
         Map<String, Object> parameters,
@@ -30,7 +30,7 @@ public record ModelFile(String from, String adapter, String template, String sys
     private static final Pattern PARAMETER_PATTERN = Pattern.compile("^PARAMETER\\s+([a-zA-z0-9.]+)?\\s+(.*)$",
             Pattern.MULTILINE);
     private static final Pattern LICENSE_PATTERN = Pattern.compile(
-            "^LICENSE(\\s+?)(.*)(?=((^PARAMETER|^MESSAGE^|^SYSTEM|^TEMPLATE|^FROM|^ADAPTER))|$)",
+            "^\\s*?LICENSE\\s+((\\\"(.+)\\\")|(.+)(?=(^PARAMETER|^MESSAGE|^SYSTEM|^TEMPLATE|^FROM|^ADAPTER)))",
             Pattern.DOTALL | Pattern.MULTILINE);
     private static final Pattern SYSTEM_PATTERN = Pattern.compile("^SYSTEM\\s+(.*?)$", Pattern.MULTILINE);
     private static final Pattern ADAPTER_PATTERN = Pattern.compile("^ADAPTER\\s+(.*?)$", Pattern.MULTILINE);
@@ -112,7 +112,6 @@ public record ModelFile(String from, String adapter, String template, String sys
     }
 
     public static ModelFile parse(String modelfile) {
-        System.out.println(modelfile);
         String from = null;
         String template = null;
         Map<String, Object> parameters = new HashMap<>();
@@ -154,7 +153,7 @@ public record ModelFile(String from, String adapter, String template, String sys
 
         Matcher licenseMatcher = LICENSE_PATTERN.matcher(modelfile);
         if (licenseMatcher.find()) {
-            license = licenseMatcher.group(2).replaceAll("\"", "");
+            license = licenseMatcher.group(3);
         }
 
         Matcher systemMatcher = SYSTEM_PATTERN.matcher(modelfile);
@@ -176,12 +175,14 @@ public record ModelFile(String from, String adapter, String template, String sys
         return new ModelFile(from, adapter, template, system, messages, parameters, license);
     }
 
-    public static ModelFile parse(Path path) throws InvalidModelFileException, IOException {
-        return parse(Files.readString(path));
-    }
-
-    public static ModelFile of(ShowResponse showResponse) {
-        return parse(showResponse.modelfile());
+    public static ModelFile parse(Path path) throws InvalidModelFileException, UncheckedIOException {
+        String modelfile = null;
+        try {
+            modelfile = Files.readString(path);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        return parse(modelfile);
     }
 
     public static Builder from(String from) {

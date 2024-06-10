@@ -21,25 +21,61 @@ import com.glynch.ollama.process.ProcessModel;
 import com.glynch.ollama.process.ProcessModels;
 import com.glynch.ollama.pull.PullResponse;
 
+/**
+ * Fluent Client for the Ollama API.
+ * 
+ * Use static factory methods {@link create()} or {@link create(String)} to
+ * create a new Ollama client.
+ * 
+ * @see <a href="https://github.com/ollama/ollama/blob/main/docs/api.md">Ollama
+ *      API</a>
+ * 
+ */
 public interface OllamaClient {
     String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
 
+    /**
+     * Create a new Ollama client.
+     * 
+     * @return a new Ollama client
+     * @throws OllamaClientException
+     */
     static OllamaClient create() {
         return builder().build();
     }
 
+    /**
+     * Create a new Ollama client with the specified host.
+     * 
+     * @param host
+     * @return a new Ollama client
+     */
     static OllamaClient create(String host) {
         return builder(host).build();
     }
 
+    /**
+     * Create a new Ollama client builder with the default host.
+     * 
+     * @return a new Ollama client builder
+     */
     static Builder builder() {
         return new DefaultOllamaClientBuilder(DEFAULT_OLLAMA_HOST);
     }
 
+    /**
+     * Create a new Ollama client builder with the specified host.
+     * 
+     * @param host
+     * @return a new Ollama client builder
+     */
     static Builder builder(String host) {
         return new DefaultOllamaClientBuilder(host);
     }
 
+    /**
+     * The Ollama client builder interface.
+     */
     interface Builder {
 
         Builder followRedirects();
@@ -50,16 +86,58 @@ public interface OllamaClient {
 
     }
 
+    /**
+     * Get the host.
+     * 
+     * @return the host
+     */
     String getHost();
 
+    /**
+     * Get a list of the running models
+     * 
+     * @see <a href=
+     *      "https://github.com/ollama/ollama/blob/main/docs/api.md#list-running-models">List
+     *      Running
+     *      Models</a>
+     * 
+     * @return a list of the running models
+     * @throws OllamaClientException
+     */
     ProcessModels ps() throws OllamaClientException;
+
+    /**
+     * Get the running model with the specified name.
+     * 
+     * @param name
+     * @return the running model with the specified name
+     * @throws OllamaClientException
+     */
 
     Optional<ProcessModel> ps(String name) throws OllamaClientException;
 
-    void load(String model) throws OllamaClientException;
+    /**
+     * Load the model with the specified name.
+     * 
+     * @param model
+     * @return the running model with the specified name
+     * @throws OllamaClientException
+     */
+    ProcessModel load(String model) throws OllamaClientException;
 
+    /**
+     * Ping the host
+     * 
+     * @return true if the host is reachable, false otherwise
+     */
     boolean ping();
 
+    /**
+     * List the models.
+     * 
+     * @return a list of the models
+     * @throws OllamaClientException
+     */
     ListModels list() throws OllamaClientException;
 
     Optional<ListModel> list(String name) throws OllamaClientException;

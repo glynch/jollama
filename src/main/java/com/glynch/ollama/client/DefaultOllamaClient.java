@@ -209,9 +209,10 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public void load(String model) throws OllamaClientException {
+    public ProcessModel load(String model) throws OllamaClientException {
         Objects.requireNonNull(model, "model must not be null");
         generate(model, "").batch();
+        return ps(model).get();
     }
 
     @Override
