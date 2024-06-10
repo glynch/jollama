@@ -155,6 +155,10 @@ public interface OllamaClient {
 
     ChatSpec chat(String model, String prompt);
 
+    ChatSpec chat(String model, String prompt, String... images);
+
+    ChatSpec chat(String model, String prompt, List<String> images);
+
     EmbeddingsSpec embeddings(String model, String prompt);
 
     CreateSpec create(String name, String modelfile) throws InvalidModelFileException;

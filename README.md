@@ -171,10 +171,9 @@ Chat by default will _stream_ the results. If you do not want to stream you can 
 
 ```java
 
-   Message message = Message.user("What is a tsunami?");
-    client.chat("llama3", message).stream().forEach(response -> {
-            System.out.print(response.message().content());
-        });
+  client.chat("llama3", "What is a tsunami?").stream().forEach(response -> {
+                System.out.print(response.message().content());
+            });
 ```
 
 ### Chat (images)
@@ -183,10 +182,11 @@ Chat with images. You need to ensure you use a multimodel model such as _lava_.
 
 ```java
 
- Message message = Message.user("Describe this image?",
-                    Image.encode(Path.of("image.png")));
-            System.out.println(client.chat("llava", message)
-                    .batch());
+ System.out.println(client
+                    .chat("llava", "Describe this image?",
+                            Image.encode(Path.of("image.png")))
+                    .batch()
+                    .chat().message().content());
 ```
 
 ### Chat (history)

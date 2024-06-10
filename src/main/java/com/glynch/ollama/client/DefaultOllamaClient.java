@@ -254,6 +254,22 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
+    public ChatSpec chat(String model, String prompt, String... images) {
+        Objects.requireNonNull(model, "model must not be null");
+        Objects.requireNonNull(prompt, "message must not be null");
+        Message message = Message.user(prompt, images);
+        return new DefaultChatSpec(this, model, message);
+    }
+
+    @Override
+    public ChatSpec chat(String model, String prompt, List<String> images) {
+        Objects.requireNonNull(model, "model must not be null");
+        Objects.requireNonNull(prompt, "message must not be null");
+        Message message = Message.user(prompt, images);
+        return new DefaultChatSpec(this, model, message);
+    }
+
+    @Override
     public EmbeddingsSpec embeddings(String model, String prompt) {
         Objects.requireNonNull(model, "model must not be null");
         Objects.requireNonNull(prompt, "prompt must not be null");
