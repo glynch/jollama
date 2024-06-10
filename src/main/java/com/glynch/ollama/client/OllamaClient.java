@@ -3,11 +3,14 @@ package com.glynch.ollama.client;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.glynch.ollama.Format;
+import com.glynch.ollama.Model;
 import com.glynch.ollama.Options;
+import com.glynch.ollama.chat.ChatHistoryResponse;
 import com.glynch.ollama.chat.ChatResponse;
 import com.glynch.ollama.chat.Message;
 import com.glynch.ollama.create.CreateResponse;
@@ -125,6 +128,8 @@ public interface OllamaClient {
      */
     ProcessModel load(String model) throws OllamaClientException;
 
+    ProcessModel load(Model model) throws OllamaClientException;
+
     /**
      * Ping the host
      * 
@@ -148,7 +153,7 @@ public interface OllamaClient {
 
     GenerateSpec generate(String model, String prompt);
 
-    ChatSpec chat(String model, Message message, Message... messages);
+    ChatSpec chat(String model, String prompt);
 
     EmbeddingsSpec embeddings(String model, String prompt);
 
@@ -202,9 +207,9 @@ public interface OllamaClient {
 
     interface ChatSpec {
 
-        ChatSpec message(Message message);
+        ChatSpec history(Message... messages);
 
-        ChatSpec message(String message);
+        ChatSpec history(List<Message> messages);
 
         ChatSpec format(Format format);
 
@@ -214,7 +219,7 @@ public interface OllamaClient {
 
         Stream<ChatResponse> stream() throws OllamaClientException;
 
-        ChatResponse batch() throws OllamaClientException;
+        ChatHistoryResponse batch() throws OllamaClientException;
 
     }
 

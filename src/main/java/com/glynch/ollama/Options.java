@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -157,15 +158,18 @@ public class Options extends AbstractMap<String, Object> {
         }
 
         public Builder(Options options) {
+            Objects.requireNonNull(options, "options cannot be null");
             this.options.putAll(options);
         }
 
         public Builder numKeep(Integer numKeep) {
+            Objects.requireNonNull(numKeep, "numKeep cannot be null");
             options.put(Key.NUM_KEEP.getValue(), numKeep);
             return this;
         }
 
         public Builder seed(Integer seed) {
+            Objects.requireNonNull(seed, "seed cannot be null");
             options.put(ModelFile.Key.SEED.getValue(), seed);
             return this;
         }
@@ -176,26 +180,31 @@ public class Options extends AbstractMap<String, Object> {
         }
 
         public Builder topK(Integer topK) {
+            Objects.requireNonNull(topK, "topK cannot be null");
             options.put(ModelFile.Key.TOP_K.getValue(), topK);
             return this;
         }
 
         public Builder topP(Float topP) {
+            Objects.requireNonNull(topP, "topP cannot be null");
             options.put(ModelFile.Key.TOP_P.getValue(), topP);
             return this;
         }
 
         public Builder tfsZ(Float tfsZ) {
+            Objects.requireNonNull(tfsZ, "tfsZ cannot be null");
             options.put(ModelFile.Key.TFS_Z.getValue(), tfsZ);
             return this;
         }
 
         public Builder typicalP(Float typicalP) {
+            Objects.requireNonNull(typicalP, "typicalP cannot be null");
             options.put(Key.TYPICAL_P.getValue(), typicalP);
             return this;
         }
 
         public Builder repeatLastN(Integer repeatLastN) {
+            Objects.requireNonNull(repeatLastN, "repeatLastN cannot be null");
             options.put(ModelFile.Key.REPEAT_LAST_N.getValue(), repeatLastN);
             return this;
         }
@@ -206,96 +215,115 @@ public class Options extends AbstractMap<String, Object> {
         }
 
         public Builder repeatPenalty(Float repeatPenalty) {
+            Objects.requireNonNull(repeatPenalty, "repeatPenalty cannot be null");
             options.put(ModelFile.Key.REPEAT_PENALTY.getValue(), repeatPenalty);
             return this;
         }
 
         public Builder presencePenalty(Float presencePenalty) {
+            Objects.requireNonNull(presencePenalty, "presencePenalty cannot be null");
             options.put(Key.PRESENCE_PENALTY.getValue(), presencePenalty);
             return this;
         }
 
         public Builder frequencyPenalty(Float frequencyPenalty) {
+            Objects.requireNonNull(frequencyPenalty, "frequencyPenalty cannot be null");
             options.put(Key.FREQUENCY_PENALTY.getValue(), frequencyPenalty);
             return this;
         }
 
         public Builder miroStat(Integer miroStat) {
+            Objects.requireNonNull(miroStat, "miroStat cannot be null");
             options.put(ModelFile.Key.MIROSTAT.getValue(), miroStat);
             return this;
         }
 
         public Builder miroStatTau(Float miroStatTau) {
+            Objects.requireNonNull(miroStatTau, "miroStatTau cannot be null");
             options.put(ModelFile.Key.MIROSTAT_TAU.getValue(), miroStatTau);
             return this;
         }
 
         public Builder miroStatEta(Float miroStatEta) {
+            Objects.requireNonNull(miroStatEta, "miroStatEta cannot be null");
             options.put(ModelFile.Key.MIROSTAT_ETA.getValue(), miroStatEta);
             return this;
         }
 
         public Builder penalizeNewline(Boolean penalizeNewline) {
+            Objects.requireNonNull(penalizeNewline, "penalizeNewline cannot be null");
             options.put(Key.PENALIZE_NEWLINE.getValue(), penalizeNewline);
             return this;
         }
 
         public Builder stop(List<String> stop) {
+            Objects.requireNonNull(stop, "stop cannot be null");
             options.put(ModelFile.Key.STOP.getValue(), stop);
             return this;
         }
 
         public Builder numa(Boolean numa) {
+            Objects.requireNonNull(numa, "numa cannot be null");
             options.put(Key.NUMA.getValue(), numa);
             return this;
         }
 
         public Builder numCtx(Integer numCtx) {
+            Objects.requireNonNull(numCtx, "numCtx cannot be null");
             options.put(ModelFile.Key.NUM_CTX.getValue(), numCtx);
             return this;
         }
 
         public Builder numBatch(Integer numBatch) {
+            Objects.requireNonNull(numBatch, "numBatch cannot be null");
             options.put(Key.NUM_BATCH.getValue(), numBatch);
             return this;
         }
 
         public Builder numGpu(Integer numGpu) {
+            Objects.requireNonNull(numGpu, "numGpu cannot be null");
             options.put(Key.NUM_GPU.getValue(), numGpu);
             return this;
         }
 
         public Builder mainGpu(Integer mainGpu) {
+            Objects.requireNonNull(mainGpu, "mainGpu cannot be null");
             options.put(Key.MAIN_GPU.getValue(), mainGpu);
             return this;
         }
 
         public Builder lowVram(Boolean lowVram) {
+            Objects.requireNonNull(lowVram, "lowVram cannot be null");
             options.put(Key.LOW_VRAM.getValue(), lowVram);
             return this;
         }
 
         public Builder f16Kv(Boolean f16Kv) {
+            Objects.requireNonNull(f16Kv, "f16Kv cannot be null");
             options.put(Key.F16_KV.getValue(), f16Kv);
             return this;
         }
 
         public Builder vocabOnly(Boolean vocabOnly) {
+            Objects.requireNonNull(vocabOnly, "vocabOnly cannot be null");
             options.put(Key.VOCAB_ONLY.getValue(), vocabOnly);
             return this;
         }
 
         public Builder useMmap(Boolean useMmap) {
+            Objects.requireNonNull(useMmap, "useMmap cannot be null");
             options.put(Key.USE_MMAP.getValue(), useMmap);
             return this;
         }
 
         public Builder useMlock(Boolean useMlock) {
+            Objects.requireNonNull(useMlock, "useMlock cannot be null");
             options.put(Key.USE_MLOCK.getValue(), useMlock);
             return this;
         }
 
         public Builder numThread(Integer numThread) {
+            Objects.requireNonNull(numThread, "numThread cannot be null");
             options.put(Key.NUM_THREAD.getValue(), numThread);
             return this;
         }

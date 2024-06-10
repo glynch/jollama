@@ -16,7 +16,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.glynch.ollama.Format;
+import com.glynch.ollama.Model;
 import com.glynch.ollama.Options;
+import com.glynch.ollama.chat.ChatHistoryResponse;
 import com.glynch.ollama.chat.ChatRequest;
 import com.glynch.ollama.chat.ChatResponse;
 import com.glynch.ollama.chat.Message;
@@ -216,6 +218,13 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
+    public ProcessModel load(Model model) throws OllamaClientException {
+        Objects.requireNonNull(model, "model must not be null");
+        generate(model.toString(), "").batch();
+        return ps(model.toString()).get();
+    }
+
+    @Override
     public BlobsSpec blobs(String digest) {
         Objects.requireNonNull(digest, "digest must not be null");
         return new DefaultBlobsSpec(this, digest);
@@ -237,10 +246,11 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public ChatSpec chat(String model, Message message, Message... messages) {
+    public ChatSpec chat(String model, String prompt) {
         Objects.requireNonNull(model, "model must not be null");
-        Objects.requireNonNull(message, "message must not be null");
-        return new DefaultChatSpec(this, model, message, messages);
+        Objects.requireNonNull(prompt, "message must not be null");
+        Message message = Message.user(prompt);
+        return new DefaultChatSpec(this, model, message);
     }
 
     @Override
@@ -428,28 +438,28 @@ final class DefaultOllamaClient implements OllamaClient {
         private final DefaultOllamaClient ollamaClient;
         private final String model;
         private final List<Message> messages = new ArrayList<>();
+        private final Message message;
         private Format format;
         private Options options;
         private String keepAlive;
 
-        public DefaultChatSpec(DefaultOllamaClient ollamaClient, String model, Message message, Message... messages) {
+        public DefaultChatSpec(DefaultOllamaClient ollamaClient, String model, Message message) {
             this.ollamaClient = ollamaClient;
             this.model = model;
-            this.messages.add(message);
-            this.messages.addAll(List.of(messages));
+            this.message = message;
         }
 
         @Override
-        public ChatSpec message(Message message) {
-            Objects.requireNonNull(message, "message must not be null");
-            this.messages.add(message);
+        public ChatSpec history(Message... messages) {
+            Objects.requireNonNull(messages, "messages must not be null");
+            this.messages.addAll(List.of(messages));
             return this;
         }
 
         @Override
-        public ChatSpec message(String message) {
-            Objects.requireNonNull(message, "message must not be null");
-            this.messages.add(Message.user(message));
+        public ChatSpec history(List<Message> messages) {
+            Objects.requireNonNull(messages, "messages must not be null");
+            this.messages.addAll(messages);
             return this;
         }
 
@@ -476,14 +486,18 @@ final class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public Stream<ChatResponse> stream() throws OllamaClientException {
+            messages.add(message);
             ChatRequest chatRequest = new ChatRequest(model, messages, format, options, true, keepAlive);
             return ollamaClient.stream(CHAT_PATH, chatRequest, ChatResponse.class);
         }
 
         @Override
-        public ChatResponse batch() throws OllamaClientException {
+        public ChatHistoryResponse batch() throws OllamaClientException {
+            messages.add(message);
             ChatRequest chatRequest = new ChatRequest(model, messages, format, options, false, keepAlive);
-            return ollamaClient.post(CHAT_PATH, chatRequest, Body.Handlers.of(ChatResponse.class)).body();
+            ChatResponse chatResponse = ollamaClient.post(CHAT_PATH, chatRequest, Body.Handlers.of(ChatResponse.class))
+                    .body();
+            return new ChatHistoryResponse(chatResponse, messages);
         }
 
     }
