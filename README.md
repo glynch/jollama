@@ -40,7 +40,7 @@ Check if Ollama is up.
 
 ### Load
 
-Load a model into memory.
+Load a model into memory and returns information about the loaded model.
 
 ```java
     ProcessModel processModel = client.load("llama3:latest");
@@ -90,7 +90,7 @@ Get a list of the current models.
 
 ### Generate (Options)
 
-This eample also gives the same result each time since it uses the same _seed_ and _0_ temperature.
+This example also gives the same result each time since it uses the same _seed_ and _0_ temperature.
 
 ```java
     Options options = Options.builder().temperature(0f).seed(42).build();
@@ -141,6 +141,16 @@ Create a model.
         );
 ```
 
+Read a modefile from disk
+
+```java
+    ModelFile modelFile = ModelFile.parse(Path.of("mario-test.modelfile"))
+     client.create("mario-test", modelFile)
+        .stream().forEach(
+            System.out::println
+        );
+```
+
 ### Copy
 
 Copy a model.
@@ -151,6 +161,8 @@ Copy a model.
 ```
 
 ### Delete
+
+Delete a model
 
 ```java
     int statucCode = client.delete("llama3-copy");
@@ -167,7 +179,7 @@ Show the contents of a modelfile for an existing model.
 
 ### Chat
 
-Chat by default will _stream_ the results. If you do not want to stream you can call _batch()_ before executing.
+Chat with a model and stream the result.
 
 ```java
 
@@ -178,7 +190,7 @@ Chat by default will _stream_ the results. If you do not want to stream you can 
 
 ### Chat (images)
 
-Chat with images. You need to ensure you use a multimodel model such as _lava_.
+Chat with images. You need to ensure you use a multimodal model such as _llava_.
 
 ```java
 
@@ -191,7 +203,7 @@ Chat with images. You need to ensure you use a multimodel model such as _lava_.
 
 ### Chat (history)
 
-Chat with a model using the hsitory of previous messages.
+Chat with a model using the history of previous messages.
 
 ```java
 
@@ -202,6 +214,8 @@ Chat with a model using the hsitory of previous messages.
 ```
 
 ### Embeddings
+
+Generate embeddings for a prompt.
 
 ```java
     client.embeddings("nomic-embed-text", "What is a Tsunami?")
