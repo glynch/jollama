@@ -43,9 +43,11 @@ Check if Ollama is up.
 Load a model into memory.
 
 ```java
+    ProcessModel processModel = client.load("llama3:latest");
+```
 
-    boolean isLoaded = client.load("llama3");
-
+```java
+    ProcessModel processModel = client.load(LLAMA_3_LATEST);
 ```
 
 ### List
@@ -193,12 +195,9 @@ Chat with a model using the hsitory of previous messages.
 
 ```java
 
-   Message question = Message.user("Why is the sky blue?");
-            Message answer = client.chat("llama3", question).batch().message();
-            System.out.println(answer.content());
-            System.out.println(client
-                    .chat("llava", question, answer, Message.user("How is that different than mie scattering?"))
-                    .batch()
+   ChatHistoryResponse history = client.chat("llama3", "Why is the sky blue?").batch();
+            System.out.println(client.chat("llama3", "How is that different than mie scattering?")
+                    .history(history.history()).batch().chat()
                     .message().content());
 ```
 
