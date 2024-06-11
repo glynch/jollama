@@ -18,10 +18,11 @@ import java.util.stream.Stream;
 import com.glynch.ollama.Format;
 import com.glynch.ollama.Model;
 import com.glynch.ollama.Options;
-import com.glynch.ollama.chat.ChatHistoryResponse;
 import com.glynch.ollama.chat.ChatRequest;
 import com.glynch.ollama.chat.ChatResponse;
+import com.glynch.ollama.chat.InMemoryMessageHistory;
 import com.glynch.ollama.chat.Message;
+import com.glynch.ollama.chat.MessageHistory;
 import com.glynch.ollama.copy.CopyRequest;
 import com.glynch.ollama.create.CreateRequest;
 import com.glynch.ollama.create.CreateResponse;
@@ -453,8 +454,8 @@ final class DefaultOllamaClient implements OllamaClient {
 
         private final DefaultOllamaClient ollamaClient;
         private final String model;
-        private final List<Message> messages = new ArrayList<>();
         private final Message message;
+        private MessageHistory history = new InMemoryMessageHistory();
         private Format format;
         private Options options;
         private String keepAlive;
@@ -468,14 +469,21 @@ final class DefaultOllamaClient implements OllamaClient {
         @Override
         public ChatSpec history(Message... messages) {
             Objects.requireNonNull(messages, "messages must not be null");
-            this.messages.addAll(List.of(messages));
+            history.add(List.of(messages));
             return this;
         }
 
         @Override
         public ChatSpec history(List<Message> messages) {
             Objects.requireNonNull(messages, "messages must not be null");
-            this.messages.addAll(messages);
+            history.add(messages);
+            return this;
+        }
+
+        @Override
+        public ChatSpec history(MessageHistory history) {
+            Objects.requireNonNull(history, "history must not be null");
+            this.history = history;
             return this;
         }
 
@@ -502,18 +510,19 @@ final class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public Stream<ChatResponse> stream() throws OllamaClientException {
-            messages.add(message);
-            ChatRequest chatRequest = new ChatRequest(model, messages, format, options, true, keepAlive);
+            history.add(message);
+            ChatRequest chatRequest = new ChatRequest(model, history.messages(), format, options, true, keepAlive);
             return ollamaClient.stream(CHAT_PATH, chatRequest, ChatResponse.class);
         }
 
         @Override
-        public ChatHistoryResponse batch() throws OllamaClientException {
-            messages.add(message);
-            ChatRequest chatRequest = new ChatRequest(model, messages, format, options, false, keepAlive);
+        public ChatResponse batch() throws OllamaClientException {
+            history.add(message);
+            ChatRequest chatRequest = new ChatRequest(model, history.messages(), format, options, false, keepAlive);
             ChatResponse chatResponse = ollamaClient.post(CHAT_PATH, chatRequest, Body.Handlers.of(ChatResponse.class))
                     .body();
-            return new ChatHistoryResponse(chatResponse, messages);
+            history.add(chatResponse.message());
+            return chatResponse;
         }
 
     }

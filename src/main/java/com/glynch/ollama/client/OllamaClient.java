@@ -10,9 +10,9 @@ import java.util.stream.Stream;
 import com.glynch.ollama.Format;
 import com.glynch.ollama.Model;
 import com.glynch.ollama.Options;
-import com.glynch.ollama.chat.ChatHistoryResponse;
 import com.glynch.ollama.chat.ChatResponse;
 import com.glynch.ollama.chat.Message;
+import com.glynch.ollama.chat.MessageHistory;
 import com.glynch.ollama.create.CreateResponse;
 import com.glynch.ollama.embeddings.EmbeddingsResponse;
 import com.glynch.ollama.generate.GenerateResponse;
@@ -215,6 +215,8 @@ public interface OllamaClient {
 
         ChatSpec history(List<Message> messages);
 
+        ChatSpec history(MessageHistory history);
+
         ChatSpec format(Format format);
 
         ChatSpec options(Options options);
@@ -223,7 +225,7 @@ public interface OllamaClient {
 
         Stream<ChatResponse> stream() throws OllamaClientException;
 
-        ChatHistoryResponse batch() throws OllamaClientException;
+        ChatResponse batch() throws OllamaClientException;
 
     }
 

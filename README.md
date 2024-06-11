@@ -198,7 +198,7 @@ Chat with images. You need to ensure you use a multimodal model such as _llava_.
                     .chat("llava", "Describe this image?",
                             Image.encode(Path.of("image.png")))
                     .batch()
-                    .chat().message().content());
+                    .message().content());
 ```
 
 ### Chat (history)
@@ -207,10 +207,13 @@ Chat with a model using the history of previous messages.
 
 ```java
 
-   ChatHistoryResponse history = client.chat("llama3", "Why is the sky blue?").batch();
-            System.out.println(client.chat("llama3", "How is that different than mie scattering?")
-                    .history(history.history()).batch().chat()
-                    .message().content());
+    MessageHistory history = new InMemoryMessageHistory();
+    client.chat("llama3", "Why is the sky blue?").history(history).batch();
+    client.chat("llama3", "How is that different than mie scattering?").history(history).batch();
+
+    for (Message message : history) {
+        System.out.println(message);
+    }
 ```
 
 ### Embeddings
