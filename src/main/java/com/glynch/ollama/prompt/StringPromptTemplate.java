@@ -20,6 +20,9 @@ public class StringPromptTemplate implements PromptTemplate {
         while (matcher.find()) {
             variables.add(matcher.group(1));
         }
+        if (variables.isEmpty()) {
+            throw new IllegalArgumentException("No variables found in template");
+        }
 
     }
 

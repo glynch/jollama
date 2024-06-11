@@ -211,6 +211,8 @@ public interface OllamaClient {
 
     interface ChatSpec {
 
+        ChatSpec system(String system);
+
         ChatSpec history(Message... messages);
 
         ChatSpec history(List<Message> messages);

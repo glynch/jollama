@@ -24,12 +24,12 @@ public class InMemoryMessageHistory implements MessageHistory {
 
     @Override
     public void add(MessageHistory history) {
-        messages.addAll(history.messages());
+        this.messages.addAll(history.messages());
     }
 
     @Override
     public void add(Message message) {
-        messages.add(message);
+        this.messages.add(message);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class InMemoryMessageHistory implements MessageHistory {
 
     @Override
     public void clear() {
-        messages.clear();
+        this.messages.clear();
     }
 
     @Override
@@ -49,7 +49,8 @@ public class InMemoryMessageHistory implements MessageHistory {
 
     @Override
     public Iterator<Message> iterator() {
-        return messages.iterator();
+        System.out.println("InMemoryMessageHistory.iterator() " + this.messages.size());
+        return this.messages.iterator();
     }
 
 }

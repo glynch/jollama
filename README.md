@@ -227,6 +227,30 @@ Chat with a model using the history of previous messages.
     }
 ```
 
+### Chat (history, stream)
+
+Since the message is streamed yo0u need to add it to the history manually.
+
+```java
+     MessageHistory history = new InMemoryMessageHistory();
+     client.chat("llama3", "Why is the sky blue?").history(history).batch();
+            StringBuilder content = new StringBuilder();
+            client.chat("llama3", "How is that different than mie scattering?")
+                    .history(history)
+                    .stream()
+                    .forEach(
+                            r -> {
+                                content.append(r.message().content());
+                                System.out.print(r.message().content());
+                            });
+
+            history.add(Message.assistant(content.toString()));
+
+            for (Message message : history) {
+                System.out.println(message);
+            }
+```
+
 ### Embeddings
 
 Generate embeddings for a prompt.

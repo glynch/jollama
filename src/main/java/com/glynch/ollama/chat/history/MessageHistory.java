@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.glynch.ollama.chat.Message;
 
+/**
+ * Represents a history of messages.
+ *
+ */
 public interface MessageHistory extends Iterable<Message> {
 
     void add(MessageHistory history);

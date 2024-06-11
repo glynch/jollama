@@ -400,7 +400,8 @@ final class DefaultOllamaClient implements OllamaClient {
                     template,
                     context,
                     true, raw, keepAlive);
-            return ollamaClient.stream(GENERATE_PATH, generateRequest, GenerateResponse.class);
+            return ollamaClient.stream(GENERATE_PATH, generateRequest,
+                    GenerateResponse.class);
         }
 
         @Override
@@ -455,6 +456,7 @@ final class DefaultOllamaClient implements OllamaClient {
         private final DefaultOllamaClient ollamaClient;
         private final String model;
         private final Message message;
+        private String system;
         private MessageHistory history = new InMemoryMessageHistory();
         private Format format;
         private Options options;
@@ -464,6 +466,13 @@ final class DefaultOllamaClient implements OllamaClient {
             this.ollamaClient = ollamaClient;
             this.model = model;
             this.message = message;
+        }
+
+        @Override
+        public ChatSpec system(String system) {
+            Objects.requireNonNull(system, "system must not be null");
+            this.system = system;
+            return this;
         }
 
         @Override
@@ -510,6 +519,9 @@ final class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public Stream<ChatResponse> stream() throws OllamaClientException {
+            if (system != null) {
+                history.add(Message.system(system));
+            }
             history.add(message);
             ChatRequest chatRequest = new ChatRequest(model, history.messages(), format, options, true, keepAlive);
             return ollamaClient.stream(CHAT_PATH, chatRequest, ChatResponse.class);
@@ -517,6 +529,9 @@ final class DefaultOllamaClient implements OllamaClient {
 
         @Override
         public ChatResponse batch() throws OllamaClientException {
+            if (system != null) {
+                history.add(Message.system(system));
+            }
             history.add(message);
             ChatRequest chatRequest = new ChatRequest(model, history.messages(), format, options, false, keepAlive);
             ChatResponse chatResponse = ollamaClient.post(CHAT_PATH, chatRequest, Body.Handlers.of(ChatResponse.class))
