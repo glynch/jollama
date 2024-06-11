@@ -67,6 +67,17 @@ Get a list of the current models.
     client.list("llama3:latest").ifPresent(System.out::println);
 ```
 
+### Prompt
+
+```java
+     PromptTemplate template = PromptTemplate.template("What is the capital of {country}?");
+     System.out.println(template.format("France"));
+
+      Map<String, Object> arguments = Map.of("country", "France");
+
+     System.out.println(template.format(arguments));
+```
+
 ### Generate (stream)
 
 ```java
