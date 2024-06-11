@@ -1,6 +1,8 @@
-package com.glynch.ollama.chat;
+package com.glynch.ollama.chat.history;
 
 import java.util.List;
+
+import com.glynch.ollama.chat.Message;
 
 public interface MessageHistory extends Iterable<Message> {
 

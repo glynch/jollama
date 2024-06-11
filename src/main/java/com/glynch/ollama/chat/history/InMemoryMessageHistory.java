@@ -1,9 +1,11 @@
-package com.glynch.ollama.chat;
+package com.glynch.ollama.chat.history;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import com.glynch.ollama.chat.Message;
 
 public class InMemoryMessageHistory implements MessageHistory {
 

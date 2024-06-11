@@ -12,7 +12,7 @@ import com.glynch.ollama.Model;
 import com.glynch.ollama.Options;
 import com.glynch.ollama.chat.ChatResponse;
 import com.glynch.ollama.chat.Message;
-import com.glynch.ollama.chat.MessageHistory;
+import com.glynch.ollama.chat.history.MessageHistory;
 import com.glynch.ollama.create.CreateResponse;
 import com.glynch.ollama.embeddings.EmbeddingsResponse;
 import com.glynch.ollama.generate.GenerateResponse;
