@@ -146,6 +146,10 @@ public class Options extends AbstractMap<String, Object> {
         return (Integer) options.get(Key.NUM_THREAD.getValue());
     }
 
+    public static Options create() {
+        return Options.builder().build();
+    }
+
     public static Builder builder() {
         return new Builder();
     }

@@ -43,6 +43,16 @@ public class InMemoryMessageHistory implements MessageHistory {
     }
 
     @Override
+    public Message get(int index) {
+        return this.messages.get(index);
+    }
+
+    @Override
+    public int size() {
+        return this.messages.size();
+    }
+
+    @Override
     public List<Message> messages() {
         return Collections.unmodifiableList(messages);
     }

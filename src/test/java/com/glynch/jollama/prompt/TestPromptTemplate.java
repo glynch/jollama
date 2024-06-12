@@ -19,6 +19,12 @@ public class TestPromptTemplate {
     }
 
     @Test
+    public void testPromptTemplateTemplate() {
+        PromptTemplate template = PromptTemplate.template("Hello, {name}!");
+        assertEquals("Hello, {name}!", template.template());
+    }
+
+    @Test
     public void testValidPromptTemplateFromStringTwoVariables() {
         PromptTemplate template = PromptTemplate.template("Hello, {name} from {country}!");
         assertEquals("Hello, Graham from Australia!", template.format("Graham", "Australia"));

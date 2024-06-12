@@ -16,8 +16,12 @@ public interface MessageHistory extends Iterable<Message> {
 
     void add(Message message);
 
+    Message get(int index);
+
     List<Message> messages();
 
     void clear();
+
+    int size();
 
 }
