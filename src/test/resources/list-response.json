@@ -1,0 +1,40 @@
+{
+    "models": [
+      {
+        "name": "mario-test:latest",
+        "model": "mario-test:latest",
+        "modified_at": "2024-06-12T16:04:49.485805858+07:00",
+        "size": 4661224708,
+        "digest": "8dbd62140f303b7f5121a90bf5c35aaf3b804f35e92160e434588ad7a396fa06",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "8.0B",
+          "quantization_level": "Q4_0"
+        },
+        "expires_at": "0001-01-01T00:00:00Z"
+      },
+      {
+        "name": "phi3:latest",
+        "model": "phi3:latest",
+        "modified_at": "2024-06-08T10:42:15.657579306+07:00",
+        "size": 2393232963,
+        "digest": "64c1188f2485448235b2d371639a127fc0e4dc2cd3c041152368883c42eb2bd1",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "phi3",
+          "families": [
+            "phi3"
+          ],
+          "parameter_size": "3.8B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "0001-01-01T00:00:00Z"
+      }
+    ]
+}
