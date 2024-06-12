@@ -70,24 +70,23 @@ Get a list of the current models.
 ### Prompt
 
 ```java
-     PromptTemplate template = PromptTemplate.template("What is the capital of {country}?");
-     System.out.println(template.format("France"));
+    PromptTemplate template = PromptTemplate.template("What is the capital of {country}?");
+    System.out.println(template.format("France"));
 
-      Map<String, Object> arguments = Map.of("country", "France");
-
-     System.out.println(template.format(arguments));
+    Map<String, Object> arguments = Map.of("country", "France");
+    System.out.println(template.format(arguments));
 ```
 
 ### Generate (stream)
 
 ```java
- client.generate("llama3", "What is a tsunami?")
-                    .stream()
-                    .forEach(
-                            r -> {
-                                System.out.print(r.response());
-                            });
-            System.out.println();
+    client.generate("llama3", "What is a tsunami?")
+        .stream()
+        .forEach(
+            r -> {
+                System.out.print(r.response());
+            });
+    System.out.println();
 ```
 
 ### Generate (batch)
@@ -133,7 +132,7 @@ Create a model.
 
 ```java
 
- client.create("mario-test", "FROM llama3\nSYSTEM You are mario from Super Mario Bros.")
+    client.create("mario-test", "FROM llama3\nSYSTEM You are mario from Super Mario Bros.")
         .stream().forEach(
             System.out::println
         );
@@ -152,7 +151,7 @@ Create a model.
         );
 ```
 
-Read a modefile from disk
+Read a modelfile from disk
 
 ```java
     ModelFile modelFile = ModelFile.parse(Path.of("mario-test.modelfile"))
@@ -194,7 +193,7 @@ Chat with a model and stream the result.
 
 ```java
 
-  client.chat("llama3", "What is a tsunami?").stream().forEach(response -> {
+    client.chat("llama3", "What is a tsunami?").stream().forEach(response -> {
                 System.out.print(response.message().content());
             });
 ```
@@ -205,11 +204,10 @@ Chat with images. You need to ensure you use a multimodal model such as _llava_.
 
 ```java
 
- System.out.println(client
-                    .chat("llava", "Describe this image?",
-                            Image.encode(Path.of("image.png")))
-                    .batch()
-                    .message().content());
+    System.out.println(client
+        .chat("llava", "Describe this image?", Image.encode(Path.of("image.png")))
+        .batch()
+        .message().content());
 ```
 
 ### Chat (history)
@@ -236,19 +234,19 @@ Since the message is streamed yo0u need to add it to the history manually.
      client.chat("llama3", "Why is the sky blue?").history(history).batch();
             StringBuilder content = new StringBuilder();
             client.chat("llama3", "How is that different than mie scattering?")
-                    .history(history)
-                    .stream()
-                    .forEach(
-                            r -> {
-                                content.append(r.message().content());
-                                System.out.print(r.message().content());
-                            });
+                .history(history)
+                .stream()
+                .forEach(
+                        r -> {
+                            content.append(r.message().content());
+                            System.out.print(r.message().content());
+                        });
 
-            history.add(Message.assistant(content.toString()));
+    history.add(Message.assistant(content.toString()));
 
-            for (Message message : history) {
-                System.out.println(message);
-            }
+    for (Message message : history) {
+        System.out.println(message);
+    }
 ```
 
 ### Embeddings
