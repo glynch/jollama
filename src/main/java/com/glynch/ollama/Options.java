@@ -334,7 +334,7 @@ public class Options extends AbstractMap<String, Object> {
 
     }
 
-    public enum Key {
+    public static enum Key {
         NUM_KEEP("num_keep"),
         NUM_PREDICT("num_predict"),
         TYPICAL_P("typical_p"),
@@ -370,6 +370,7 @@ public class Options extends AbstractMap<String, Object> {
         }
 
         public static Key of(String value) {
+            Objects.requireNonNull(value, "value cannot be null");
             return Arrays.stream(values()).filter(v -> v.getValue().equals(value)).findFirst()
                     .orElse(null);
         }

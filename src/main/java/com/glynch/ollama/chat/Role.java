@@ -1,5 +1,8 @@
 package com.glynch.ollama.chat;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Role {
@@ -25,12 +28,9 @@ public enum Role {
     }
 
     public static Role of(String value) {
-        for (Role role : Role.values()) {
-            if (role.value.equals(value)) {
-                return role;
-            }
-        }
-        throw new IllegalArgumentException("Invalid role: " + value);
+        Objects.requireNonNull(value, "value cannot be null");
+        return Arrays.stream(values()).filter(v -> v.getValue().equals(value)).findFirst()
+                .orElse(null);
     }
 
 }

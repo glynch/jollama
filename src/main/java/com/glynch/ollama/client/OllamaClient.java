@@ -27,9 +27,12 @@ import com.glynch.ollama.pull.PullResponse;
 /**
  * Fluent Client for the Ollama API.
  * 
- * Use static factory methods {@link create()} or {@link create(String)} to
+ * <p>
+ * Use static factory methods {@link #create()} or {@link #create(String)} to
  * create a new Ollama client.
+ * </p>
  * 
+ * @author Graham Lynch
  * @see <a href="https://github.com/ollama/ollama/blob/main/docs/api.md">Ollama
  *      API</a>
  * 
@@ -38,20 +41,22 @@ public interface OllamaClient {
     String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
 
     /**
-     * Create a new Ollama client.
+     * Create a new {@code OllamaClient} with the default host of
+     * http://localhost:11434.
      * 
      * @return a new Ollama client
-     * @throws OllamaClientException
+     * @see #create(String)
      */
     static OllamaClient create() {
         return builder().build();
     }
 
     /**
-     * Create a new Ollama client with the specified host.
+     * Create a new {@code OllamaClient} with the specified host.
      * 
      * @param host
      * @return a new Ollama client
+     * @see #create()
      */
     static OllamaClient create(String host) {
         return builder(host).build();
@@ -67,7 +72,7 @@ public interface OllamaClient {
     }
 
     /**
-     * Create a new Ollama client builder with the specified host.
+     * Create a new {@code OllamaClient} with the specified host.
      * 
      * @param host
      * @return a new Ollama client builder
@@ -77,7 +82,7 @@ public interface OllamaClient {
     }
 
     /**
-     * The Ollama client builder interface.
+     * A builder for creating a {@link OllamaClient}.
      */
     interface Builder {
 
@@ -105,7 +110,7 @@ public interface OllamaClient {
      *      Models</a>
      * 
      * @return a list of the running models
-     * @throws OllamaClientException
+     * @throws OllamaClientException in case of request or response errors
      */
     ProcessModels ps() throws OllamaClientException;
 
@@ -153,6 +158,12 @@ public interface OllamaClient {
 
     GenerateSpec generate(String model, String prompt);
 
+    /**
+     * 
+     * @param model  @see {@link com.glynch.ollama.Model}
+     * @param prompt @see {@link com.glynch.ollama.chat.Message}
+     * @return
+     */
     ChatSpec chat(String model, String prompt);
 
     ChatSpec chat(String model, String prompt, String... images);
