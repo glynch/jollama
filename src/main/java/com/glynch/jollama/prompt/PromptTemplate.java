@@ -1,4 +1,4 @@
-package com.glynch.ollama.prompt;
+package com.glynch.jollama.prompt;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

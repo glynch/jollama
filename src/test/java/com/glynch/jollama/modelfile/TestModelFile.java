@@ -1,4 +1,4 @@
-package com.glynch.ollama.modelfile;
+package com.glynch.jollama.modelfile;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.glynch.ollama.chat.Message;
+import com.glynch.jollama.chat.Message;
 
 public class TestModelFile {
 

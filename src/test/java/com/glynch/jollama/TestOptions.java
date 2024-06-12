@@ -1,4 +1,4 @@
-package com.glynch.ollama;
+package com.glynch.jollama;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;

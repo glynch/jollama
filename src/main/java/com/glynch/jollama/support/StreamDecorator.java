@@ -1,4 +1,4 @@
-package com.glynch.ollama.support;
+package com.glynch.jollama.support;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;

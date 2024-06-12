@@ -1,16 +1,16 @@
-package com.glynch.ollama.client;
+package com.glynch.jollama.client;
 
-import com.glynch.ollama.NestedRuntimeException;
+import com.glynch.jollama.NestedRuntimeException;
 
-public class OllamaClientException extends NestedRuntimeException {
+public class JOllamaClientException extends NestedRuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public OllamaClientException(String message) {
+    public JOllamaClientException(String message) {
         super(message);
     }
 
-    public OllamaClientException(String message, Throwable cause) {
+    public JOllamaClientException(String message, Throwable cause) {
         super(message, cause);
     }
 

@@ -1,4 +1,4 @@
-package com.glynch.ollama.client;
+package com.glynch.jollama.client;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,35 +19,35 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.glynch.ollama.Format;
-import com.glynch.ollama.Model;
-import com.glynch.ollama.Options;
-import com.glynch.ollama.chat.ChatRequest;
-import com.glynch.ollama.chat.ChatResponse;
-import com.glynch.ollama.chat.Message;
-import com.glynch.ollama.chat.history.InMemoryMessageHistory;
-import com.glynch.ollama.chat.history.MessageHistory;
-import com.glynch.ollama.copy.CopyRequest;
-import com.glynch.ollama.create.CreateRequest;
-import com.glynch.ollama.create.CreateResponse;
-import com.glynch.ollama.delete.DeleteRequest;
-import com.glynch.ollama.embeddings.EmbeddingsRequest;
-import com.glynch.ollama.embeddings.EmbeddingsResponse;
-import com.glynch.ollama.generate.GenerateRequest;
-import com.glynch.ollama.generate.GenerateResponse;
-import com.glynch.ollama.list.ListModel;
-import com.glynch.ollama.list.ListModels;
-import com.glynch.ollama.modelfile.InvalidModelFileException;
-import com.glynch.ollama.modelfile.ModelFile;
-import com.glynch.ollama.process.ProcessModel;
-import com.glynch.ollama.process.ProcessModels;
-import com.glynch.ollama.pull.PullRequest;
-import com.glynch.ollama.pull.PullResponse;
-import com.glynch.ollama.show.ShowRequest;
-import com.glynch.ollama.show.ShowResponse;
-import com.glynch.ollama.support.Body;
+import com.glynch.jollama.Format;
+import com.glynch.jollama.Model;
+import com.glynch.jollama.Options;
+import com.glynch.jollama.chat.ChatRequest;
+import com.glynch.jollama.chat.ChatResponse;
+import com.glynch.jollama.chat.Message;
+import com.glynch.jollama.chat.history.InMemoryMessageHistory;
+import com.glynch.jollama.chat.history.MessageHistory;
+import com.glynch.jollama.copy.CopyRequest;
+import com.glynch.jollama.create.CreateRequest;
+import com.glynch.jollama.create.CreateResponse;
+import com.glynch.jollama.delete.DeleteRequest;
+import com.glynch.jollama.embeddings.EmbeddingsRequest;
+import com.glynch.jollama.embeddings.EmbeddingsResponse;
+import com.glynch.jollama.generate.GenerateRequest;
+import com.glynch.jollama.generate.GenerateResponse;
+import com.glynch.jollama.list.ListModel;
+import com.glynch.jollama.list.ListModels;
+import com.glynch.jollama.modelfile.InvalidModelFileException;
+import com.glynch.jollama.modelfile.ModelFile;
+import com.glynch.jollama.process.ProcessModel;
+import com.glynch.jollama.process.ProcessModels;
+import com.glynch.jollama.pull.PullRequest;
+import com.glynch.jollama.pull.PullResponse;
+import com.glynch.jollama.show.ShowRequest;
+import com.glynch.jollama.show.ShowResponse;
+import com.glynch.jollama.support.Body;
 
-final class DefaultOllamaClient implements OllamaClient {
+final class DefaultJOllamaClient implements JOllamaClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("com.glynch.ollama.client");
     private static final String PING_PATH = "";
@@ -67,7 +67,7 @@ final class DefaultOllamaClient implements OllamaClient {
     private final String host;
     private final HttpClient client;
 
-    DefaultOllamaClient(HttpClient client, String host) {
+    DefaultJOllamaClient(HttpClient client, String host) {
         this.host = host;
         this.client = client;
     }
@@ -90,18 +90,18 @@ final class DefaultOllamaClient implements OllamaClient {
         final Throwable cause = exception.getCause();
         final String message = cause.getMessage();
 
-        if (cause instanceof OllamaClientResponseException) {
-            throw (OllamaClientResponseException) cause;
+        if (cause instanceof JOllamaClientResponseException) {
+            throw (JOllamaClientResponseException) cause;
         } else if (cause instanceof IOException) {
-            throw new OllamaClientRequestException(message, cause, request.uri(), request.method());
+            throw new JOllamaClientRequestException(message, cause, request.uri(), request.method());
         } else if (cause instanceof InterruptedException) {
-            throw new OllamaClientException(message, cause);
+            throw new JOllamaClientException(message, cause);
         } else {
-            throw new OllamaClientException(message, cause);
+            throw new JOllamaClientException(message, cause);
         }
     }
 
-    private <T> HttpResponse<T> get(String path, BodyHandler<T> bodyHandler) throws OllamaClientException {
+    private <T> HttpResponse<T> get(String path, BodyHandler<T> bodyHandler) throws JOllamaClientException {
         LOGGER.debug("GET {}", path);
         HttpResponse<T> response = null;
         HttpRequest request = HttpRequest.newBuilder()
@@ -118,7 +118,7 @@ final class DefaultOllamaClient implements OllamaClient {
         return response;
     }
 
-    private <T> HttpResponse<Void> head(String path) throws OllamaClientException {
+    private <T> HttpResponse<Void> head(String path) throws JOllamaClientException {
         LOGGER.debug("HEAD {}", path);
         HttpResponse<Void> response = null;
         HttpRequest request = HttpRequest.newBuilder()
@@ -133,7 +133,7 @@ final class DefaultOllamaClient implements OllamaClient {
         return response;
     }
 
-    private <T> HttpResponse<Void> delete(String path, Object body) throws OllamaClientException {
+    private <T> HttpResponse<Void> delete(String path, Object body) throws JOllamaClientException {
         LOGGER.debug("DELETE {}: {}", path, body);
         HttpResponse<Void> response = null;
         HttpRequest request = HttpRequest.newBuilder()
@@ -151,7 +151,7 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     private <T> HttpResponse<T> post(String path, Object body,
-            BodyHandler<T> bodyHandler) throws OllamaClientException {
+            BodyHandler<T> bodyHandler) throws JOllamaClientException {
         LOGGER.debug("POST {}: {}", path, body);
         HttpResponse<T> response = null;
         HttpRequest request = HttpRequest.newBuilder()
@@ -169,7 +169,7 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     private <T> HttpResponse<Stream<T>> stream(String path, Object body,
-            BodyHandler<Stream<T>> bodyHandler) throws OllamaClientException {
+            BodyHandler<Stream<T>> bodyHandler) throws JOllamaClientException {
         LOGGER.debug("POST {}: {}", path, body);
         HttpResponse<Stream<T>> response = null;
         HttpRequest request = HttpRequest.newBuilder()
@@ -186,12 +186,12 @@ final class DefaultOllamaClient implements OllamaClient {
         return response;
     }
 
-    private <T> Stream<T> stream(String path, Object body, Class<T> type) throws OllamaClientException {
+    private <T> Stream<T> stream(String path, Object body, Class<T> type) throws JOllamaClientException {
         return stream(path, body, Body.Handlers.streamOf(type)).body();
     }
 
     @Override
-    public boolean ping() throws OllamaClientException {
+    public boolean ping() throws JOllamaClientException {
         boolean isUp = false;
         try {
             HttpResponse<String> response = get(PING_PATH, BodyHandlers.ofString());
@@ -203,36 +203,36 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public ProcessModels ps() throws OllamaClientException {
+    public ProcessModels ps() throws JOllamaClientException {
         return get(PS_PATH, Body.Handlers.of(ProcessModels.class)).body();
     }
 
     @Override
-    public Optional<ProcessModel> ps(String name) throws OllamaClientException {
+    public Optional<ProcessModel> ps(String name) throws JOllamaClientException {
         Objects.requireNonNull(name, "name must not be null");
         return ps().models().stream().filter(model -> model.name().equals(name)).findFirst();
     }
 
     @Override
-    public ListModels list() throws OllamaClientException {
+    public ListModels list() throws JOllamaClientException {
         return get(LIST_PATH, Body.Handlers.of(ListModels.class)).body();
     }
 
     @Override
-    public Optional<ListModel> list(String name) throws OllamaClientException {
+    public Optional<ListModel> list(String name) throws JOllamaClientException {
         Objects.requireNonNull(name, "name must not be null");
         return list().models().stream().filter(model -> model.name().equals(name)).findFirst();
     }
 
     @Override
-    public ProcessModel load(String model) throws OllamaClientException {
+    public ProcessModel load(String model) throws JOllamaClientException {
         Objects.requireNonNull(model, "model must not be null");
         generate(model, "").batch();
         return ps(model).get();
     }
 
     @Override
-    public ProcessModel load(Model model) throws OllamaClientException {
+    public ProcessModel load(Model model) throws JOllamaClientException {
         Objects.requireNonNull(model, "model must not be null");
         generate(model.toString(), "").batch();
         return ps(model.toString()).get();
@@ -245,7 +245,7 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public ModelFile show(String name) throws OllamaClientException, InvalidModelFileException {
+    public ModelFile show(String name) throws JOllamaClientException, InvalidModelFileException {
         Objects.requireNonNull(name, "name must not be null");
         ShowRequest showRequest = new ShowRequest(name);
         ShowResponse showResponse = post(SHOW_PATH, showRequest, Body.Handlers.of(ShowResponse.class)).body();
@@ -297,7 +297,7 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public int copy(String source, String destination) throws OllamaClientException {
+    public int copy(String source, String destination) throws JOllamaClientException {
         Objects.requireNonNull(source, "source must not be null");
         Objects.requireNonNull(destination, "destination must not be null");
         CopyRequest copyRequest = new CopyRequest(source, destination);
@@ -305,7 +305,7 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     @Override
-    public int delete(String name) throws OllamaClientException {
+    public int delete(String name) throws JOllamaClientException {
         Objects.requireNonNull(name, "name must not be null");
         DeleteRequest deleteRequest = new DeleteRequest(name);
         return delete(DELETE_PATH, deleteRequest).statusCode();
@@ -313,7 +313,7 @@ final class DefaultOllamaClient implements OllamaClient {
 
     private class DefaultGenerateSpec implements GenerateSpec {
 
-        private final DefaultOllamaClient ollamaClient;
+        private final DefaultJOllamaClient ollamaClient;
         private String model;
         private String prompt;
         private List<String> images = new ArrayList<>();
@@ -325,7 +325,7 @@ final class DefaultOllamaClient implements OllamaClient {
         private Boolean raw;
         private String keepAlive;
 
-        public DefaultGenerateSpec(DefaultOllamaClient ollamaClient, String model, String prompt) {
+        public DefaultGenerateSpec(DefaultJOllamaClient ollamaClient, String model, String prompt) {
             this.ollamaClient = ollamaClient;
             this.model = model;
             this.prompt = prompt;
@@ -430,13 +430,13 @@ final class DefaultOllamaClient implements OllamaClient {
 
     private class DefaultEmbeddingsSpec implements EmbeddingsSpec {
 
-        private final DefaultOllamaClient ollamaClient;
+        private final DefaultJOllamaClient ollamaClient;
         private String model;
         private String prompt;
         private Options options;
         private String keepAlive;
 
-        public DefaultEmbeddingsSpec(DefaultOllamaClient ollamaClient, String model, String prompt) {
+        public DefaultEmbeddingsSpec(DefaultJOllamaClient ollamaClient, String model, String prompt) {
             this.ollamaClient = ollamaClient;
             this.model = model;
             this.prompt = prompt;
@@ -457,7 +457,7 @@ final class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public EmbeddingsResponse get() throws OllamaClientException {
+        public EmbeddingsResponse get() throws JOllamaClientException {
             EmbeddingsRequest request = new EmbeddingsRequest(model, prompt, options, keepAlive);
             return ollamaClient.post(EMBEDDINGS_PATH, request, Body.Handlers.of(EmbeddingsResponse.class)).body();
         }
@@ -466,7 +466,7 @@ final class DefaultOllamaClient implements OllamaClient {
 
     private class DefaultChatSpec implements ChatSpec {
 
-        private final DefaultOllamaClient ollamaClient;
+        private final DefaultJOllamaClient ollamaClient;
         private final String model;
         private final Message message;
         private String system;
@@ -475,7 +475,7 @@ final class DefaultOllamaClient implements OllamaClient {
         private Options options;
         private String keepAlive;
 
-        public DefaultChatSpec(DefaultOllamaClient ollamaClient, String model, Message message) {
+        public DefaultChatSpec(DefaultJOllamaClient ollamaClient, String model, Message message) {
             this.ollamaClient = ollamaClient;
             this.model = model;
             this.message = message;
@@ -531,7 +531,7 @@ final class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public Stream<ChatResponse> stream() throws OllamaClientException {
+        public Stream<ChatResponse> stream() throws JOllamaClientException {
             if (system != null) {
                 history.add(Message.system(system));
             }
@@ -541,7 +541,7 @@ final class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public ChatResponse batch() throws OllamaClientException {
+        public ChatResponse batch() throws JOllamaClientException {
             if (system != null) {
                 history.add(Message.system(system));
             }
@@ -579,24 +579,24 @@ final class DefaultOllamaClient implements OllamaClient {
 
     private class DefaultCreateSpec implements CreateSpec {
 
-        private final DefaultOllamaClient ollamaClient;
+        private final DefaultJOllamaClient ollamaClient;
         private final String name;
         private String modelfile;
         private Path path;
 
-        public DefaultCreateSpec(DefaultOllamaClient ollamaClient, String name, String modelfile) {
+        public DefaultCreateSpec(DefaultJOllamaClient ollamaClient, String name, String modelfile) {
             this.ollamaClient = ollamaClient;
             this.name = name;
             this.modelfile = modelfile;
         }
 
-        public DefaultCreateSpec(DefaultOllamaClient ollamaClient, String name, Path path) {
+        public DefaultCreateSpec(DefaultJOllamaClient ollamaClient, String name, Path path) {
             this.ollamaClient = ollamaClient;
             this.name = name;
             this.path = path;
         }
 
-        public DefaultCreateSpec(DefaultOllamaClient ollamaClient, String name, ModelFile modelFile) {
+        public DefaultCreateSpec(DefaultJOllamaClient ollamaClient, String name, ModelFile modelFile) {
             this.ollamaClient = ollamaClient;
             this.name = name;
             this.modelfile = modelFile.toString();
@@ -619,11 +619,11 @@ final class DefaultOllamaClient implements OllamaClient {
 
     private class DefaultPullSpec implements PullSpec {
 
-        private final DefaultOllamaClient ollamaClient;
+        private final DefaultJOllamaClient ollamaClient;
         private final String name;
         private Boolean insecure;
 
-        public DefaultPullSpec(DefaultOllamaClient ollamaClient, String name) {
+        public DefaultPullSpec(DefaultJOllamaClient ollamaClient, String name) {
             this.ollamaClient = ollamaClient;
             this.name = name;
         }
@@ -635,13 +635,13 @@ final class DefaultOllamaClient implements OllamaClient {
         }
 
         @Override
-        public Stream<PullResponse> stream() throws OllamaClientException {
+        public Stream<PullResponse> stream() throws JOllamaClientException {
             PullRequest pullRequest = new PullRequest(name, insecure, true);
             return ollamaClient.stream(PULL_PATH, pullRequest, PullResponse.class);
         }
 
         @Override
-        public PullResponse batch() throws OllamaClientException {
+        public PullResponse batch() throws JOllamaClientException {
             return ollamaClient.post(PULL_PATH, new PullRequest(name, insecure, false),
                     Body.Handlers.of(PullResponse.class)).body();
         }
@@ -650,22 +650,22 @@ final class DefaultOllamaClient implements OllamaClient {
 
     private class DefaultBlobsSpec implements BlobsSpec {
 
-        private final DefaultOllamaClient ollamaClient;
+        private final DefaultJOllamaClient ollamaClient;
         private final String digest;
 
-        public DefaultBlobsSpec(DefaultOllamaClient ollamaClient, String digest) {
+        public DefaultBlobsSpec(DefaultJOllamaClient ollamaClient, String digest) {
             this.ollamaClient = ollamaClient;
             this.digest = digest;
         }
 
         @Override
-        public int exists() throws OllamaClientException {
+        public int exists() throws JOllamaClientException {
             HttpResponse<Void> response = head(BLOBS_PATH + "/" + digest);
             return response.statusCode();
         }
 
         @Override
-        public int create() throws OllamaClientException {
+        public int create() throws JOllamaClientException {
             HttpResponse<Void> response = ollamaClient.post(BLOBS_PATH + "/" + digest, digest,
                     BodyHandlers.discarding());
             return response.statusCode();

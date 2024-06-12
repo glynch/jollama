@@ -1,4 +1,4 @@
-package com.glynch.ollama;
+package com.glynch.jollama;
 
-public record OllamaError(String error) {
+public record JOllamaError(String error) {
 }

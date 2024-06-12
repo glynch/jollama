@@ -1,4 +1,4 @@
-package com.glynch.ollama.list;
+package com.glynch.jollama.list;
 
 import java.util.List;
 

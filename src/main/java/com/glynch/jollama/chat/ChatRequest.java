@@ -1,10 +1,10 @@
-package com.glynch.ollama.chat;
+package com.glynch.jollama.chat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.glynch.ollama.Format;
-import com.glynch.ollama.Options;
+import com.glynch.jollama.Format;
+import com.glynch.jollama.Options;
 
 public record ChatRequest(
         String model,

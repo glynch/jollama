@@ -1,11 +1,11 @@
-package com.glynch.ollama.generate;
+package com.glynch.jollama.generate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.glynch.ollama.Format;
-import com.glynch.ollama.Options;
+import com.glynch.jollama.Format;
+import com.glynch.jollama.Options;
 
 public record GenerateRequest(
         String model,

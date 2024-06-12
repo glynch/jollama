@@ -1,4 +1,4 @@
-package com.glynch.ollama.prompt;
+package com.glynch.jollama.prompt;
 
 import java.util.ArrayList;
 import java.util.Collections;

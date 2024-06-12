@@ -1,4 +1,4 @@
-package com.glynch.ollama.embeddings;
+package com.glynch.jollama.embeddings;
 
 import java.util.ArrayList;
 import java.util.List;

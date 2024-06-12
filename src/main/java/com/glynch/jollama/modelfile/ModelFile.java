@@ -1,4 +1,4 @@
-package com.glynch.ollama.modelfile;
+package com.glynch.jollama.modelfile;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -14,8 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.glynch.ollama.chat.Message;
-import com.glynch.ollama.chat.Role;
+import com.glynch.jollama.chat.Message;
+import com.glynch.jollama.chat.Role;
 
 public record ModelFile(String from, String adapter, String template, String system, List<Message> messages,
         Map<String, Object> parameters,

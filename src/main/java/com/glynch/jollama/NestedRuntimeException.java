@@ -1,4 +1,4 @@
-package com.glynch.ollama;
+package com.glynch.jollama;
 
 public class NestedRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 1L;

@@ -1,6 +1,6 @@
-package com.glynch.ollama.modelfile;
+package com.glynch.jollama.modelfile;
 
-import com.glynch.ollama.NestedRuntimeException;
+import com.glynch.jollama.NestedRuntimeException;
 
 public class InvalidModelFileException extends NestedRuntimeException {
 

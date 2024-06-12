@@ -1,8 +1,8 @@
-package com.glynch.ollama.chat.history;
+package com.glynch.jollama.chat.history;
 
 import java.util.List;
 
-import com.glynch.ollama.chat.Message;
+import com.glynch.jollama.chat.Message;
 
 /**
  * Represents a history of messages.

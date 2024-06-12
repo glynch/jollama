@@ -1,4 +1,4 @@
-package com.glynch.ollama.create;
+package com.glynch.jollama.create;
 
 import java.nio.file.Path;
 

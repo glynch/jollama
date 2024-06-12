@@ -1,4 +1,4 @@
-package com.glynch.ollama.support;
+package com.glynch.jollama.support;
 
 import java.net.http.HttpResponse.BodyHandler;
 import java.net.http.HttpResponse.BodySubscriber;
@@ -6,7 +6,7 @@ import java.net.http.HttpResponse.BodySubscribers;
 import java.net.http.HttpResponse.ResponseInfo;
 import java.nio.charset.StandardCharsets;
 
-import com.glynch.ollama.support.Body.Mappers;
+import com.glynch.jollama.support.Body.Mappers;
 
 public class JsonBodyHandler<T> implements BodyHandler<T> {
 

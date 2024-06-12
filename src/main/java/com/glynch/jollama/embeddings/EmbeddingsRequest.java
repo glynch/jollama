@@ -1,11 +1,11 @@
-package com.glynch.ollama.embeddings;
+package com.glynch.jollama.embeddings;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.glynch.ollama.Options;
+import com.glynch.jollama.Options;
 
 public record EmbeddingsRequest(
-                String model,
-                String prompt,
-                Options options,
-                @JsonProperty("keep_alive") String keepAlive) {
+        String model,
+        String prompt,
+        Options options,
+        @JsonProperty("keep_alive") String keepAlive) {
 }

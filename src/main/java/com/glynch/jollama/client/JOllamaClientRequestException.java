@@ -1,20 +1,20 @@
-package com.glynch.ollama.client;
+package com.glynch.jollama.client;
 
 import java.net.URI;
 
-public class OllamaClientRequestException extends OllamaClientException {
+public class JOllamaClientRequestException extends JOllamaClientException {
 
     private static final long serialVersionUID = 1L;
 
     private final URI uri;
     private final String method;
 
-    public OllamaClientRequestException(String message, URI uri, String method) {
+    public JOllamaClientRequestException(String message, URI uri, String method) {
         this(message, null, uri, method);
 
     }
 
-    public OllamaClientRequestException(String message, Throwable cause, URI uri, String method) {
+    public JOllamaClientRequestException(String message, Throwable cause, URI uri, String method) {
         super(message, cause);
         this.uri = uri;
         this.method = method;

@@ -1,4 +1,4 @@
-package com.glynch.ollama.chat;
+package com.glynch.jollama.chat;
 
 import java.util.Arrays;
 import java.util.Objects;

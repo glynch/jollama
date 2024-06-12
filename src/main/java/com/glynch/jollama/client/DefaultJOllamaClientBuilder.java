@@ -1,17 +1,17 @@
-package com.glynch.ollama.client;
+package com.glynch.jollama.client;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.Objects;
 
-import com.glynch.ollama.client.OllamaClient.Builder;
+import com.glynch.jollama.client.JOllamaClient.Builder;
 
-final class DefaultOllamaClientBuilder implements OllamaClient.Builder {
+final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
 
     private final HttpClient.Builder clientBuilder = HttpClient.newBuilder();
     private String host;
 
-    DefaultOllamaClientBuilder(String host) {
+    DefaultJOllamaClientBuilder(String host) {
         this.host = host;
         clientBuilder.version(HttpClient.Version.HTTP_2);
 
@@ -31,8 +31,8 @@ final class DefaultOllamaClientBuilder implements OllamaClient.Builder {
     }
 
     @Override
-    public OllamaClient build() {
-        return new DefaultOllamaClient(clientBuilder.build(), host);
+    public JOllamaClient build() {
+        return new DefaultJOllamaClient(clientBuilder.build(), host);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.glynch.ollama.support;
+package com.glynch.jollama.support;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;

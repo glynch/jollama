@@ -1,4 +1,4 @@
-package com.glynch.ollama.generate;
+package com.glynch.jollama.generate;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
