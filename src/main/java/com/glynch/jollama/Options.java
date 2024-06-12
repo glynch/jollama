@@ -33,23 +33,23 @@ public class Options extends AbstractMap<String, Object> {
         throw new UnsupportedOperationException("'put' is not supported on Options");
     }
 
-    public Integer getNumKeep() {
+    public Integer numKeep() {
         return (Integer) options.get(Key.NUM_KEEP.getValue());
     }
 
-    public Integer getSeed() {
+    public Integer seed() {
         return (Integer) options.get(ModelFile.Key.SEED.getValue());
     }
 
-    public Integer getNumPredict() {
+    public Integer numPredict() {
         return (Integer) options.get(ModelFile.Key.NUM_PREDICT.getValue());
     }
 
-    public Integer getTopK() {
+    public Integer topK() {
         return (Integer) options.get(ModelFile.Key.TOP_K.getValue());
     }
 
-    public Float getTopP() {
+    public Float topP() {
         return (Float) options.get(ModelFile.Key.TOP_P.getValue());
     }
 
@@ -57,92 +57,92 @@ public class Options extends AbstractMap<String, Object> {
         return (Float) options.get(ModelFile.Key.TFS_Z.getValue());
     }
 
-    public Float getTypicalP() {
+    public Float typicalP() {
         return (Float) options.get(Key.TYPICAL_P.getValue());
     }
 
-    public Integer getRepeatLastN() {
+    public Integer repeatLastN() {
         return (Integer) options.get(ModelFile.Key.REPEAT_LAST_N.getValue());
     }
 
-    public Float getTemperature() {
+    public Float temperature() {
         return (Float) options.get(ModelFile.Key.TEMPERATURE.getValue());
     }
 
-    public Float getRepeatPenalty() {
+    public Float repeatPenalty() {
         return (Float) options.get(ModelFile.Key.REPEAT_PENALTY.getValue());
     }
 
-    public Float getPresencePenalty() {
+    public Float presencePenalty() {
         return (Float) options.get(Key.PRESENCE_PENALTY.getValue());
     }
 
-    public Float getFrequencyPenalty() {
+    public Float frequencyPenalty() {
         return (Float) options.get(Key.FREQUENCY_PENALTY.getValue());
     }
 
-    public Integer getMiroStat() {
+    public Integer miroStat() {
         return (Integer) options.get(ModelFile.Key.MIROSTAT.getValue());
     }
 
-    public Float getMiroStatTau() {
+    public Float miroStatTau() {
         return (Float) options.get(ModelFile.Key.MIROSTAT_TAU.getValue());
     }
 
-    public Float getMiroStatEta() {
+    public Float miroStatEta() {
         return (Float) options.get(ModelFile.Key.MIROSTAT_ETA.getValue());
     }
 
-    public Boolean getPenalizeNewline() {
+    public Boolean penalizeNewline() {
         return (Boolean) options.get(Key.PENALIZE_NEWLINE.getValue());
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getStop() {
+    public List<String> stop() {
         return (List<String>) options.get(ModelFile.Key.STOP.getValue());
     }
 
-    public Boolean getNuma() {
+    public Boolean numa() {
         return (Boolean) options.get(Key.NUMA.getValue());
     }
 
-    public Integer getNumCtx() {
+    public Integer numCtx() {
         return (Integer) options.get(ModelFile.Key.NUM_CTX.getValue());
     }
 
-    public Integer getNumBatch() {
+    public Integer numBatch() {
         return (Integer) options.get(Key.NUM_BATCH.getValue());
     }
 
-    public Integer getNumGpu() {
+    public Integer numGpu() {
         return (Integer) options.get(Key.NUM_GPU.getValue());
     }
 
-    public Integer getMainGpu() {
+    public Integer mainGpu() {
         return (Integer) options.get(Key.MAIN_GPU.getValue());
     }
 
-    public Boolean getLowVram() {
+    public Boolean lowVram() {
         return (Boolean) options.get(Key.LOW_VRAM.getValue());
     }
 
-    public Boolean getF16Kv() {
+    public Boolean f16Kv() {
         return (Boolean) options.get(Key.F16_KV.getValue());
     }
 
-    public Boolean getVocabOnly() {
+    public Boolean vocabOnly() {
         return (Boolean) options.get(Key.VOCAB_ONLY.getValue());
     }
 
-    public Boolean getUseMmap() {
+    public Boolean useMmap() {
         return (Boolean) options.get(Key.USE_MMAP.getValue());
     }
 
-    public Boolean getUseMlock() {
+    public Boolean useMlock() {
         return (Boolean) options.get(Key.USE_MLOCK.getValue());
     }
 
-    public Integer getNumThread() {
+    public Integer numThread() {
         return (Integer) options.get(Key.NUM_THREAD.getValue());
     }
 
