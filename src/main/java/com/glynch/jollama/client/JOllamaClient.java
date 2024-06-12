@@ -54,7 +54,7 @@ public interface JOllamaClient {
     /**
      * Create a new {@code JOllamaClient} with the specified host.
      * 
-     * @param host
+     * @param host the Ollama server host
      * @return a new JOllama client
      * @see #create()
      */
@@ -74,7 +74,7 @@ public interface JOllamaClient {
     /**
      * Create a new {@code JOllamaClient} with the specified host.
      * 
-     * @param host
+     * @param host the Ollama server host
      * @return a new Ollama client builder
      */
     static Builder builder(String host) {
@@ -119,7 +119,7 @@ public interface JOllamaClient {
     /**
      * Get the running model with the specified name.
      * 
-     * @param name
+     * @param name the name of the model
      * @return the running model with the specified name
      * @throws JOllamaClientException
      */
@@ -129,12 +129,18 @@ public interface JOllamaClient {
     /**
      * Load the model with the specified name.
      * 
-     * @param model
+     * @param model the name of the model
      * @return the running model with the specified name
      * @throws JOllamaClientException
      */
     ProcessModel load(String model) throws JOllamaClientException;
 
+    /**
+     * 
+     * @param model the model {@link com.glynch.jollama.Model}
+     * @return
+     * @throws JOllamaClientException
+     */
     ProcessModel load(Model model) throws JOllamaClientException;
 
     /**
@@ -152,11 +158,19 @@ public interface JOllamaClient {
      */
     ListModels list() throws JOllamaClientException;
 
+    /**
+     * 
+     * @param name the name of the model
+     * @return
+     * @throws JOllamaClientException
+     */
     Optional<ListModel> list(String name) throws JOllamaClientException;
 
     BlobsSpec blobs(String digest);
 
     ModelFile show(String name) throws JOllamaClientException, InvalidModelFileException;
+
+    ModelFile show(Model name) throws JOllamaClientException, InvalidModelFileException;
 
     GenerateSpec generate(String model, String prompt);
 
@@ -168,11 +182,19 @@ public interface JOllamaClient {
      */
     ChatSpec chat(String model, String prompt);
 
+    ChatSpec chat(Model model, String prompt);
+
     ChatSpec chat(String model, String prompt, String... images);
+
+    ChatSpec chat(Model model, String prompt, String... images);
 
     ChatSpec chat(String model, String prompt, List<String> images);
 
+    ChatSpec chat(Model model, String prompt, List<String> images);
+
     EmbeddingsSpec embeddings(String model, String prompt);
+
+    EmbeddingsSpec embeddings(Model model, String prompt);
 
     CreateSpec create(String name, String modelfile) throws InvalidModelFileException;
 
@@ -182,9 +204,41 @@ public interface JOllamaClient {
 
     PullSpec pull(String name);
 
+    PullSpec pull(Model name);
+
+    /**
+     * 
+     * @param source      the source model name to copy
+     * @param destination the destination model name
+     * @return the HTTP status code
+     * @throws JOllamaClientException
+     */
     int copy(String source, String destination) throws JOllamaClientException;
 
+    /**
+     * 
+     * @param source      the source model {@link com.glynch.jollama.Model} to copy
+     * @param destination the destination model name
+     * @return the HTTP status code
+     * @throws JOllamaClientException
+     */
+    int copy(Model source, String destination) throws JOllamaClientException;
+
+    /**
+     * 
+     * @param name the name of the model to delete
+     * @return the HTTP status code
+     * @throws JOllamaClientException
+     */
     int delete(String name) throws JOllamaClientException;
+
+    /**
+     * 
+     * @param name the model {@link com.glynch.jollama.Model} to delete
+     * @return the HTTP status code
+     * @throws JOllamaClientException
+     */
+    int delete(Model name) throws JOllamaClientException;
 
     interface BlobsSpec {
         int exists() throws JOllamaClientException;

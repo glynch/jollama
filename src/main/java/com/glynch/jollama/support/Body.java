@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.glynch.jollama.OllamaError;
+import com.glynch.jollama.JOllamaError;
 import com.glynch.jollama.client.JOllamaClientException;
 import com.glynch.jollama.client.JOllamaClientResponseException;
 
@@ -79,7 +79,7 @@ public class Body {
         public static <T> Function<String, T> exceptionally() {
             return (body) -> {
                 try {
-                    throw new JOllamaClientException(objectMapper.readValue(body, OllamaError.class).error());
+                    throw new JOllamaClientException(objectMapper.readValue(body, JOllamaError.class).error());
                 } catch (JsonProcessingException e) {
                     throw new JOllamaClientException(body);
                 }
@@ -89,7 +89,7 @@ public class Body {
         public static <T> Function<String, T> exceptionally(ResponseInfo responseInfo) {
             return (body) -> {
                 try {
-                    throw new JOllamaClientResponseException(objectMapper.readValue(body, OllamaError.class).error(),
+                    throw new JOllamaClientResponseException(objectMapper.readValue(body, JOllamaError.class).error(),
                             responseInfo.statusCode(), responseInfo.headers());
                 } catch (JsonProcessingException e) {
                     throw new JOllamaClientResponseException(body, responseInfo.statusCode(), responseInfo.headers());

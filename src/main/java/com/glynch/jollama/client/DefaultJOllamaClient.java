@@ -253,6 +253,12 @@ final class DefaultJOllamaClient implements JOllamaClient {
     }
 
     @Override
+    public ModelFile show(Model name) throws JOllamaClientException, InvalidModelFileException {
+        Objects.requireNonNull(name, "name must not be null");
+        return show(name.toString());
+    }
+
+    @Override
     public GenerateSpec generate(String model, String prompt) {
         Objects.requireNonNull(model, "model must not be null");
         Objects.requireNonNull(prompt, "prompt must not be null");
@@ -268,11 +274,23 @@ final class DefaultJOllamaClient implements JOllamaClient {
     }
 
     @Override
+    public ChatSpec chat(Model model, String prompt) {
+        Objects.requireNonNull(model, "model must not be null");
+        return chat(model.toString(), prompt);
+    }
+
+    @Override
     public ChatSpec chat(String model, String prompt, String... images) {
         Objects.requireNonNull(model, "model must not be null");
         Objects.requireNonNull(prompt, "message must not be null");
         Message message = Message.user(prompt, images);
         return new DefaultChatSpec(this, model, message);
+    }
+
+    @Override
+    public ChatSpec chat(Model model, String prompt, String... images) {
+        Objects.requireNonNull(model, "model must not be null");
+        return chat(model.toString(), prompt, images);
     }
 
     @Override
@@ -284,6 +302,12 @@ final class DefaultJOllamaClient implements JOllamaClient {
     }
 
     @Override
+    public ChatSpec chat(Model model, String prompt, List<String> images) {
+        Objects.requireNonNull(model, "model must not be null");
+        return chat(model.toString(), prompt, images);
+    }
+
+    @Override
     public EmbeddingsSpec embeddings(String model, String prompt) {
         Objects.requireNonNull(model, "model must not be null");
         Objects.requireNonNull(prompt, "prompt must not be null");
@@ -291,9 +315,21 @@ final class DefaultJOllamaClient implements JOllamaClient {
     }
 
     @Override
+    public EmbeddingsSpec embeddings(Model model, String prompt) {
+        Objects.requireNonNull(model, "model must not be null");
+        return embeddings(model.toString(), prompt);
+    }
+
+    @Override
     public PullSpec pull(String name) {
         Objects.requireNonNull(name, "name must not be null");
         return new DefaultPullSpec(this, name);
+    }
+
+    @Override
+    public PullSpec pull(Model name) {
+        Objects.requireNonNull(name, "name must not be null");
+        return pull(name.toString());
     }
 
     @Override
@@ -305,10 +341,22 @@ final class DefaultJOllamaClient implements JOllamaClient {
     }
 
     @Override
+    public int copy(Model source, String destination) throws JOllamaClientException {
+        Objects.requireNonNull(source, "source must not be null");
+        return copy(source.toString(), destination);
+    }
+
+    @Override
     public int delete(String name) throws JOllamaClientException {
         Objects.requireNonNull(name, "name must not be null");
         DeleteRequest deleteRequest = new DeleteRequest(name);
         return delete(DELETE_PATH, deleteRequest).statusCode();
+    }
+
+    @Override
+    public int delete(Model name) throws JOllamaClientException {
+        Objects.requireNonNull(name, "name must not be null");
+        return delete(name.toString());
     }
 
     private class DefaultGenerateSpec implements GenerateSpec {
