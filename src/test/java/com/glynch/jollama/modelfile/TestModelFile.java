@@ -1,7 +1,10 @@
 package com.glynch.ollama.modelfile;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -22,21 +25,29 @@ public class TestModelFile {
     }
 
     @Test
-    public void whenFromReturnsCorrectValue() {
+    public void testModelFileValidFrom() {
         ModelFile modelFile = builder.build();
         assertEquals("llama3", modelFile.from());
     }
 
     @Test
-    public void whenValidModelFileFromPath() {
+    public void testModelFileValidPath() {
         ModelFile modelFile = ModelFile.parse(Path.of("src/test/resources/test.modelfile"));
-        assertEquals("llama3", modelFile.from());
-        assertEquals("You are mario from Super MarioBros.", modelFile.system());
-        assertEquals(LICENSE_STRING, modelFile.license());
         Message user = Message.user("This is a user message.", List.of());
         Message assistant = Message.assistant("This is the assistant answer.", List.of());
-        assertEquals(user, modelFile.messages().get(0));
-        assertEquals(assistant, modelFile.messages().get(1));
+        assertAll(
+                () -> assertEquals("llama3", modelFile.from()),
+                () -> assertEquals("You are mario from Super MarioBros.", modelFile.system()),
+                () -> assertEquals(LICENSE_STRING, modelFile.license()),
+                () -> assertEquals(user, modelFile.messages().get(0)),
+                () -> assertEquals(assistant, modelFile.messages().get(1)));
+    }
+
+    @Test
+    public void testModelFileInValidPath() {
+        assertThrows(UncheckedIOException.class, () -> {
+            ModelFile.parse(Path.of("src/test/resources/invalid.modelfile"));
+        });
     }
 
 }

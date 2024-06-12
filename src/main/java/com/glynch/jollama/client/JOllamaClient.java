@@ -1,4 +1,4 @@
-package com.glynch.ollama.client;
+package com.glynch.jollama.client;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -7,22 +7,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import com.glynch.ollama.Format;
-import com.glynch.ollama.Model;
-import com.glynch.ollama.Options;
-import com.glynch.ollama.chat.ChatResponse;
-import com.glynch.ollama.chat.Message;
-import com.glynch.ollama.chat.history.MessageHistory;
-import com.glynch.ollama.create.CreateResponse;
-import com.glynch.ollama.embeddings.EmbeddingsResponse;
-import com.glynch.ollama.generate.GenerateResponse;
-import com.glynch.ollama.list.ListModel;
-import com.glynch.ollama.list.ListModels;
-import com.glynch.ollama.modelfile.InvalidModelFileException;
-import com.glynch.ollama.modelfile.ModelFile;
-import com.glynch.ollama.process.ProcessModel;
-import com.glynch.ollama.process.ProcessModels;
-import com.glynch.ollama.pull.PullResponse;
+import com.glynch.jollama.Format;
+import com.glynch.jollama.Model;
+import com.glynch.jollama.Options;
+import com.glynch.jollama.chat.ChatResponse;
+import com.glynch.jollama.chat.Message;
+import com.glynch.jollama.chat.history.MessageHistory;
+import com.glynch.jollama.create.CreateResponse;
+import com.glynch.jollama.embeddings.EmbeddingsResponse;
+import com.glynch.jollama.generate.GenerateResponse;
+import com.glynch.jollama.list.ListModel;
+import com.glynch.jollama.list.ListModels;
+import com.glynch.jollama.modelfile.InvalidModelFileException;
+import com.glynch.jollama.modelfile.ModelFile;
+import com.glynch.jollama.process.ProcessModel;
+import com.glynch.jollama.process.ProcessModels;
+import com.glynch.jollama.pull.PullResponse;
 
 /**
  * Fluent Client for the Ollama API.
@@ -32,57 +32,57 @@ import com.glynch.ollama.pull.PullResponse;
  * create a new Ollama client.
  * </p>
  * 
- * @author Graham Lynch
+ * @author glynch
  * @see <a href="https://github.com/ollama/ollama/blob/main/docs/api.md">Ollama
  *      API</a>
  * 
  */
-public interface OllamaClient {
+public interface JOllamaClient {
     String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
 
     /**
      * Create a new {@code OllamaClient} with the default host of
-     * http://localhost:11434.
+     * {@link #DEFAULT_OLLAMA_HOST}.
      * 
-     * @return a new Ollama client
+     * @return a new JOllama client
      * @see #create(String)
      */
-    static OllamaClient create() {
+    static JOllamaClient create() {
         return builder().build();
     }
 
     /**
-     * Create a new {@code OllamaClient} with the specified host.
+     * Create a new {@code JOllamaClient} with the specified host.
      * 
      * @param host
-     * @return a new Ollama client
+     * @return a new JOllama client
      * @see #create()
      */
-    static OllamaClient create(String host) {
+    static JOllamaClient create(String host) {
         return builder(host).build();
     }
 
     /**
-     * Create a new Ollama client builder with the default host.
+     * Create a new JOllama client builder with the default host.
      * 
-     * @return a new Ollama client builder
+     * @return a newJ Ollama client builder
      */
     static Builder builder() {
-        return new DefaultOllamaClientBuilder(DEFAULT_OLLAMA_HOST);
+        return new DefaultJOllamaClientBuilder(DEFAULT_OLLAMA_HOST);
     }
 
     /**
-     * Create a new {@code OllamaClient} with the specified host.
+     * Create a new {@code JOllamaClient} with the specified host.
      * 
      * @param host
      * @return a new Ollama client builder
      */
     static Builder builder(String host) {
-        return new DefaultOllamaClientBuilder(host);
+        return new DefaultJOllamaClientBuilder(host);
     }
 
     /**
-     * A builder for creating a {@link OllamaClient}.
+     * A builder for creating a {@link JOllamaClient}.
      */
     interface Builder {
 
@@ -90,16 +90,18 @@ public interface OllamaClient {
 
         Builder connectTimeout(Duration duration);
 
-        OllamaClient build();
+        JOllamaClient build();
 
     }
 
     /**
-     * Get the host.
+     * Get the host. Defaults to {@link #DEFAULT_OLLAMA_HOST}.
      * 
      * @return the host
      */
     String getHost();
+
+    Optional<Duration> getConnectTimeout();
 
     /**
      * Get a list of the running models
@@ -110,30 +112,30 @@ public interface OllamaClient {
      *      Models</a>
      * 
      * @return a list of the running models
-     * @throws OllamaClientException in case of request or response errors
+     * @throws JOllamaClientException in case of request or response errors
      */
-    ProcessModels ps() throws OllamaClientException;
+    ProcessModels ps() throws JOllamaClientException;
 
     /**
      * Get the running model with the specified name.
      * 
      * @param name
      * @return the running model with the specified name
-     * @throws OllamaClientException
+     * @throws JOllamaClientException
      */
 
-    Optional<ProcessModel> ps(String name) throws OllamaClientException;
+    Optional<ProcessModel> ps(String name) throws JOllamaClientException;
 
     /**
      * Load the model with the specified name.
      * 
      * @param model
      * @return the running model with the specified name
-     * @throws OllamaClientException
+     * @throws JOllamaClientException
      */
-    ProcessModel load(String model) throws OllamaClientException;
+    ProcessModel load(String model) throws JOllamaClientException;
 
-    ProcessModel load(Model model) throws OllamaClientException;
+    ProcessModel load(Model model) throws JOllamaClientException;
 
     /**
      * Ping the host
@@ -146,22 +148,22 @@ public interface OllamaClient {
      * List the models.
      * 
      * @return a list of the models
-     * @throws OllamaClientException
+     * @throws JOllamaClientException
      */
-    ListModels list() throws OllamaClientException;
+    ListModels list() throws JOllamaClientException;
 
-    Optional<ListModel> list(String name) throws OllamaClientException;
+    Optional<ListModel> list(String name) throws JOllamaClientException;
 
     BlobsSpec blobs(String digest);
 
-    ModelFile show(String name) throws OllamaClientException, InvalidModelFileException;
+    ModelFile show(String name) throws JOllamaClientException, InvalidModelFileException;
 
     GenerateSpec generate(String model, String prompt);
 
     /**
      * 
-     * @param model  @see {@link com.glynch.ollama.Model}
-     * @param prompt @see {@link com.glynch.ollama.chat.Message}
+     * @param model  @see {@link com.glynch.jollama.Model}
+     * @param prompt @see {@link com.glynch.jollama.chat.Message}
      * @return
      */
     ChatSpec chat(String model, String prompt);
@@ -180,14 +182,14 @@ public interface OllamaClient {
 
     PullSpec pull(String name);
 
-    int copy(String source, String destination) throws OllamaClientException;
+    int copy(String source, String destination) throws JOllamaClientException;
 
-    int delete(String name) throws OllamaClientException;
+    int delete(String name) throws JOllamaClientException;
 
     interface BlobsSpec {
-        int exists() throws OllamaClientException;
+        int exists() throws JOllamaClientException;
 
-        int create() throws OllamaClientException;
+        int create() throws JOllamaClientException;
     }
 
     interface GenerateSpec {
@@ -214,9 +216,9 @@ public interface OllamaClient {
 
         GenerateSpec keepAlive(String keepAlive);
 
-        Stream<GenerateResponse> stream() throws OllamaClientException;
+        Stream<GenerateResponse> stream() throws JOllamaClientException;
 
-        GenerateResponse batch() throws OllamaClientException;
+        GenerateResponse batch() throws JOllamaClientException;
 
     }
 
@@ -236,9 +238,9 @@ public interface OllamaClient {
 
         ChatSpec keepAlive(String keepAlive);
 
-        Stream<ChatResponse> stream() throws OllamaClientException;
+        Stream<ChatResponse> stream() throws JOllamaClientException;
 
-        ChatResponse batch() throws OllamaClientException;
+        ChatResponse batch() throws JOllamaClientException;
 
     }
 
@@ -248,21 +250,21 @@ public interface OllamaClient {
 
         EmbeddingsSpec keepAlive(String keepAlive);
 
-        EmbeddingsResponse get() throws OllamaClientException;
+        EmbeddingsResponse get() throws JOllamaClientException;
     }
 
     interface PullSpec {
         PullSpec insecure(boolean insecure);
 
-        Stream<PullResponse> stream() throws OllamaClientException;
+        Stream<PullResponse> stream() throws JOllamaClientException;
 
-        PullResponse batch() throws OllamaClientException;
+        PullResponse batch() throws JOllamaClientException;
     }
 
     interface CreateSpec {
-        Stream<CreateResponse> stream() throws OllamaClientException;
+        Stream<CreateResponse> stream() throws JOllamaClientException;
 
-        CreateResponse batch() throws OllamaClientException;
+        CreateResponse batch() throws JOllamaClientException;
     }
 
 }

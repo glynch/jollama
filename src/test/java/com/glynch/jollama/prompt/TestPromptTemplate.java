@@ -1,7 +1,9 @@
 package com.glynch.ollama.prompt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -74,9 +76,16 @@ public class TestPromptTemplate {
     }
 
     @Test
-    public void testPromptTemplateFromPath() {
+    public void testPromptTemplateFromValidPath() {
         PromptTemplate template = PromptTemplate.template(Path.of("src/test/resources/prompt-template.txt"));
         assertEquals("Hello, Graham\n from Australia!", template.format("Graham", "Australia"));
+    }
+
+    @Test
+    public void testPromptTemplateFromInvalidPath() {
+        assertThrows(UncheckedIOException.class, () -> {
+            PromptTemplate.template(Path.of("src/test/resources/invalid-prompt-template.txt"));
+        });
     }
 
 }

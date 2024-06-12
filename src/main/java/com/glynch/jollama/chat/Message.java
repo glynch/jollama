@@ -18,7 +18,7 @@ public record Message(Role role, String content, List<String> images) {
     }
 
     public static Message system(String content, List<String> images) {
-        return new Message(Role.USER, content, Collections.unmodifiableList(images));
+        return new Message(Role.SYSTEM, content, Collections.unmodifiableList(images));
     }
 
     public static Message system(String content) {

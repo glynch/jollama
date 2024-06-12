@@ -9,11 +9,15 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandler;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.glynch.ollama.Format;
 import com.glynch.ollama.Model;
@@ -45,7 +49,7 @@ import com.glynch.ollama.support.Body;
 
 final class DefaultOllamaClient implements OllamaClient {
 
-    String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
+    private static final Logger LOGGER = LoggerFactory.getLogger("com.glynch.ollama.client");
     private static final String PING_PATH = "";
     private static final String LIST_PATH = "/api/tags";
     private static final String GENERATE_PATH = "/api/generate";
@@ -73,6 +77,11 @@ final class DefaultOllamaClient implements OllamaClient {
         return this.host;
     }
 
+    @Override
+    public Optional<Duration> getConnectTimeout() {
+        return this.client.connectTimeout();
+    }
+
     private URI getUri(String path) {
         return URI.create(this.host + path);
     }
@@ -93,6 +102,7 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     private <T> HttpResponse<T> get(String path, BodyHandler<T> bodyHandler) throws OllamaClientException {
+        LOGGER.debug("GET {}", path);
         HttpResponse<T> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
@@ -109,6 +119,7 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     private <T> HttpResponse<Void> head(String path) throws OllamaClientException {
+        LOGGER.debug("HEAD {}", path);
         HttpResponse<Void> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
@@ -123,6 +134,7 @@ final class DefaultOllamaClient implements OllamaClient {
     }
 
     private <T> HttpResponse<Void> delete(String path, Object body) throws OllamaClientException {
+        LOGGER.debug("DELETE {}: {}", path, body);
         HttpResponse<Void> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
@@ -140,6 +152,7 @@ final class DefaultOllamaClient implements OllamaClient {
 
     private <T> HttpResponse<T> post(String path, Object body,
             BodyHandler<T> bodyHandler) throws OllamaClientException {
+        LOGGER.debug("POST {}: {}", path, body);
         HttpResponse<T> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))
@@ -157,7 +170,7 @@ final class DefaultOllamaClient implements OllamaClient {
 
     private <T> HttpResponse<Stream<T>> stream(String path, Object body,
             BodyHandler<Stream<T>> bodyHandler) throws OllamaClientException {
-        System.out.println(body);
+        LOGGER.debug("POST {}: {}", path, body);
         HttpResponse<Stream<T>> response = null;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(getUri(path))

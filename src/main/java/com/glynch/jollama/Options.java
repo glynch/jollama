@@ -1,4 +1,4 @@
-package com.glynch.ollama;
+package com.glynch.jollama;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.glynch.ollama.modelfile.ModelFile;
+import com.glynch.jollama.modelfile.ModelFile;
 
 public class Options extends AbstractMap<String, Object> {
 
@@ -98,7 +98,7 @@ public class Options extends AbstractMap<String, Object> {
     }
 
     @SuppressWarnings("unchecked")
-    List<String> getStop() {
+    public List<String> getStop() {
         return (List<String>) options.get(ModelFile.Key.STOP.getValue());
     }
 

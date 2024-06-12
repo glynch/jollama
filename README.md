@@ -1,4 +1,4 @@
-# Ollama4j Java Library
+# JOllama Java Library
 
 The Ollama4j Java library provides a fluent Java API for interacting with Ollama REST endpoints.
 
@@ -6,21 +6,21 @@ See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
 
 ## Usage
 
-### Create an Ollama Client
+### Create a JOllama Client
 
 ```java
 
-    OllamaClient client = OllamaClient.create();
+    JOllamaClient client = JOllamaClient.create();
 
 ```
 
 ```java
-    OllamaClient client = OllamaClient.create("http://localhost:11434");
+    JOllamaClient client = JOllamaClient.create("http://localhost:11434");
 
 ```
 
 ```java
-    OllamaClient client = OllamaClient
+    JOllamaClient client = JOllamaClient
         .builder()
         .followRedirects()
         .connectTimeout(Duration.ofSeconds(5))
