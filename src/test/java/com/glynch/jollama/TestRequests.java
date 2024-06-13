@@ -3,6 +3,7 @@ package com.glynch.jollama;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import com.glynch.jollama.chat.Message;
 import com.glynch.jollama.copy.CopyRequest;
 import com.glynch.jollama.create.CreateRequest;
 import com.glynch.jollama.delete.DeleteRequest;
+import com.glynch.jollama.generate.GenerateRequest;
 import com.glynch.jollama.show.ShowRequest;
 
 public class TestRequests {
@@ -68,6 +70,25 @@ public class TestRequests {
         assertAll(
                 () -> assertEquals("llama3:latest", request.source()),
                 () -> assertEquals("llama3-copy", request.destination()));
+    }
+
+    @Test
+    public void generateRequest() {
+        GenerateRequest request = new GenerateRequest("llama3", "Why is the sky blue?", Collections.emptyList(),
+                Format.JSON,
+                Options.create(), "", "", Collections.emptyList(), false, null, "5s");
+        assertAll(
+                () -> assertEquals("llama3", request.model()),
+                () -> assertEquals("Why is the sky blue?", request.prompt()),
+                () -> assertEquals(0, request.images().size()),
+                () -> assertEquals(Format.JSON, request.format()),
+                () -> assertEquals(0, request.options().size()),
+                () -> assertEquals("", request.system()),
+                () -> assertEquals("", request.template()),
+                () -> assertEquals(0, request.context().size()),
+                () -> assertEquals(false, request.stream()),
+                () -> assertEquals(null, request.raw()),
+                () -> assertEquals("5s", request.keepAlive()));
     }
 
 }

@@ -77,6 +77,11 @@
     </build>
 
       <dependencies>
+      <dependency>
+    <groupId>io.projectreactor.netty</groupId>
+    <artifactId>reactor-netty-core</artifactId>
+    <version>1.1.20</version>
+</dependency>
              <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

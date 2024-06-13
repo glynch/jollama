@@ -47,6 +47,8 @@ import com.glynch.jollama.show.ShowRequest;
 import com.glynch.jollama.show.ShowResponse;
 import com.glynch.jollama.support.Body;
 
+import reactor.core.publisher.Flux;
+
 final class DefaultJOllamaClient implements JOllamaClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("com.glynch.ollama.client");
@@ -456,13 +458,14 @@ final class DefaultJOllamaClient implements JOllamaClient {
         }
 
         @Override
-        public Stream<GenerateResponse> stream() {
+        public Flux<GenerateResponse> stream() {
             GenerateRequest generateRequest = new GenerateRequest(model, prompt, images, format, options, system,
                     template,
                     context,
                     true, raw, keepAlive);
-            return ollamaClient.stream(GENERATE_PATH, generateRequest,
+            Stream<GenerateResponse> response = ollamaClient.stream(GENERATE_PATH, generateRequest,
                     GenerateResponse.class);
+            return Flux.fromStream(response);
         }
 
         @Override
@@ -579,13 +582,22 @@ final class DefaultJOllamaClient implements JOllamaClient {
         }
 
         @Override
-        public Stream<ChatResponse> stream() throws JOllamaClientException {
+        public Flux<ChatResponse> stream() throws JOllamaClientException {
             if (system != null) {
                 history.add(Message.system(system));
             }
             history.add(message);
+
             ChatRequest chatRequest = new ChatRequest(model, history.messages(), format, options, true, keepAlive);
-            return ollamaClient.stream(CHAT_PATH, chatRequest, ChatResponse.class);
+            StringBuilder content = new StringBuilder();
+            Stream<ChatResponse> stream = ollamaClient.stream(CHAT_PATH, chatRequest, ChatResponse.class)
+                    .map(r -> {
+                        content.append(r.message().content());
+                        return r;
+                    });
+            return Flux.fromStream(stream).doOnComplete(() -> {
+                history.add(Message.assistant(content.toString()));
+            });
         }
 
         @Override
@@ -595,10 +607,10 @@ final class DefaultJOllamaClient implements JOllamaClient {
             }
             history.add(message);
             ChatRequest chatRequest = new ChatRequest(model, history.messages(), format, options, false, keepAlive);
-            ChatResponse chatResponse = ollamaClient.post(CHAT_PATH, chatRequest, Body.Handlers.of(ChatResponse.class))
+            ChatResponse response = ollamaClient.post(CHAT_PATH, chatRequest, Body.Handlers.of(ChatResponse.class))
                     .body();
-            history.add(chatResponse.message());
-            return chatResponse;
+            history.add(response.message());
+            return response;
         }
 
     }
@@ -632,18 +644,6 @@ final class DefaultJOllamaClient implements JOllamaClient {
         private String modelfile;
         private Path path;
 
-        public DefaultCreateSpec(DefaultJOllamaClient ollamaClient, String name, String modelfile) {
-            this.ollamaClient = ollamaClient;
-            this.name = name;
-            this.modelfile = modelfile;
-        }
-
-        public DefaultCreateSpec(DefaultJOllamaClient ollamaClient, String name, Path path) {
-            this.ollamaClient = ollamaClient;
-            this.name = name;
-            this.path = path;
-        }
-
         public DefaultCreateSpec(DefaultJOllamaClient ollamaClient, String name, ModelFile modelFile) {
             this.ollamaClient = ollamaClient;
             this.name = name;
@@ -651,9 +651,9 @@ final class DefaultJOllamaClient implements JOllamaClient {
         }
 
         @Override
-        public Stream<CreateResponse> stream() {
+        public Flux<CreateResponse> stream() {
             CreateRequest createRequest = new CreateRequest(name, modelfile, true, path);
-            return ollamaClient.stream(CREATE_PATH, createRequest, CreateResponse.class);
+            return Flux.fromStream(ollamaClient.stream(CREATE_PATH, createRequest, CreateResponse.class));
         }
 
         @Override
@@ -683,9 +683,9 @@ final class DefaultJOllamaClient implements JOllamaClient {
         }
 
         @Override
-        public Stream<PullResponse> stream() throws JOllamaClientException {
+        public Flux<PullResponse> stream() throws JOllamaClientException {
             PullRequest pullRequest = new PullRequest(name, insecure, true);
-            return ollamaClient.stream(PULL_PATH, pullRequest, PullResponse.class);
+            return Flux.fromStream(ollamaClient.stream(PULL_PATH, pullRequest, PullResponse.class));
         }
 
         @Override

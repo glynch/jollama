@@ -114,7 +114,7 @@ This example also gives the same result each time since it uses the same _seed_ 
 Pull a model.
 
 ```java
-    client.pull("phi3").stream().forEach(response -> {
+    client.pull("phi3").stream().subscribe(response -> {
         System.out.println(response.status());
     });
 ```
@@ -133,9 +133,9 @@ Create a model.
 ```java
 
     client.create("mario-test", "FROM llama3\nSYSTEM You are mario from Super Mario Bros.")
-        .stream().forEach(
-            System.out::println
-        );
+        .stream().subscribe(r -> {
+            System.out.println(r.status());
+        });
 ```
 
 ```java
@@ -217,10 +217,17 @@ Chat with a model using the history of previous messages.
 ```java
 
     MessageHistory history = new InMemoryMessageHistory();
-    client.chat("llama3", "Why is the sky blue?").history(history).batch();
-    client.chat("llama3", "How is that different than mie scattering?").history(history).batch();
+    client.chat("llama3", "Why is the sky blue?").history(history).stream().subscribe(r -> {
+        System.out.print(r.message().content());
+    });
+    System.out.println();
+    client.chat("llama3", "How is that different than mie scattering?").history(history)
+            .stream().subscribe(r -> {
+                System.out.print(r.message().content());
+            });
+    System.out.println();
 
-    for (Message message : history) {
+    for (Message message : history.messages()) {
         System.out.println(message);
     }
 ```

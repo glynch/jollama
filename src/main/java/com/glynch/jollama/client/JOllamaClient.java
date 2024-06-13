@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import com.glynch.jollama.Format;
 import com.glynch.jollama.Model;
@@ -23,6 +22,8 @@ import com.glynch.jollama.modelfile.ModelFile;
 import com.glynch.jollama.process.ProcessModel;
 import com.glynch.jollama.process.ProcessModels;
 import com.glynch.jollama.pull.PullResponse;
+
+import reactor.core.publisher.Flux;
 
 /**
  * Fluent Client for the Ollama API.
@@ -270,7 +271,7 @@ public interface JOllamaClient {
 
         GenerateSpec keepAlive(String keepAlive);
 
-        Stream<GenerateResponse> stream() throws JOllamaClientException;
+        Flux<GenerateResponse> stream() throws JOllamaClientException;
 
         GenerateResponse batch() throws JOllamaClientException;
 
@@ -292,7 +293,7 @@ public interface JOllamaClient {
 
         ChatSpec keepAlive(String keepAlive);
 
-        Stream<ChatResponse> stream() throws JOllamaClientException;
+        Flux<ChatResponse> stream() throws JOllamaClientException;
 
         ChatResponse batch() throws JOllamaClientException;
 
@@ -310,13 +311,13 @@ public interface JOllamaClient {
     interface PullSpec {
         PullSpec insecure(boolean insecure);
 
-        Stream<PullResponse> stream() throws JOllamaClientException;
+        Flux<PullResponse> stream() throws JOllamaClientException;
 
         PullResponse batch() throws JOllamaClientException;
     }
 
     interface CreateSpec {
-        Stream<CreateResponse> stream() throws JOllamaClientException;
+        Flux<CreateResponse> stream() throws JOllamaClientException;
 
         CreateResponse batch() throws JOllamaClientException;
     }
