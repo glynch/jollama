@@ -55,14 +55,18 @@ public record ModelFile(String from, String adapter, String template, String sys
         if (parameters != null) {
             parameters.forEach((k, v) -> {
                 Key key = Key.of(k);
-                if (key != null && key == Key.STOP) {
-                    @SuppressWarnings("unchecked")
-                    List<String> stops = (List<String>) v;
-                    stops.forEach(
-                            stop -> builder.append("PARAMETER ").append(key).append(" ").append(stop).append("\n"));
-                    return;
+                if (key != null) {
+                    if (List.class.isAssignableFrom(v.getClass())) {
+                        @SuppressWarnings("unchecked")
+                        List<String> list = (List<String>) v;
+                        list.forEach(
+                                value -> builder.append("PARAMETER ").append(key).append(" ").append(value)
+                                        .append("\n"));
+                    } else {
+                        builder.append("PARAMETER ").append(k).append(" ").append(v).append("\n");
+                    }
                 }
-                builder.append("PARAMETER ").append(k).append(" ").append(v).append("\n");
+
             });
         }
 

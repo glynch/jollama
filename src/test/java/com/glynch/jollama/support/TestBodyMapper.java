@@ -38,7 +38,7 @@ public class TestBodyMapper {
     @Test
     public void testBodyMapperChatResponse() throws IOException {
 
-        String json = Files.readString(Path.of("src/test/resources/chat-response.json"));
+        String json = Files.readString(Path.of("src/test/resources/responses/chat.json"));
         ChatResponse response = Body.Mappers.map(ChatResponse.class).apply(json);
 
         assertAll(
@@ -67,7 +67,7 @@ public class TestBodyMapper {
 
     @Test
     public void testBodyMapperListModels() throws IOException {
-        String json = Files.readString(Path.of("src/test/resources/list-response.json"));
+        String json = Files.readString(Path.of("src/test/resources/responses/list.json"));
         ListModels response = Body.Mappers.map(ListModels.class).apply(json);
         Details llama3Details = new Details("", "gguf", "llama", List.of("llama"), "8.0B", "Q4_0");
         Details phi3Details = new Details("", "gguf", "phi3", List.of("phi3"), "3.8B", "Q4_K_M");

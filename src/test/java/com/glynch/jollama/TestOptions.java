@@ -30,7 +30,7 @@ public class TestOptions {
                 .repeatLastN(33)
                 .temperature(0.8f)
                 .repeatPenalty(1.2f)
-                .frequencyPenalty(1.5f)
+                .frequencyPenalty(1.0f)
                 .presencePenalty(1.5f)
                 .miroStat(1)
                 .miroStatTau(0.8f)
@@ -145,7 +145,7 @@ public class TestOptions {
                 () -> assertEquals(0.8f, newOptions.temperature()),
                 () -> assertEquals(1.2f, newOptions.repeatPenalty()),
                 () -> assertEquals(1.5f, newOptions.presencePenalty()),
-                () -> assertEquals(1.5f, newOptions.frequencyPenalty()),
+                () -> assertEquals(1.0f, newOptions.frequencyPenalty()),
                 () -> assertEquals(1, newOptions.miroStat()),
                 () -> assertEquals(0.8f, newOptions.miroStatTau()),
                 () -> assertEquals(0.6f, newOptions.miroStatEta()),
