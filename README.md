@@ -56,7 +56,7 @@ Get a list of the current models.
 
 ```java
 
-    client.list().forEach(model -> {
+    client.list().models().forEach(model -> {
             System.out.println(model);
     })
 

@@ -59,7 +59,6 @@ public class InMemoryMessageHistory implements MessageHistory {
 
     @Override
     public Iterator<Message> iterator() {
-        System.out.println("InMemoryMessageHistory.iterator() " + this.messages.size());
         return this.messages.iterator();
     }
 

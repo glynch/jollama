@@ -1,6 +1,6 @@
 package com.glynch.jollama.generate;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record GenerateResponse(
         String model,
-        @JsonProperty("created_at") OffsetDateTime createdAt,
+        @JsonProperty("created_at") Instant createdAt,
         String response,
         boolean done,
         @JsonProperty("done_reason") String doneReason,

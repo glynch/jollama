@@ -8,8 +8,4 @@ public class InvalidModelFileException extends NestedRuntimeException {
         super(message);
     }
 
-    public InvalidModelFileException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
 }

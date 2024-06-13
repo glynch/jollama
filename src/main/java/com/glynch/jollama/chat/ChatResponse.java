@@ -1,13 +1,13 @@
 package com.glynch.jollama.chat;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record ChatResponse(
         String model,
-        @JsonIgnore @JsonProperty("created_at") OffsetDateTime createdAt,
+        @JsonIgnore @JsonProperty("created_at") Instant createdAt,
         Message message,
         @JsonProperty("done_reason") String doneReason,
         boolean done,

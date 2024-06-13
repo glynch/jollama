@@ -10,6 +10,10 @@ import com.glynch.jollama.chat.Message;
  */
 public interface MessageHistory extends Iterable<Message> {
 
+    static MessageHistory create() {
+        return new InMemoryMessageHistory();
+    }
+
     void add(MessageHistory history);
 
     void add(List<Message> messages);
