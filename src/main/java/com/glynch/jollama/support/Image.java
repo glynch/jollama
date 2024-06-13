@@ -15,6 +15,10 @@ public class Image {
         return new String(Base64.getEncoder().encode(image));
     }
 
+    public static String encode(String path) {
+        return encode(Path.of(path));
+    }
+
     public static String encode(Path path) {
         try {
             return encode(Files.readAllBytes(path));

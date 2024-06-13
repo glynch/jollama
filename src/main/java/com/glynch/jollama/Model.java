@@ -7,7 +7,23 @@ public enum Model {
 
     LLAMA_3_LATEST(Name.LLAMA_3, "latest"),
     LLAMA_3_8B(Name.LLAMA_3, "8b"),
-    LLAMA_3_70B(Name.LLAMA_3, "70b");
+    LLAMA_3_70B(Name.LLAMA_3, "70b"),
+    PHI_3_LATEST(Name.PHI_3, "latest"),
+    PHI_3_3_8B(Name.PHI_3, "3.8b"),
+    PHI_3_14B(Name.PHI_3, "14b"),
+    QWEN_2_LATEST(Name.QWEN_2, "latest"),
+    QWEN_2_72B(Name.QWEN_2, "72b"),
+    QWEN_2_7B(Name.QWEN_2, "7b"),
+    QWEN_2_1_5B(Name.QWEN_2, "1.5b"),
+    QWEN_2_0_5B(Name.QWEN_2, "0.5b"),
+    AYA_LATEST(Name.AYA, "latest"),
+    AYA_8B(Name.AYA, "8b"),
+    AYA_35B(Name.AYA, "35b"),
+    MISTRAL_LATEST(Name.MISTRAL, "latest"),
+    MISTRAL_7B(Name.MISTRAL, "7b"),
+    GEMMA_LATEST(Name.GEMMA, "latest"),
+    GEMMA_2B(Name.GEMMA, "2b"),
+    GEMMA_7B(Name.GEMMA, "7b"),
     ;
 
     private final Name name;

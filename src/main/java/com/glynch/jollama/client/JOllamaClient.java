@@ -186,7 +186,7 @@ public interface JOllamaClient {
      * 
      * @param model  @see {@link com.glynch.jollama.Model}
      * @param prompt @see {@link com.glynch.jollama.chat.Message}
-     * @return
+     * @return a {@link ChatSpec}
      */
     ChatSpec chat(String model, String prompt);
 
@@ -286,6 +286,11 @@ public interface JOllamaClient {
 
     interface ChatSpec {
 
+        /**
+         * 
+         * @param system the system {@link com.glynch.jollama.chat.Message}
+         * @return
+         */
         ChatSpec system(String system);
 
         ChatSpec history(Message... messages);
@@ -296,8 +301,18 @@ public interface JOllamaClient {
 
         ChatSpec format(Format format);
 
+        /**
+         * 
+         * @param options the options {@link com.glynch.jollama.Options}
+         * @return a {@link ChatSpec}
+         */
         ChatSpec options(Options options);
 
+        /**
+         * 
+         * @param keepAlive the keep alive {@link com.glynch.jollama.KeepAlive}
+         * @return a {@link ChatSpec}
+         */
         ChatSpec keepAlive(KeepAlive keepAlive);
 
         Flux<ChatResponse> stream() throws JOllamaClientException;

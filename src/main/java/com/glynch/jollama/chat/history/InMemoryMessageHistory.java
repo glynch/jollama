@@ -48,6 +48,11 @@ public class InMemoryMessageHistory implements MessageHistory {
     }
 
     @Override
+    public Message remove(int index) {
+        return this.messages.remove(index);
+    }
+
+    @Override
     public int size() {
         return this.messages.size();
     }

@@ -22,6 +22,8 @@ public interface MessageHistory extends Iterable<Message> {
 
     Message get(int index);
 
+    Message remove(int index);
+
     List<Message> messages();
 
     void clear();

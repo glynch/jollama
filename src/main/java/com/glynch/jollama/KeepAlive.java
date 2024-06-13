@@ -11,7 +11,6 @@ public record KeepAlive(long duration, Units units) {
     }
 
     public static enum Units {
-        MILLISECONDS("ms"),
         SECONDS("s"),
         MINUTES("m"),
         HOURS("h"),
@@ -27,10 +26,6 @@ public record KeepAlive(long duration, Units units) {
         public String toString() {
             return symbol;
         }
-    }
-
-    public static KeepAlive milliseconds(long duration) {
-        return new KeepAlive(duration, Units.MILLISECONDS);
     }
 
     public static KeepAlive seconds(long duration) {
