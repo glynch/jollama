@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.glynch.jollama.Format;
+import com.glynch.jollama.KeepAlive;
 import com.glynch.jollama.Model;
 import com.glynch.jollama.Options;
 import com.glynch.jollama.chat.ChatResponse;
@@ -134,7 +135,9 @@ public interface JOllamaClient {
      * @return the running model with the specified name
      * @throws JOllamaClientException
      */
-    ProcessModel load(String model) throws JOllamaClientException;
+    Optional<ProcessModel> load(String model) throws JOllamaClientException;
+
+    Optional<ProcessModel> load(String model, KeepAlive keepAlive) throws JOllamaClientException;
 
     /**
      * 
@@ -142,7 +145,9 @@ public interface JOllamaClient {
      * @return
      * @throws JOllamaClientException
      */
-    ProcessModel load(Model model) throws JOllamaClientException;
+    Optional<ProcessModel> load(Model model) throws JOllamaClientException;
+
+    Optional<ProcessModel> load(Model model, KeepAlive keepAlive) throws JOllamaClientException;
 
     /**
      * Ping the host
@@ -166,6 +171,8 @@ public interface JOllamaClient {
      * @throws JOllamaClientException
      */
     Optional<ListModel> list(String name) throws JOllamaClientException;
+
+    Optional<ListModel> list(Model name) throws JOllamaClientException;
 
     BlobsSpec blobs(String digest);
 
@@ -269,7 +276,7 @@ public interface JOllamaClient {
 
         GenerateSpec raw();
 
-        GenerateSpec keepAlive(String keepAlive);
+        GenerateSpec keepAlive(KeepAlive keepAlive);
 
         Flux<GenerateResponse> stream() throws JOllamaClientException;
 
@@ -291,7 +298,7 @@ public interface JOllamaClient {
 
         ChatSpec options(Options options);
 
-        ChatSpec keepAlive(String keepAlive);
+        ChatSpec keepAlive(KeepAlive keepAlive);
 
         Flux<ChatResponse> stream() throws JOllamaClientException;
 

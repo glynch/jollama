@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.glynch.jollama.Format;
+import com.glynch.jollama.KeepAlive;
 import com.glynch.jollama.Model;
 import com.glynch.jollama.Options;
 import com.glynch.jollama.chat.ChatRequest;
@@ -221,23 +222,41 @@ final class DefaultJOllamaClient implements JOllamaClient {
     }
 
     @Override
+    public Optional<ListModel> list(Model model) throws JOllamaClientException {
+        Objects.requireNonNull(model, "model must not be null");
+        return list(model.toString());
+    }
+
+    @Override
     public Optional<ListModel> list(String name) throws JOllamaClientException {
         Objects.requireNonNull(name, "name must not be null");
         return list().models().stream().filter(model -> model.name().equals(name)).findFirst();
     }
 
     @Override
-    public ProcessModel load(String model) throws JOllamaClientException {
+    public Optional<ProcessModel> load(String model, KeepAlive keepAlive) throws JOllamaClientException {
         Objects.requireNonNull(model, "model must not be null");
-        generate(model, "").batch();
-        return ps(model).get();
+        Objects.requireNonNull(keepAlive, "keepAlive must not be null");
+        generate(model, "").keepAlive(keepAlive).batch();
+        return ps(model);
     }
 
     @Override
-    public ProcessModel load(Model model) throws JOllamaClientException {
+    public Optional<ProcessModel> load(String model) throws JOllamaClientException {
         Objects.requireNonNull(model, "model must not be null");
-        generate(model.toString(), "").batch();
-        return ps(model.toString()).get();
+        return load(model, KeepAlive.DEFAULT);
+    }
+
+    @Override
+    public Optional<ProcessModel> load(Model model) throws JOllamaClientException {
+        Objects.requireNonNull(model, "model must not be null");
+        return load(model.toString());
+    }
+
+    @Override
+    public Optional<ProcessModel> load(Model model, KeepAlive keepAlive) throws JOllamaClientException {
+        Objects.requireNonNull(model, "model must not be null");
+        return load(model.toString(), keepAlive);
     }
 
     @Override
@@ -451,9 +470,9 @@ final class DefaultJOllamaClient implements JOllamaClient {
         }
 
         @Override
-        public GenerateSpec keepAlive(String keepAlive) {
+        public GenerateSpec keepAlive(KeepAlive keepAlive) {
             Objects.requireNonNull(keepAlive, "keepAlive must not be null");
-            this.keepAlive = keepAlive;
+            this.keepAlive = keepAlive.toString();
             return this;
         }
 
@@ -575,9 +594,9 @@ final class DefaultJOllamaClient implements JOllamaClient {
         }
 
         @Override
-        public ChatSpec keepAlive(String keepAlive) {
+        public ChatSpec keepAlive(KeepAlive keepAlive) {
             Objects.requireNonNull(keepAlive, "keepAlive must not be null");
-            this.keepAlive = keepAlive;
+            this.keepAlive = keepAlive.toString();
             return this;
         }
 
