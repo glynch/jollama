@@ -40,19 +40,29 @@ Check if Ollama is up.
 
 ### Load
 
+See [Load a model](https://github.com/ollama/ollama/blob/main/docs/api.md#load-a-model)
+
 Load a model into memory and returns information about the loaded model.
 
 ```java
-    ProcessModel processModel = client.load("llama3:latest");
+    Optional<ProcessModel> pm = client.load("llama3:latest");
+    if (pm.isPresent()) {
+        System.out.println(pm.get());
+    }
 ```
 
 ```java
-    ProcessModel processModel = client.load(LLAMA_3_LATEST);
+    Optional<ProcessModel> pm = client.load(Model.LLAMA_3_LATEST, KeepAlive.DEFAULT);
+    if (pm.isPresent()) {
+        System.out.println(pm.get());
+    }
 ```
 
 ### List
 
-Get a list of the current models.
+See [List Local Models](https://github.com/ollama/ollama/blob/main/docs/api.md#list-local-models)
+
+Get a list of the current local models.
 
 ```java
 
@@ -61,6 +71,8 @@ Get a list of the current models.
     })
 
 ```
+
+List a specific local model.
 
 ```java
 
@@ -79,10 +91,12 @@ Get a list of the current models.
 
 ### Generate (stream)
 
+See [Generate a completion](https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-completion)
+
 ```java
     client.generate("llama3", "What is a tsunami?")
         .stream()
-        .forEach(
+        .subscribe(
             r -> {
                 System.out.print(r.response());
             });
@@ -130,6 +144,8 @@ Pull a model.
 
 Create a model.
 
+See [Create a Model](https://github.com/ollama/ollama/blob/main/docs/api.md#create-a-model)
+
 ```java
 
     client.create("mario-test", "FROM llama3\nSYSTEM You are mario from Super Mario Bros.")
@@ -165,6 +181,8 @@ Read a modelfile from disk
 
 Copy a model.
 
+See [Copy a Model](https://github.com/ollama/ollama/blob/main/docs/api.md#copy-a-model)
+
 ```java
     int statusCode = client.copy("llama3", "llama3-copy");
 
@@ -173,6 +191,8 @@ Copy a model.
 ### Delete
 
 Delete a model
+
+See [Delete a Model](https://github.com/ollama/ollama/blob/main/docs/api.md#delete-a-model)
 
 ```java
     int statucCode = client.delete("llama3-copy");
@@ -183,6 +203,8 @@ Delete a model
 
 Show the contents of a modelfile for an existing model.
 
+See [Show Model Information](https://github.com/ollama/ollama/blob/main/docs/api.md#show-model-information)
+
 ```java
     System.out.println(client.show("llama3"));
 ```
@@ -191,9 +213,11 @@ Show the contents of a modelfile for an existing model.
 
 Chat with a model and stream the result.
 
+See [Generate a chat completion](https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-chat-completion)
+
 ```java
 
-    client.chat("llama3", "What is a tsunami?").stream().forEach(response -> {
+    client.chat("llama3", "What is a tsunami?").stream().subscribe(response -> {
                 System.out.print(response.message().content());
             });
 ```
@@ -236,6 +260,8 @@ Chat with a model using the history of previous messages.
 
 Generate embeddings for a prompt.
 
+See [Generate Embeddings](https://github.com/ollama/ollama/blob/main/docs/api.md#generate-embeddings)
+
 ```java
     client.embeddings("nomic-embed-text", "What is a Tsunami?")
         .get()
@@ -257,6 +283,8 @@ Check if a blob exists.
 ### Process
 
 Show currently loaded models and associated model information.
+
+See [List Running Models](https://github.com/ollama/ollama/blob/main/docs/api.md#list-running-models)
 
 ```java
     client.ps().models().forEach(System.out::println);
