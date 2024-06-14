@@ -107,8 +107,7 @@ See [Generate a completion](https://github.com/ollama/ollama/blob/main/docs/api.
 
 ```java
     GenerateResponse generateResponse = client.generate("llama3", "What is a tsunami?")
-                    .batch()
-                    .get();
+                    .batch();
     System.out.println(generateResponse.response());
 ```
 
