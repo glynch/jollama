@@ -30,23 +30,26 @@ import reactor.core.publisher.Flux;
  * Fluent Client for the Ollama API.
  * 
  * <p>
- * Use static factory methods {@link #create()} or {@link #create(String)} to
- * create a new Ollama client.
+ * Use static factory methods {@link #create()} or {@link #create(String)}
+ * or {@link JOllamaClient#builder()} or {@link JOllamaClient#builder(String)}
+ * to create a new Ollama client.
  * </p>
  * 
- * @author glynch
+ * @author Graham Lynch
  * @see <a href="https://github.com/ollama/ollama/blob/main/docs/api.md">Ollama
  *      API</a>
  * 
  */
 public interface JOllamaClient {
+    /**
+     * The default Ollama host.
+     */
     String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
 
     /**
-     * Create a new {@code OllamaClient} with the default host of
+     * Create a new {@code JOllamaClient} with the default host of
      * {@link #DEFAULT_OLLAMA_HOST}.
      * 
-     * @return a new JOllama client
      * @see #create(String)
      */
     static JOllamaClient create() {
@@ -54,20 +57,18 @@ public interface JOllamaClient {
     }
 
     /**
-     * Create a new {@code JOllamaClient} with the specified host.
+     * A variant of {@code JOllamaClient#create()} that accepts a host.
      * 
-     * @param host the Ollama server host
-     * @return a new JOllama client
-     * @see #create()
+     * @param host the Ollama server host for all requests
+     * @see #builder(String)
      */
     static JOllamaClient create(String host) {
         return builder(host).build();
     }
 
     /**
-     * Create a new JOllama client builder with the default host.
+     * Obtain a {@code JOllamaClient} builder with the default host.
      * 
-     * @return a newJ Ollama client builder
      */
     static Builder builder() {
         return new DefaultJOllamaClientBuilder(DEFAULT_OLLAMA_HOST);
@@ -84,7 +85,7 @@ public interface JOllamaClient {
     }
 
     /**
-     * A builder for creating a {@link JOllamaClient}.
+     * A mutable builder for creating a {@link JOllamaClient}.
      */
     interface Builder {
 
@@ -131,7 +132,8 @@ public interface JOllamaClient {
     /**
      * Load the model with the specified name.
      * 
-     * @param model the name of the model
+     * @param model the name of the model. This should include the tag. If there is
+     *              no tag it defaults to latest
      * @return the running model with the specified name
      * @throws JOllamaClientException
      */

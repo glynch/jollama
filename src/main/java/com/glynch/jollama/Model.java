@@ -24,6 +24,12 @@ public enum Model {
     GEMMA_LATEST(Name.GEMMA, "latest"),
     GEMMA_2B(Name.GEMMA, "2b"),
     GEMMA_7B(Name.GEMMA, "7b"),
+    ORCA_MINI_LATEST(Name.ORCA_MINI, "latest"),
+    ORCA_MINI_3B(Name.ORCA_MINI, "3b"),
+    ORCA_MINI_7B(Name.ORCA_MINI, "7b"),
+    ORCA_MINI_13B(Name.ORCA_MINI, "13b"),
+    ORCA_MINI_70B(Name.ORCA_MINI, "70b"),
+    NOMIC_EMBED_TEXT_LATEST(Name.NOMIC_EMBED_TEXT, "latest"),
     ;
 
     private final Name name;

@@ -61,4 +61,13 @@ public class TestModelFile {
                 });
     }
 
+    // @Test
+    // public void modeFileToString() throws IOException {
+    // ModelFile modelFile =
+    // ModelFile.parse(Path.of("src/test/resources/test.modelfile"));
+    // String expected =
+    // Files.readString(Path.of("src/test/resources/test.modelfile"));
+    // assertEquals(expected, modelFile.toString());
+    // }
+
 }

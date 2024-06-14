@@ -1,5 +1,6 @@
 package com.glynch.jollama.prompt;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -20,8 +21,10 @@ public class TestPromptTemplate {
 
     @Test
     public void testPromptTemplateTemplate() {
-        PromptTemplate template = PromptTemplate.template("Hello, {name}!");
-        assertEquals("Hello, {name}!", template.template());
+        PromptTemplate template = PromptTemplate.template("Hello, {name} from {country}!");
+        assertAll(
+                () -> assertEquals("Hello, {name} from {country}!", template.template()),
+                () -> assertEquals(2, template.variables().size()));
     }
 
     @Test
@@ -83,7 +86,7 @@ public class TestPromptTemplate {
 
     @Test
     public void testPromptTemplateFromValidPath() {
-        PromptTemplate template = PromptTemplate.template(Path.of("src/test/resources/prompt-template.txt"));
+        PromptTemplate template = PromptTemplate.template(Path.of("src/test/resources/prompts/prompt-template.txt"));
         assertEquals("Hello, Graham\n from Australia!", template.format("Graham", "Australia"));
     }
 

@@ -1,6 +1,5 @@
 package com.glynch.jollama.generate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,11 +19,6 @@ public record GenerateRequest(
         Boolean raw,
         @JsonProperty("keep_alive") String keepAlive) {
     public GenerateRequest {
-        if (context == null) {
-            context = new ArrayList<>();
-        }
-        if (images == null) {
-            images = new ArrayList<>();
-        }
+
     }
 }

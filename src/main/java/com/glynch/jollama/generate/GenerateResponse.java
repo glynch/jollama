@@ -1,7 +1,6 @@
 package com.glynch.jollama.generate;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,8 +18,6 @@ public record GenerateResponse(
         @JsonProperty("eval_count") Long evalCount,
         @JsonProperty("eval_duration") Long evalDuration) {
     public GenerateResponse {
-        if (context == null) {
-            context = new ArrayList<>();
-        }
+
     }
 }
