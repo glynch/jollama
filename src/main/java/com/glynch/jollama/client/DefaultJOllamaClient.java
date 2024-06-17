@@ -81,6 +81,21 @@ final class DefaultJOllamaClient implements JOllamaClient {
     }
 
     @Override
+    public Redirect getRedirect() {
+        switch (this.client.followRedirects()) {
+            case ALWAYS:
+                return Redirect.ALWAYS;
+            case NEVER:
+                return Redirect.NEVER;
+            case NORMAL:
+                return Redirect.NORMAL;
+            default:
+                return Redirect.NEVER;
+        }
+
+    }
+
+    @Override
     public Optional<Duration> getConnectTimeout() {
         return this.client.connectTimeout();
     }
@@ -121,7 +136,7 @@ final class DefaultJOllamaClient implements JOllamaClient {
         return response;
     }
 
-    private <T> HttpResponse<Void> head(String path) throws JOllamaClientException {
+    private HttpResponse<Void> head(String path) throws JOllamaClientException {
         LOGGER.debug("HEAD {}", path);
         HttpResponse<Void> response = null;
         HttpRequest request = HttpRequest.newBuilder()
@@ -284,6 +299,12 @@ final class DefaultJOllamaClient implements JOllamaClient {
         Objects.requireNonNull(model, "model must not be null");
         Objects.requireNonNull(prompt, "prompt must not be null");
         return new DefaultGenerateSpec(this, model, prompt);
+    }
+
+    @Override
+    public GenerateSpec generate(Model model, String prompt) {
+        Objects.requireNonNull(model, "model must not be null");
+        return generate(model.toString(), prompt);
     }
 
     @Override
@@ -614,9 +635,7 @@ final class DefaultJOllamaClient implements JOllamaClient {
                         content.append(r.message().content());
                         return r;
                     });
-            return Flux.fromStream(stream).doOnComplete(() -> {
-                history.add(Message.assistant(content.toString()));
-            });
+            return Flux.fromStream(stream).doOnComplete(() -> history.add(Message.assistant(content.toString())));
         }
 
         @Override

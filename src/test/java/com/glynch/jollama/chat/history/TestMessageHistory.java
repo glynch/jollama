@@ -45,7 +45,7 @@ public class TestMessageHistory {
     }
 
     @Test
-    public void testMessageHistoryAddMListOfMessage() {
+    public void testMessageHistoryAddListOfMessages() {
         Message user = Message.user("Why is the sky blue?");
         Message assistant = Message.assistant("Because of Rayleigh scattering.");
         history.add(List.of(user, assistant));
@@ -106,6 +106,26 @@ public class TestMessageHistory {
         for (Message message : history) {
             assertEquals(history.get(i++), message);
         }
+    }
+
+    @Test
+    public void testMessageHistoryCreate() {
+        MessageHistory history = MessageHistory.create();
+        assertEquals(0, history.size());
+    }
+
+    @Test
+    public void testMessageHistoryRemoveMessage() {
+        Message user = Message.user("Why is the sky blue?");
+        Message assistant = Message.assistant("Because of Rayleigh scattering.");
+        history.add(List.of(user, assistant));
+
+        history.remove(0);
+
+        assertAll(
+                () -> assertEquals(1, history.size()),
+                () -> assertEquals(assistant, history.get(0)));
+
     }
 
 }

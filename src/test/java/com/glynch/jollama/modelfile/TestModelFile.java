@@ -25,13 +25,7 @@ public class TestModelFile {
     }
 
     @Test
-    public void testModelFileValidFrom() {
-        ModelFile modelFile = builder.build();
-        assertEquals("llama3", modelFile.from());
-    }
-
-    @Test
-    public void testModelFileValidPath() {
+    void modelFileValidPath() {
         ModelFile modelFile = ModelFile.parse(Path.of("src/test/resources/test.modelfile"));
         System.out.println(modelFile.toString());
         Message user = Message.user("This is a user message.", List.of());
@@ -45,14 +39,14 @@ public class TestModelFile {
     }
 
     @Test
-    public void testModelFileInValidPath() {
+    void modelFileInValidPath() {
         assertThrows(UncheckedIOException.class, () -> {
             ModelFile.parse(Path.of("src/test/resources/invalid-path.modelfile"));
         });
     }
 
     @Test
-    public void testInvalidModelFileValidPath() {
+    void modeFileInvalidModelFileValidPath() {
 
         assertThrows(
                 InvalidModelFileException.class,
@@ -61,13 +55,33 @@ public class TestModelFile {
                 });
     }
 
-    // @Test
-    // public void modeFileToString() throws IOException {
-    // ModelFile modelFile =
-    // ModelFile.parse(Path.of("src/test/resources/test.modelfile"));
-    // String expected =
-    // Files.readString(Path.of("src/test/resources/test.modelfile"));
-    // assertEquals(expected, modelFile.toString());
-    // }
+    @Test
+    void modelFileBuilder() {
+        Message user = Message.user("Why is the sky blue?");
+        Message assistant = Message.assistant("The sky is blue because of Rayleigh scattering.");
+        Message system = Message.system("You are meteorological expert.");
+        ModelFile modelFile = builder.system("You are mario from Super Mario Bros.")
+                .license(LICENSE_STRING)
+                .message(system)
+                .message(user)
+                .message(assistant)
+                .stop("<|end|>")
+                .stop("<|user|>")
+                .stop("<|assistant|>")
+                .temperature(0f)
+                .seed(42)
+                .build();
+        assertAll(
+                () -> assertEquals("llama3", modelFile.from()),
+                () -> assertEquals("You are mario from Super Mario Bros.", modelFile.system()),
+                () -> assertEquals(LICENSE_STRING, modelFile.license()),
+                () -> assertEquals(system, modelFile.messages().get(0)),
+                () -> assertEquals(user, modelFile.messages().get(1)),
+                () -> assertEquals(assistant, modelFile.messages().get(2)),
+                () -> assertEquals(3, modelFile.parameters().size()),
+                () -> assertEquals(0f, modelFile.temperature()),
+                () -> assertEquals(42, modelFile.seed()),
+                () -> assertEquals(3, modelFile.stop().size()));
+    }
 
 }

@@ -17,10 +17,10 @@ import com.glynch.jollama.create.CreateResponse;
 import com.glynch.jollama.generate.GenerateResponse;
 import com.glynch.jollama.list.ListModels;
 
-public class TestBodyMapper {
+class TestBodyMapper {
 
     @Test
-    public void testBodyMapperGenerateResponse() {
+    void bodyMapperGenerateResponse() {
 
         GenerateResponse response = Body.Mappers.map(GenerateResponse.class).apply(
                 "{\"model\":\"llama3\",\"created_at\":\"2024-06-12T07:41:44.589776Z\",\"response\":\"Ts\",\"done\":false}");
@@ -36,7 +36,7 @@ public class TestBodyMapper {
     }
 
     @Test
-    public void testBodyMapperChatResponse() throws IOException {
+    void bodyMapperChatResponse() throws IOException {
 
         String json = Files.readString(Path.of("src/test/resources/responses/chat.json"));
         ChatResponse response = Body.Mappers.map(ChatResponse.class).apply(json);
@@ -59,14 +59,14 @@ public class TestBodyMapper {
     }
 
     @Test
-    public void testBodyMapperCreateResponse() {
+    void bodyMapperCreateResponse() {
         String json = "{\"status\":\"success\"}";
         CreateResponse response = Body.Mappers.map(CreateResponse.class).apply(json);
         assertEquals("success", response.status());
     }
 
     @Test
-    public void testBodyMapperListModels() throws IOException {
+    void bodyMapperListModels() throws IOException {
         String json = Files.readString(Path.of("src/test/resources/responses/list.json"));
         ListModels response = Body.Mappers.map(ListModels.class).apply(json);
         Details llama3Details = new Details("", "gguf", "llama", List.of("llama"), "8.0B", "Q4_0");
@@ -86,11 +86,6 @@ public class TestBodyMapper {
                 () -> assertEquals(2393232963L, response.models().get(1).size()),
                 () -> assertEquals(llama3Details, response.models().get(0).details()),
                 () -> assertEquals(phi3Details, response.models().get(1).details()));
-
-    }
-
-    @Test
-    public void showResponse() {
 
     }
 

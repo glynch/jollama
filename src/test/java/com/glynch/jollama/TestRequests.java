@@ -16,10 +16,10 @@ import com.glynch.jollama.delete.DeleteRequest;
 import com.glynch.jollama.generate.GenerateRequest;
 import com.glynch.jollama.show.ShowRequest;
 
-public class TestRequests {
+class TestRequests {
 
     @Test
-    public void testCreateRequest() {
+    void testCreateRequest() {
 
         String modelFile = "FROM llaam3\nSYSTEM";
         CreateRequest request = new CreateRequest("glynch/llama3", modelFile, true, null);
@@ -33,7 +33,7 @@ public class TestRequests {
     }
 
     @Test
-    public void testChatRequest() {
+    void testChatRequest() {
         Message message = Message.user("Why is the sky blue?");
         ChatRequest request = new ChatRequest("llama3", List.of(message), Format.JSON, Options.create(), true, "5s");
 
@@ -48,7 +48,7 @@ public class TestRequests {
     }
 
     @Test
-    public void showRequest() {
+    void showRequest() {
         ShowRequest request = new ShowRequest("llama3:latest");
 
         assertAll(
@@ -56,7 +56,7 @@ public class TestRequests {
     }
 
     @Test
-    public void deleteRequest() {
+    void deleteRequest() {
         DeleteRequest request = new DeleteRequest("llama3:latest");
 
         assertAll(
@@ -64,7 +64,7 @@ public class TestRequests {
     }
 
     @Test
-    public void copyRequest() {
+    void copyRequest() {
         CopyRequest request = new CopyRequest("llama3:latest", "llama3-copy");
 
         assertAll(
@@ -73,7 +73,7 @@ public class TestRequests {
     }
 
     @Test
-    public void generateRequest() {
+    void generateRequest() {
         GenerateRequest request = new GenerateRequest("llama3", "Why is the sky blue?", Collections.emptyList(),
                 Format.JSON,
                 Options.create(), "", "", Collections.emptyList(), false, null, "5s");

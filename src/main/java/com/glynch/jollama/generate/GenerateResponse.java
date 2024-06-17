@@ -17,7 +17,5 @@ public record GenerateResponse(
         @JsonProperty("prompt_eval_duration") Long promptEvalDuration,
         @JsonProperty("eval_count") Long evalCount,
         @JsonProperty("eval_duration") Long evalDuration) {
-    public GenerateResponse {
 
-    }
 }

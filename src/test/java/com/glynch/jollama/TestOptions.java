@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 
 import com.glynch.jollama.Options.Key;
 
-public class TestOptions {
+class TestOptions {
 
     private Options options;
 
     @BeforeEach
-    public void init() {
+    void init() {
         Options.Builder optionsBuilder = Options.builder();
         optionsBuilder
                 .numKeep(5)
@@ -53,7 +53,7 @@ public class TestOptions {
     }
 
     @Test
-    public void whenOptionsBuilderPopulatedAllValuesCorrect() {
+    void options() {
 
         assertAll(
                 "options",
@@ -88,12 +88,12 @@ public class TestOptions {
     }
 
     @Test
-    public void options_Empty_Size_Zero() {
+    void optionsEmpty() {
         assertTrue(() -> Options.builder().build().size() == 0);
     }
 
     @Test
-    public void testOptionsFromOptionsBuilder() {
+    void optionsBuilderWithOptions() {
 
         Options newOptions = new Options.Builder(options).build();
         assertAll(
@@ -129,7 +129,7 @@ public class TestOptions {
     }
 
     @Test
-    public void testOptionsFromOptionsConstructor() {
+    void optionsWithOptionsConstructor() {
 
         Options newOptions = new Options(options);
         assertAll(
@@ -165,7 +165,7 @@ public class TestOptions {
     }
 
     @Test
-    public void testOptionsKey() {
+    void optionsKey() {
 
         Key key = Key.of("num_keep");
         assertEquals(Key.NUM_KEEP, key);

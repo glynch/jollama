@@ -91,6 +91,10 @@ public interface JOllamaClient {
 
         Builder followRedirects();
 
+        Builder followRedirectsNever();
+
+        Builder followRedirectsAlways();
+
         Builder connectTimeout(Duration duration);
 
         JOllamaClient build();
@@ -104,6 +108,13 @@ public interface JOllamaClient {
      */
     String getHost();
 
+    Redirect getRedirect();
+
+    /**
+     * Get the connect timeout.
+     * 
+     * @return the connect timeout
+     */
     Optional<Duration> getConnectTimeout();
 
     /**
@@ -183,6 +194,8 @@ public interface JOllamaClient {
     ModelFile show(Model name) throws JOllamaClientException, InvalidModelFileException;
 
     GenerateSpec generate(String model, String prompt);
+
+    GenerateSpec generate(Model model, String prompt);
 
     /**
      * 

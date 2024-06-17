@@ -24,6 +24,18 @@ final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
     }
 
     @Override
+    public Builder followRedirectsNever() {
+        clientBuilder.followRedirects(HttpClient.Redirect.NEVER);
+        return this;
+    }
+
+    @Override
+    public Builder followRedirectsAlways() {
+        clientBuilder.followRedirects(HttpClient.Redirect.ALWAYS);
+        return this;
+    }
+
+    @Override
     public Builder connectTimeout(Duration duration) {
         Objects.requireNonNull(duration, "duration cannot be null");
         clientBuilder.connectTimeout(duration);

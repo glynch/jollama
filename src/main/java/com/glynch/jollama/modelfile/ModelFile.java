@@ -77,7 +77,7 @@ public record ModelFile(String from, String adapter, String template, String sys
         return builder.toString();
     }
 
-    public static enum Key {
+    public enum Key {
 
         SEED("seed"),
         NUM_PREDICT("num_predict"),
@@ -191,6 +191,55 @@ public record ModelFile(String from, String adapter, String template, String sys
 
     public static Builder from(String from) {
         return new DefaultModelFileBuilder(from);
+    }
+
+    public Float temperature() {
+        return (Float) parameters.get(Key.TEMPERATURE.getValue());
+    }
+
+    public Integer seed() {
+        return (Integer) parameters.get(Key.SEED.getValue());
+    }
+
+    public Float mirostat() {
+        return (Float) parameters.get(Key.MIROSTAT.getValue());
+    }
+
+    public Float mirostatTau() {
+        return (Float) parameters.get(Key.MIROSTAT_TAU.getValue());
+    }
+
+    public Float mirostatEta() {
+        return (Float) parameters.get(Key.MIROSTAT_ETA.getValue());
+    }
+
+    public Integer numCtx() {
+        return (Integer) parameters.get(Key.NUM_CTX.getValue());
+    }
+
+    public Integer repeatLastN() {
+        return (Integer) parameters.get(Key.REPEAT_LAST_N.getValue());
+    }
+
+    public Float repeatPenalty() {
+        return (Float) parameters.get(Key.REPEAT_PENALTY.getValue());
+    }
+
+    public Integer topK() {
+        return (Integer) parameters.get(Key.TOP_K.getValue());
+    }
+
+    public Float topP() {
+        return (Float) parameters.get(Key.TOP_P.getValue());
+    }
+
+    public Float tfsZ() {
+        return (Float) parameters.get(Key.TFS_Z.getValue());
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> stop() {
+        return (List<String>) parameters.get(Key.STOP.getValue());
     }
 
     public interface Builder {

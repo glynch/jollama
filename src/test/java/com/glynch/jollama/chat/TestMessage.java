@@ -19,33 +19,33 @@ public class TestMessage {
 
     @Test
     public void testAssistantMessage() {
-        Message message = Message.assistant("Why is the sky blue?");
+        Message message = Message.assistant("Because of Raleigh scattering.");
 
         assertAll(
-                () -> assertEquals("Why is the sky blue?", message.content()),
+                () -> assertEquals("Because of Raleigh scattering.", message.content()),
                 () -> assertEquals(Role.ASSISTANT, message.role()),
                 () -> assertEquals(0, message.images().size()));
     }
 
     @Test
-    public void testSystemtMessage() {
-        Message message = Message.system("Why is the sky blue?");
+    public void testSystemMessage() {
+        Message message = Message.system("You are an expert meteorologist.");
 
         assertAll(
-                () -> assertEquals("Why is the sky blue?", message.content()),
+                () -> assertEquals("You are an expert meteorologist.", message.content()),
                 () -> assertEquals(Role.SYSTEM, message.role()),
                 () -> assertEquals(0, message.images().size()));
     }
 
     @Test
     public void testMessageFromMessage() {
-        Message message = Message.user("Why is the sky blue?");
-        Message message2 = Message.message(message);
+        Message user = Message.user("Why is the sky blue?");
+        Message message = Message.message(user);
 
         assertAll(
-                () -> assertEquals("Why is the sky blue?", message2.content()),
-                () -> assertEquals(Role.USER, message2.role()),
-                () -> assertEquals(0, message2.images().size()));
+                () -> assertEquals("Why is the sky blue?", message.content()),
+                () -> assertEquals(Role.USER, message.role()),
+                () -> assertEquals(0, message.images().size()));
     }
 
     @Test
@@ -59,22 +59,22 @@ public class TestMessage {
     }
 
     @Test
-    public void testSystemMessageNoImages() {
-        Message message = Message.system("Why is the sky blue?", new String[0]);
+    public void testAssistantMessageNoImages() {
+        Message message = Message.assistant("Because of Raleigh scattering.", new String[0]);
 
         assertAll(
-                () -> assertEquals("Why is the sky blue?", message.content()),
-                () -> assertEquals(Role.SYSTEM, message.role()),
+                () -> assertEquals("Because of Raleigh scattering.", message.content()),
+                () -> assertEquals(Role.ASSISTANT, message.role()),
                 () -> assertEquals(0, message.images().size()));
     }
 
     @Test
-    public void testAssitantMessageNoImages() {
-        Message message = Message.assistant("Why is the sky blue?", new String[0]);
+    public void testSystemMessageNoImages() {
+        Message message = Message.system("You are an expert meteorologist.", new String[0]);
 
         assertAll(
-                () -> assertEquals("Why is the sky blue?", message.content()),
-                () -> assertEquals(Role.ASSISTANT, message.role()),
+                () -> assertEquals("You are an expert meteorologist.", message.content()),
+                () -> assertEquals(Role.SYSTEM, message.role()),
                 () -> assertEquals(0, message.images().size()));
     }
 

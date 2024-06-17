@@ -27,4 +27,11 @@ public class TestRole {
         assertEquals("system", role.toString());
     }
 
+    @Test
+    public void testRoleStaticFactoryFromString() {
+        Role role = Role.of("user");
+
+        assertEquals(Role.USER, role);
+    }
+
 }

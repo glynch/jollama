@@ -67,7 +67,7 @@ public class Body {
         }
 
         public static <T> Function<String, T> map(Class<T> type) {
-            return (body) -> {
+            return body -> {
                 try {
                     return objectMapper.readValue(body, type);
                 } catch (JsonProcessingException e) {
@@ -77,7 +77,7 @@ public class Body {
         }
 
         public static <T> Function<String, T> exceptionally() {
-            return (body) -> {
+            return body -> {
                 try {
                     throw new JOllamaClientException(objectMapper.readValue(body, JOllamaError.class).error());
                 } catch (JsonProcessingException e) {
@@ -87,7 +87,7 @@ public class Body {
         }
 
         public static <T> Function<String, T> exceptionally(ResponseInfo responseInfo) {
-            return (body) -> {
+            return body -> {
                 try {
                     throw new JOllamaClientResponseException(objectMapper.readValue(body, JOllamaError.class).error(),
                             responseInfo.statusCode(), responseInfo.headers());

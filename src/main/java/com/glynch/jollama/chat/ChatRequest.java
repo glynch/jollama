@@ -1,6 +1,5 @@
 package com.glynch.jollama.chat;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.glynch.jollama.Format;
@@ -13,9 +12,5 @@ public record ChatRequest(
         Options options,
         Boolean stream,
         String keepAlive) {
-    public ChatRequest {
-        if (messages == null) {
-            messages = new ArrayList<>();
-        }
-    }
+
 }

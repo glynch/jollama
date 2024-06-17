@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class TestFormat {
+class TestFormat {
 
     @Test
-    public void testFormat() {
+    void formatToString() {
 
         Format format = Format.JSON;
         assertEquals("json", format.toString());
@@ -15,7 +15,7 @@ public class TestFormat {
     }
 
     @Test
-    public void tesFormatFromValue() {
+    void formatFromValue() {
 
         Format format = Format.of("json");
         assertEquals("json", format.toString());

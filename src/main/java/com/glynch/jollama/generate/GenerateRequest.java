@@ -18,7 +18,5 @@ public record GenerateRequest(
         Boolean stream,
         Boolean raw,
         @JsonProperty("keep_alive") String keepAlive) {
-    public GenerateRequest {
 
-    }
 }

@@ -5,10 +5,10 @@ import java.util.Objects;
 
 public enum Model {
 
-    LLAMA_3_LATEST(Name.LLAMA_3, "latest"),
     LLAMA_3_8B(Name.LLAMA_3, "8b"),
     LLAMA_3_70B(Name.LLAMA_3, "70b"),
     PHI_3_LATEST(Name.PHI_3, "latest"),
+    PHI_3_MINI(Name.PHI_3, "mini"),
     PHI_3_3_8B(Name.PHI_3, "3.8b"),
     PHI_3_14B(Name.PHI_3, "14b"),
     QWEN_2_LATEST(Name.QWEN_2, "latest"),
@@ -29,6 +29,7 @@ public enum Model {
     ORCA_MINI_7B(Name.ORCA_MINI, "7b"),
     ORCA_MINI_13B(Name.ORCA_MINI, "13b"),
     ORCA_MINI_70B(Name.ORCA_MINI, "70b"),
+    NOMIC_EMBED_TEXT_V1_5(Name.NOMIC_EMBED_TEXT, "v1.5"),
     NOMIC_EMBED_TEXT_LATEST(Name.NOMIC_EMBED_TEXT, "latest"),
     ;
 
@@ -65,7 +66,7 @@ public enum Model {
         return of(name, "latest");
     }
 
-    public static enum Name {
+    public enum Name {
 
         LLAMA_3("llama3"),
         PHI_3("phi3"),
@@ -114,8 +115,7 @@ public enum Model {
         STABLE_LM2("stablelm2"),
         STARLING_LM("starling-lm"),
         DOLPHIN_CODER("dolphincoder"),
-        NOUS_HERMES_2("nous-hermes2"),
-        ;
+        NOUS_HERMES_2("nous-hermes2"),;
 
         private final String name;
 

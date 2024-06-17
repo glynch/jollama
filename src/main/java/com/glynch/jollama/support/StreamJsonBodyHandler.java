@@ -25,14 +25,14 @@ public class StreamJsonBodyHandler<T> implements BodyHandler<Stream<T>> {
         if (statusCode == 404 || statusCode == 400 || statusCode == 500) {
             return BodySubscribers.mapping(
                     upstream,
-                    (lines) -> {
+                    lines -> {
                         return lines.map(Mappers.exceptionally(responseInfo));
                     });
         }
 
         return BodySubscribers.mapping(
                 upstream,
-                (lines) -> {
+                lines -> {
                     return lines.map(
                             Mappers.map(type));
                 });

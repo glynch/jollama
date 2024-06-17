@@ -13,19 +13,19 @@ import com.glynch.jollama.modelfile.ModelFile;
 
 public class Options extends AbstractMap<String, Object> {
 
-    private final Map<String, Object> options = new HashMap<>();
+    private final Map<String, Object> optionsMap = new HashMap<>();
 
-    private Options(Map<String, Object> options) {
-        this.options.putAll(options);
+    private Options(Map<String, Object> optionsMap) {
+        this.optionsMap.putAll(optionsMap);
     }
 
     public Options(Options options) {
-        this.options.putAll(options);
+        this.optionsMap.putAll(options);
     }
 
     @Override
     public Set<Entry<String, Object>> entrySet() {
-        return options.entrySet();
+        return optionsMap.entrySet();
     }
 
     @Override
@@ -34,116 +34,116 @@ public class Options extends AbstractMap<String, Object> {
     }
 
     public Integer numKeep() {
-        return (Integer) options.get(Key.NUM_KEEP.getValue());
+        return (Integer) optionsMap.get(Key.NUM_KEEP.getValue());
     }
 
     public Integer seed() {
-        return (Integer) options.get(ModelFile.Key.SEED.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.SEED.getValue());
     }
 
     public Integer numPredict() {
-        return (Integer) options.get(ModelFile.Key.NUM_PREDICT.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.NUM_PREDICT.getValue());
     }
 
     public Integer topK() {
-        return (Integer) options.get(ModelFile.Key.TOP_K.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.TOP_K.getValue());
     }
 
     public Float topP() {
-        return (Float) options.get(ModelFile.Key.TOP_P.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.TOP_P.getValue());
     }
 
     public Float getTfsZ() {
-        return (Float) options.get(ModelFile.Key.TFS_Z.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.TFS_Z.getValue());
     }
 
     public Float typicalP() {
-        return (Float) options.get(Key.TYPICAL_P.getValue());
+        return (Float) optionsMap.get(Key.TYPICAL_P.getValue());
     }
 
     public Integer repeatLastN() {
-        return (Integer) options.get(ModelFile.Key.REPEAT_LAST_N.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.REPEAT_LAST_N.getValue());
     }
 
     public Float temperature() {
-        return (Float) options.get(ModelFile.Key.TEMPERATURE.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.TEMPERATURE.getValue());
     }
 
     public Float repeatPenalty() {
-        return (Float) options.get(ModelFile.Key.REPEAT_PENALTY.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.REPEAT_PENALTY.getValue());
     }
 
     public Float presencePenalty() {
-        return (Float) options.get(Key.PRESENCE_PENALTY.getValue());
+        return (Float) optionsMap.get(Key.PRESENCE_PENALTY.getValue());
     }
 
     public Float frequencyPenalty() {
-        return (Float) options.get(Key.FREQUENCY_PENALTY.getValue());
+        return (Float) optionsMap.get(Key.FREQUENCY_PENALTY.getValue());
     }
 
     public Integer miroStat() {
-        return (Integer) options.get(ModelFile.Key.MIROSTAT.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.MIROSTAT.getValue());
     }
 
     public Float miroStatTau() {
-        return (Float) options.get(ModelFile.Key.MIROSTAT_TAU.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.MIROSTAT_TAU.getValue());
     }
 
     public Float miroStatEta() {
-        return (Float) options.get(ModelFile.Key.MIROSTAT_ETA.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.MIROSTAT_ETA.getValue());
     }
 
     public Boolean penalizeNewline() {
-        return (Boolean) options.get(Key.PENALIZE_NEWLINE.getValue());
+        return (Boolean) optionsMap.get(Key.PENALIZE_NEWLINE.getValue());
     }
 
     @SuppressWarnings("unchecked")
     public List<String> stop() {
-        return (List<String>) options.get(ModelFile.Key.STOP.getValue());
+        return (List<String>) optionsMap.get(ModelFile.Key.STOP.getValue());
     }
 
     public Boolean numa() {
-        return (Boolean) options.get(Key.NUMA.getValue());
+        return (Boolean) optionsMap.get(Key.NUMA.getValue());
     }
 
     public Integer numCtx() {
-        return (Integer) options.get(ModelFile.Key.NUM_CTX.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.NUM_CTX.getValue());
     }
 
     public Integer numBatch() {
-        return (Integer) options.get(Key.NUM_BATCH.getValue());
+        return (Integer) optionsMap.get(Key.NUM_BATCH.getValue());
     }
 
     public Integer numGpu() {
-        return (Integer) options.get(Key.NUM_GPU.getValue());
+        return (Integer) optionsMap.get(Key.NUM_GPU.getValue());
     }
 
     public Integer mainGpu() {
-        return (Integer) options.get(Key.MAIN_GPU.getValue());
+        return (Integer) optionsMap.get(Key.MAIN_GPU.getValue());
     }
 
     public Boolean lowVram() {
-        return (Boolean) options.get(Key.LOW_VRAM.getValue());
+        return (Boolean) optionsMap.get(Key.LOW_VRAM.getValue());
     }
 
     public Boolean f16Kv() {
-        return (Boolean) options.get(Key.F16_KV.getValue());
+        return (Boolean) optionsMap.get(Key.F16_KV.getValue());
     }
 
     public Boolean vocabOnly() {
-        return (Boolean) options.get(Key.VOCAB_ONLY.getValue());
+        return (Boolean) optionsMap.get(Key.VOCAB_ONLY.getValue());
     }
 
     public Boolean useMmap() {
-        return (Boolean) options.get(Key.USE_MMAP.getValue());
+        return (Boolean) optionsMap.get(Key.USE_MMAP.getValue());
     }
 
     public Boolean useMlock() {
-        return (Boolean) options.get(Key.USE_MLOCK.getValue());
+        return (Boolean) optionsMap.get(Key.USE_MLOCK.getValue());
     }
 
     public Integer numThread() {
-        return (Integer) options.get(Key.NUM_THREAD.getValue());
+        return (Integer) optionsMap.get(Key.NUM_THREAD.getValue());
     }
 
     public static Options create() {
@@ -338,7 +338,7 @@ public class Options extends AbstractMap<String, Object> {
 
     }
 
-    public static enum Key {
+    public enum Key {
         NUM_KEEP("num_keep"),
         NUM_PREDICT("num_predict"),
         TYPICAL_P("typical_p"),
