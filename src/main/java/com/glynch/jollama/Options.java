@@ -154,6 +154,9 @@ public class Options extends AbstractMap<String, Object> {
         return new Builder();
     }
 
+    /**
+     * Builder of {@linkplain Options options}.
+     */
     public static class Builder {
         private final Map<String, Object> options = new HashMap<>();
 
@@ -166,35 +169,79 @@ public class Options extends AbstractMap<String, Object> {
             this.options.putAll(options);
         }
 
+        /**
+         * Sets the number of predictions to generate.
+         * 
+         * @param numKeep The number of predictions
+         * @return this builder
+         */
         public Builder numKeep(Integer numKeep) {
             Objects.requireNonNull(numKeep, "numKeep cannot be null");
             options.put(Key.NUM_KEEP.getValue(), numKeep);
             return this;
         }
 
+        /**
+         * Sets the random number seed. Used for reproducibility.
+         * 
+         * @param seed The seed
+         * @return this builder
+         */
         public Builder seed(Integer seed) {
             Objects.requireNonNull(seed, "seed cannot be null");
             options.put(ModelFile.Key.SEED.getValue(), seed);
             return this;
         }
 
+        /**
+         * Sets the maximum number of predictions to generate.
+         * 
+         * @param numPredict The number of tokens
+         * @return this builder
+         */
         public Builder numPredict(Integer numPredict) {
             options.put(ModelFile.Key.NUM_PREDICT.getValue(), numPredict);
             return this;
         }
 
+        /**
+         * Limits the number of highest probability tokens to consider at each step of
+         * the generation.
+         * 
+         * @param topK The number of highest probability tokens
+         * @return this builder
+         */
         public Builder topK(Integer topK) {
             Objects.requireNonNull(topK, "topK cannot be null");
             options.put(ModelFile.Key.TOP_K.getValue(), topK);
             return this;
         }
 
+        /**
+         * Controls the cumulative probability of the generated tokens.
+         * Also know as nucleus sampling.
+         * 
+         * @param topP The cumulative probability
+         * @return this builder
+         * 
+         * @see <a href="https://arxiv.org/abs/1904.09751">Nucleus Sampling</a>
+         * @see <a href="https://en.wikipedia.org/wiki/Top-p_sampling">Top-p
+         *      sampling</a>
+         */
         public Builder topP(Float topP) {
             Objects.requireNonNull(topP, "topP cannot be null");
             options.put(ModelFile.Key.TOP_P.getValue(), topP);
             return this;
         }
 
+        /**
+         * Reduces the impact less probable tokens.
+         * Adjusts the number of logits (token probabilties) to consider.
+         * A value of 1.0 disables this feature.
+         * 
+         * @param tfsZ The number of logits
+         * @return this builder
+         */
         public Builder tfsZ(Float tfsZ) {
             Objects.requireNonNull(tfsZ, "tfsZ cannot be null");
             options.put(ModelFile.Key.TFS_Z.getValue(), tfsZ);
@@ -207,6 +254,12 @@ public class Options extends AbstractMap<String, Object> {
             return this;
         }
 
+        /**
+         * The last N tokens to consider for penalizing repetition.
+         * 
+         * @param repeatLastN The number of tokens
+         * @return this builder
+         */
         public Builder repeatLastN(Integer repeatLastN) {
             Objects.requireNonNull(repeatLastN, "repeatLastN cannot be null");
             options.put(ModelFile.Key.REPEAT_LAST_N.getValue(), repeatLastN);
@@ -332,6 +385,11 @@ public class Options extends AbstractMap<String, Object> {
             return this;
         }
 
+        /**
+         * Builds and returns new {@link Options} instance.
+         * 
+         * @return a new {@code Options}
+         */
         public Options build() {
             return new Options(options);
         }

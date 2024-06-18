@@ -8,6 +8,12 @@ import java.nio.charset.StandardCharsets;
 
 import com.glynch.jollama.support.Body.Mappers;
 
+/**
+ * Implementation of {@link BodyHandler} that converts the response body to a
+ * JSON object.
+ * 
+ * @param <T> The type of the JSON object.
+ */
 public class JsonBodyHandler<T> implements BodyHandler<T> {
 
     private final Class<T> type;
@@ -22,7 +28,7 @@ public class JsonBodyHandler<T> implements BodyHandler<T> {
         BodySubscriber<String> upstream = BodySubscribers.ofString(StandardCharsets.UTF_8);
         int statusCode = responseInfo.statusCode();
         // Should check for 400, 500 ...
-        if (responseInfo.statusCode() == 404) {
+        if (statusCode == 404) {
             return BodySubscribers.mapping(
                     upstream,
                     Mappers.exceptionally(responseInfo));

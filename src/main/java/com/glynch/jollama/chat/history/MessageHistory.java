@@ -6,6 +6,10 @@ import com.glynch.jollama.chat.Message;
 
 /**
  * Represents a history of messages.
+ * 
+ * Can be used to store a history of messages for a chat request.
+ * 
+ * @author Graham Lynch
  *
  */
 public interface MessageHistory extends Iterable<Message> {

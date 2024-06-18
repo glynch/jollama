@@ -35,6 +35,13 @@ public record ModelFile(String from, String adapter, String template, String sys
     private static final Pattern SYSTEM_PATTERN = Pattern.compile("^SYSTEM\\s+(.*?)$", Pattern.MULTILINE);
     private static final Pattern ADAPTER_PATTERN = Pattern.compile("^ADAPTER\\s+(.*?)$", Pattern.MULTILINE);
 
+    /**
+     * String representation of the model file.
+     * 
+     * @see <a href=
+     *      "https://github.com/ollama/ollama/blob/main/docs/modelfile.md#format">Model
+     *      file</a>
+     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

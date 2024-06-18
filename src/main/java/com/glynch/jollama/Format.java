@@ -5,6 +5,11 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * Enumeration for the possible response formats.
+ * 
+ *
+ */
 public enum Format {
     JSON("json");
 

@@ -33,11 +33,26 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.build.directory}/merged.exec</sonar.jacoco.reportPath>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            target/site/jacoco-merged-test-coverage-report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
     </properties>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -63,6 +78,11 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <configuration>
+                            <doclint>-html,-syntax,-accessibility,-missing</doclint>
+                            <failOnError>false</failOnError>
+                            <quiet>true</quiet>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -165,6 +185,11 @@
 
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>4.0.0.4121</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -204,12 +229,6 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>ollama</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>4.0.0.4121</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

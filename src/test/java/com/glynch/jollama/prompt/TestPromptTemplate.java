@@ -92,9 +92,8 @@ public class TestPromptTemplate {
 
     @Test
     void promptTemplateFromInvalidPath() {
-        assertThrows(UncheckedIOException.class, () -> {
-            PromptTemplate.template(Path.of("src/test/resources/invalid-prompt-template.txt"));
-        });
+        assertThrows(UncheckedIOException.class,
+                () -> PromptTemplate.template(Path.of("src/test/resources/invalid-prompt-template.txt")));
     }
 
 }

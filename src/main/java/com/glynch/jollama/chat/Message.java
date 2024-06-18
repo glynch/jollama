@@ -3,6 +3,17 @@ package com.glynch.jollama.chat;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Chat message.
+ * 
+ * @param role    The {@link Role role} of the message.
+ * @param content The content of the message.
+ * @param images  The images of the message. Base64 encoded. Requires multimodel
+ *                model
+ * 
+ * @author Graham Lynch
+ * 
+ */
 public record Message(Role role, String content, List<String> images) {
 
     public static Message user(String content, List<String> images) {

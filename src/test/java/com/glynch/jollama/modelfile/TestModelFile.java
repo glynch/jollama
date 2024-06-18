@@ -40,9 +40,8 @@ public class TestModelFile {
 
     @Test
     void modelFileInValidPath() {
-        assertThrows(UncheckedIOException.class, () -> {
-            ModelFile.parse(Path.of("src/test/resources/invalid-path.modelfile"));
-        });
+        assertThrows(UncheckedIOException.class,
+                () -> ModelFile.parse(Path.of("src/test/resources/invalid-path.modelfile")));
     }
 
     @Test
@@ -50,9 +49,7 @@ public class TestModelFile {
 
         assertThrows(
                 InvalidModelFileException.class,
-                () -> {
-                    ModelFile.parse(Path.of("src/test/resources/invalid.modelfile"));
-                });
+                () -> ModelFile.parse(Path.of("src/test/resources/invalid.modelfile")));
     }
 
     @Test

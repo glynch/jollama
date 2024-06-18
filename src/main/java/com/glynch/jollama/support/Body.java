@@ -17,6 +17,9 @@ import com.glynch.jollama.JOllamaError;
 import com.glynch.jollama.client.JOllamaClientException;
 import com.glynch.jollama.client.JOllamaClientResponseException;
 
+/**
+ * Utility class for handling JSON bodies.
+ */
 public class Body {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -31,6 +34,9 @@ public class Body {
     private Body() {
     }
 
+    /**
+     * Utility class for handling JSON bodies.
+     */
     public static class Handlers {
 
         private Handlers() {

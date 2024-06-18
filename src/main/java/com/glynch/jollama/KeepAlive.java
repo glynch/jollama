@@ -5,18 +5,42 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Keep alive duration.
+ * 
+ * @param duration The duration of the keep alive.
+ * @param units    The {@link Units units} of the duration.
+ * 
+ * @author Graham Lynch
+ * 
+ * 
+ */
 public record KeepAlive(long duration, Units units) {
 
     private static final Pattern PATTERN = Pattern.compile("^((0|-1)|(([1-9]\\d*)([smhd])?))$");
 
+    /**
+     * Default keep alive of 5 minutes.
+     */
     public static final KeepAlive DEFAULT = KeepAlive.minutes(5);
+    /**
+     * Keep alive forever.
+     */
     public static final KeepAlive FOREVER = new KeepAlive(-1);
+    /**
+     * Unload model immediately.
+     */
     public static final KeepAlive NEVER = new KeepAlive(0);
 
     public KeepAlive(long duration) {
         this(duration, null);
     }
 
+    /**
+     * Get the duration in seconds.
+     * 
+     * @return The duration in seconds.
+     */
     public long duration() {
         if (units != null) {
             switch (units) {
@@ -64,22 +88,54 @@ public record KeepAlive(long duration, Units units) {
         }
     }
 
+    /**
+     * Create a keep alive of the given duration in seconds.
+     * 
+     * @param duration The duration in seconds
+     * @return A keep alive of the given duration in {@link Units#SECONDS}.
+     */
     public static KeepAlive seconds(long duration) {
         return new KeepAlive(duration, Units.SECONDS);
     }
 
+    /**
+     * Create a keep alive of the given duration in minutes.
+     * 
+     * @param duration The duration in minutes
+     * @return A keep alive of the given duration in {@link Units#MINUTES}.
+     */
     public static KeepAlive minutes(long duration) {
         return new KeepAlive(duration, Units.MINUTES);
     }
 
+    /**
+     * Create a keep alive of the given duration in hours.
+     * 
+     * @param duration The duration in hours
+     * @return A keep alive of the given duration in {@link Units#HOURS}.
+     */
     public static KeepAlive hours(long duration) {
         return new KeepAlive(duration, Units.HOURS);
     }
 
+    /**
+     * Create a keep alive of the given duration in days.
+     * 
+     * @param duration The duration in days
+     * @return A keep alive of the given duration in {@link Units#DAYS}.
+     */
     public static KeepAlive days(long duration) {
         return new KeepAlive(duration, Units.DAYS);
     }
 
+    /**
+     * Create a keep alive from the given value.
+     * 
+     * 
+     * 
+     * @param value The value of the keep alive.
+     * @return A keep alive representing the given value.
+     */
     public static KeepAlive of(String value) {
         Objects.requireNonNull(value, "value cannot be null");
         Matcher matcher = PATTERN.matcher(value);

@@ -32,7 +32,7 @@ import reactor.core.publisher.Flux;
  * <p>
  * Use static factory methods {@link #create()} or {@link #create(String)}
  * or {@link JOllamaClient#builder()} or {@link JOllamaClient#builder(String)}
- * to create a new Ollama client.
+ * to create a new JOllama client.
  * </p>
  * 
  * @author Graham Lynch
@@ -47,7 +47,7 @@ public interface JOllamaClient {
     String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
 
     /**
-     * Create a new {@code JOllamaClient} with the default host of
+     * Create a new {@link JOllamaClient} with the default host of
      * {@link #DEFAULT_OLLAMA_HOST}.
      * 
      * @see #create(String)
@@ -57,7 +57,7 @@ public interface JOllamaClient {
     }
 
     /**
-     * A variant of {@code JOllamaClient#create()} that accepts a host.
+     * A variant of {@link JOllamaClient#create()} that accepts a host.
      * 
      * @param host the Ollama server host for all requests
      * @see #builder(String)
@@ -67,7 +67,7 @@ public interface JOllamaClient {
     }
 
     /**
-     * Obtain a {@code JOllamaClient} builder with the default host.
+     * Obtain a builder with the default host.
      * 
      */
     static Builder builder() {
@@ -75,7 +75,7 @@ public interface JOllamaClient {
     }
 
     /**
-     * Create a new {@code JOllamaClient} with the specified host.
+     * Obtain abuilder with the specified host.
      * 
      * @param host the Ollama server host
      * @return a new Ollama client builder
@@ -89,12 +89,39 @@ public interface JOllamaClient {
      */
     interface Builder {
 
+        /**
+         * follow redirects
+         * 
+         * @return this builder
+         * 
+         * @see Redirect#NORMAL
+         */
         Builder followRedirects();
 
+        /**
+         * Never follow redirects
+         * 
+         * @return this builder
+         * 
+         * @see Redirect#NEVER
+         */
         Builder followRedirectsNever();
 
+        /**
+         * Always follow redirects
+         * 
+         * @return this builder
+         * 
+         * @see Redirect#ALWAYS
+         */
         Builder followRedirectsAlways();
 
+        /**
+         * Set the connect timeout.
+         * 
+         * @param duration
+         * @return this builder
+         */
         Builder connectTimeout(Duration duration);
 
         JOllamaClient build();
@@ -113,7 +140,7 @@ public interface JOllamaClient {
     /**
      * Get the connect timeout.
      * 
-     * @return the connect timeout
+     * @return An {@link Optional} of the {@link Duration} of the connect timeout.
      */
     Optional<Duration> getConnectTimeout();
 
@@ -135,7 +162,7 @@ public interface JOllamaClient {
      * 
      * @param name the name of the model
      * @return the running model with the specified name
-     * @throws JOllamaClientException
+     * @throws JOllamaClientException in case of request or response errors
      */
 
     Optional<ProcessModel> ps(String name) throws JOllamaClientException;
@@ -146,17 +173,19 @@ public interface JOllamaClient {
      * @param model the name of the model. This should include the tag. If there is
      *              no tag it defaults to latest
      * @return the running model with the specified name
-     * @throws JOllamaClientException
+     * @throws JOllamaClientException in case of request or response errors
      */
     Optional<ProcessModel> load(String model) throws JOllamaClientException;
 
     Optional<ProcessModel> load(String model, KeepAlive keepAlive) throws JOllamaClientException;
 
     /**
+     *
+     * Load the model with the specified name.
      * 
-     * @param model the model {@link com.glynch.jollama.Model}
-     * @return
-     * @throws JOllamaClientException
+     * @param model the model {@link Model}
+     * @return the loaded model
+     * @throws JOllamaClientException in case of request or response errors
      */
     Optional<ProcessModel> load(Model model) throws JOllamaClientException;
 
@@ -165,7 +194,8 @@ public interface JOllamaClient {
     /**
      * Ping the host
      * 
-     * @return true if the host is reachable, false otherwise
+     * @return <code>true</code> if the host is reachable, <code>false</code>
+     *         otherwise.
      */
     boolean ping();
 
@@ -173,15 +203,16 @@ public interface JOllamaClient {
      * List the models.
      * 
      * @return a list of the models
-     * @throws JOllamaClientException
+     * @throws JOllamaClientException in case of request or response errors
      */
     ListModels list() throws JOllamaClientException;
 
     /**
+     * List the model with the specified name.
      * 
      * @param name the name of the model
-     * @return
-     * @throws JOllamaClientException
+     * @return the model with the specified name
+     * @throws JOllamaClientException in case of request or response errors
      */
     Optional<ListModel> list(String name) throws JOllamaClientException;
 
@@ -199,8 +230,10 @@ public interface JOllamaClient {
 
     /**
      * 
-     * @param model  @see {@link com.glynch.jollama.Model}
-     * @param prompt @see {@link com.glynch.jollama.chat.Message}
+     * Obtains a builder for a chat request.
+     * 
+     * @param model  The {@link Model} to use
+     * @param prompt The user prompt
      * @return a {@link ChatSpec}
      */
     ChatSpec chat(String model, String prompt);
@@ -231,44 +264,56 @@ public interface JOllamaClient {
 
     /**
      * 
+     * Copies the source model to the destination model.
+     * 
      * @param source      the source model name to copy
      * @param destination the destination model name
      * @return the HTTP status code
-     * @throws JOllamaClientException
+     * @throws JOllamaClientException in case of request or response errors
      */
     int copy(String source, String destination) throws JOllamaClientException;
 
     /**
      * 
-     * @param source      the source model {@link com.glynch.jollama.Model} to copy
+     * Copies the source model to the destination model.
+     * 
+     * @param source      the source model {@link Model} to copy
      * @param destination the destination model name
      * @return the HTTP status code
-     * @throws JOllamaClientException
+     * @throws JOllamaClientException in case of request or response errors
      */
     int copy(Model source, String destination) throws JOllamaClientException;
 
     /**
+     * Deletes the model with the specified name.
      * 
      * @param name the name of the model to delete
      * @return the HTTP status code
-     * @throws JOllamaClientException
+     * @throws JOllamaClientException in case of request or response errors
      */
     int delete(String name) throws JOllamaClientException;
 
     /**
+     * Deletes the specific {@link Model}
      * 
      * @param name the model {@link com.glynch.jollama.Model} to delete
      * @return the HTTP status code
-     * @throws JOllamaClientException
+     * @throws JOllamaClientException in case of request or response errors
      */
     int delete(Model name) throws JOllamaClientException;
 
+    /**
+     * A builder for a blobs request.
+     */
     interface BlobsSpec {
         int exists() throws JOllamaClientException;
 
         int create() throws JOllamaClientException;
     }
 
+    /**
+     * A builder for a generate request.
+     */
     interface GenerateSpec {
 
         GenerateSpec images(String image, String... images);
@@ -277,8 +322,19 @@ public interface JOllamaClient {
 
         GenerateSpec format(Format format);
 
+        /**
+         * Set the format of the response to json
+         * 
+         * @return a {@link GenerateSpec}
+         */
         GenerateSpec json();
 
+        /**
+         * Set the options for the request
+         * 
+         * @param options the options {@link com.glynch.jollama.Options}
+         * @return a {@link GenerateSpec}
+         */
         GenerateSpec options(Options options);
 
         GenerateSpec system(String system);
@@ -299,24 +355,29 @@ public interface JOllamaClient {
 
     }
 
+    /**
+     * A builder for a chat request.
+     */
     interface ChatSpec {
 
         /**
+         * Sets the system prompt for this builder.
          * 
-         * @param system the system {@link com.glynch.jollama.chat.Message}
-         * @return
+         * @param system the system message
+         * @return a {@link ChatSpec}
          */
         ChatSpec system(String system);
 
-        ChatSpec history(Message... messages);
+        ChatSpec history(MessageHistory history);
 
         ChatSpec history(List<Message> messages);
 
-        ChatSpec history(MessageHistory history);
+        ChatSpec history(Message... messages);
 
         ChatSpec format(Format format);
 
         /**
+         * Sets the options for this builder.
          * 
          * @param options the options {@link com.glynch.jollama.Options}
          * @return a {@link ChatSpec}
@@ -324,6 +385,8 @@ public interface JOllamaClient {
         ChatSpec options(Options options);
 
         /**
+         * 
+         * Sets the keep alive for this builder.
          * 
          * @param keepAlive the keep alive {@link com.glynch.jollama.KeepAlive}
          * @return a {@link ChatSpec}
@@ -345,6 +408,9 @@ public interface JOllamaClient {
         EmbeddingsResponse get() throws JOllamaClientException;
     }
 
+    /**
+     * A builder for a pull request.
+     */
     interface PullSpec {
         PullSpec insecure(boolean insecure);
 
@@ -353,6 +419,9 @@ public interface JOllamaClient {
         PullResponse batch() throws JOllamaClientException;
     }
 
+    /**
+     * A builder for a create request.
+     */
     interface CreateSpec {
         Flux<CreateResponse> stream() throws JOllamaClientException;
 
