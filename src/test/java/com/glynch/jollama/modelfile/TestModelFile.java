@@ -27,7 +27,6 @@ public class TestModelFile {
     @Test
     void modelFileValidPath() {
         ModelFile modelFile = ModelFile.parse(Path.of("src/test/resources/test.modelfile"));
-        System.out.println(modelFile.toString());
         Message user = Message.user("This is a user message.", List.of());
         Message assistant = Message.assistant("This is the assistant answer.", List.of());
         assertAll(

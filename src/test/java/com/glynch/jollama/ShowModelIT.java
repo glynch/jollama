@@ -22,7 +22,6 @@ class ShowModelIT extends AbstractJOllamaIT {
     @Test
     void showModel() {
         ModelFile modelFile = client.show(Model.PHI_3_MINI);
-        System.out.println(modelFile);
         assertAll(
                 () -> assertTrue(modelFile.license().contains("MIT License")),
                 () -> assertEquals(1, modelFile.parameters().size()));
