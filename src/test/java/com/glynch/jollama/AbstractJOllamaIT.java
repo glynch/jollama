@@ -1,5 +1,7 @@
 package com.glynch.jollama;
 
+import java.time.Duration;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -25,7 +27,8 @@ abstract class AbstractJOllamaIT {
     @BeforeAll
     void beforeAll() {
         ollama.start();
-        client = JOllamaClient.create(ollama.getEndpoint());
+        client = JOllamaClient.builder(ollama.getEndpoint()).followRedirectsAlways().readTimeout(Duration.ofSeconds(60))
+                .build();
     }
 
     @AfterAll

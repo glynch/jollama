@@ -47,6 +47,13 @@ final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
     }
 
     @Override
+    public Builder readTimeout(Duration duration) {
+        Objects.requireNonNull(duration, "duration cannot be null");
+        builder.readTimeout(duration);
+        return this;
+    }
+
+    @Override
     public JOllamaClient build() {
         return new DefaultJOllamaClient(builder.build(), host);
     }

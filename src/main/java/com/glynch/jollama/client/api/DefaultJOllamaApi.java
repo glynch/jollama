@@ -51,6 +51,21 @@ public class DefaultJOllamaApi implements JOllamaApi {
     }
 
     @Override
+    public String host() {
+        return host;
+    }
+
+    @Override
+    public int connectTimeout() {
+        return client.connectTimeoutMillis();
+    }
+
+    @Override
+    public int readTimeout() {
+        return client.readTimeoutMillis();
+    }
+
+    @Override
     public Response execute(Request request) {
         try {
             return client.newCall(request).execute();

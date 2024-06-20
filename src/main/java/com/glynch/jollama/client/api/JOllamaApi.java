@@ -27,4 +27,10 @@ public interface JOllamaApi {
 
     <T> Flux<T> stream(String path, Object body, Class<T> type);
 
+    String host();
+
+    int connectTimeout();
+
+    int readTimeout();
+
 }

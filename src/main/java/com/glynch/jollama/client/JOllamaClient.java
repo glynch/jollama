@@ -124,6 +124,8 @@ public interface JOllamaClient {
          */
         Builder connectTimeout(Duration duration);
 
+        Builder readTimeout(Duration duration);
+
         JOllamaClient build();
 
     }
@@ -143,6 +145,13 @@ public interface JOllamaClient {
      * @return The connect timeout in milliseconds.
      */
     int getConnectTimeout();
+
+    /**
+     * Get the read timeout.
+     * 
+     * @return The read timeout in milliseconds.
+     */
+    int getReadTimeout();
 
     /**
      * Get a list of the running models

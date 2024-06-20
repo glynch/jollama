@@ -86,7 +86,12 @@ final class DefaultJOllamaClient implements JOllamaClient {
 
     @Override
     public int getConnectTimeout() {
-        return this.client.connectTimeoutMillis();
+        return api.connectTimeout();
+    }
+
+    @Override
+    public int getReadTimeout() {
+        return api.readTimeout();
     }
 
     @Override
