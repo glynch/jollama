@@ -90,7 +90,7 @@ public interface JOllamaClient {
     interface Builder {
 
         /**
-         * follow redirects
+         * follow redirects except https to http or http to https
          * 
          * @return this builder
          * 
@@ -140,9 +140,9 @@ public interface JOllamaClient {
     /**
      * Get the connect timeout.
      * 
-     * @return An {@link Optional} of the {@link Duration} of the connect timeout.
+     * @return The connect timeout in milliseconds.
      */
-    Optional<Duration> getConnectTimeout();
+    int getConnectTimeout();
 
     /**
      * Get a list of the running models
@@ -320,35 +320,72 @@ public interface JOllamaClient {
 
         GenerateSpec image(String image);
 
+        /**
+         * Set the format of the response.
+         * 
+         * @param format the format {@link Format}
+         * @return this builder
+         */
         GenerateSpec format(Format format);
 
         /**
-         * Set the format of the response to json
+         * Set the format of the response to {@link Format#JSON json}
          * 
-         * @return a {@link GenerateSpec}
+         * @return this bvuilder
          */
         GenerateSpec json();
 
         /**
          * Set the options for the request
          * 
-         * @param options the options {@link com.glynch.jollama.Options}
-         * @return a {@link GenerateSpec}
+         * @param options the {@link com.glynch.jollama.Options options}
+         * @return this builder
          */
         GenerateSpec options(Options options);
 
+        /**
+         * Set the system prompt for this builder.
+         * 
+         * @param system the system prompt
+         * @return this builder
+         */
         GenerateSpec system(String system);
 
+        /**
+         * Set the template for this builder.
+         * 
+         * @param template the template
+         * @return
+         */
         GenerateSpec template(String template);
 
+        /**
+         * Set the context for this builder.
+         * 
+         * @param context  the context
+         * @param contexts the contexts
+         * @return this builder
+         */
         GenerateSpec context(int context, int... contexts);
 
         GenerateSpec raw(boolean raw);
 
         GenerateSpec raw();
 
+        /**
+         * Set the keep alive for this builder.
+         * 
+         * @param keepAlive the keep alive {@link com.glynch.jollama.KeepAlive}
+         * @return this builder
+         */
         GenerateSpec keepAlive(KeepAlive keepAlive);
 
+        /**
+         * Stream the response.
+         * 
+         * @return a {@link Flux} of {@link GenerateResponse}
+         * @throws JOllamaClientException in case of request or response errors
+         */
         Flux<GenerateResponse> stream() throws JOllamaClientException;
 
         GenerateResponse batch() throws JOllamaClientException;

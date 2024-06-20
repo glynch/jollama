@@ -1,50 +1,54 @@
 package com.glynch.jollama.client;
 
-import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.Objects;
 
 import com.glynch.jollama.client.JOllamaClient.Builder;
 
+import okhttp3.OkHttpClient;
+
 final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
 
-    private final HttpClient.Builder clientBuilder = HttpClient.newBuilder();
+    private final OkHttpClient.Builder builder = new OkHttpClient.Builder();
     private String host;
 
     DefaultJOllamaClientBuilder(String host) {
         this.host = host;
-        clientBuilder.version(HttpClient.Version.HTTP_2);
 
     }
 
     @Override
     public Builder followRedirects() {
-        clientBuilder.followRedirects(HttpClient.Redirect.NORMAL);
+        builder.followRedirects(true);
+        builder.followSslRedirects(false);
+
         return this;
     }
 
     @Override
     public Builder followRedirectsNever() {
-        clientBuilder.followRedirects(HttpClient.Redirect.NEVER);
+        builder.followRedirects(false);
+        builder.followSslRedirects(false);
         return this;
     }
 
     @Override
     public Builder followRedirectsAlways() {
-        clientBuilder.followRedirects(HttpClient.Redirect.ALWAYS);
+        builder.followSslRedirects(true);
+        builder.followSslRedirects(true);
         return this;
     }
 
     @Override
     public Builder connectTimeout(Duration duration) {
         Objects.requireNonNull(duration, "duration cannot be null");
-        clientBuilder.connectTimeout(duration);
+        builder.connectTimeout(duration);
         return this;
     }
 
     @Override
     public JOllamaClient build() {
-        return new DefaultJOllamaClient(clientBuilder.build(), host);
+        return new DefaultJOllamaClient(builder.build(), host);
     }
 
 }

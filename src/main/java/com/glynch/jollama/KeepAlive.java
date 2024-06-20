@@ -60,10 +60,25 @@ public record KeepAlive(long duration, Units units) {
         }
     }
 
+    /**
+     * The units of the keep alive duration.
+     */
     public enum Units {
+        /**
+         * Seconds.
+         */
         SECONDS("s"),
+        /**
+         * Minutes.
+         */
         MINUTES("m"),
+        /**
+         * Hours.
+         */
         HOURS("h"),
+        /**
+         * Days.
+         */
         DAYS("d");
 
         private final String symbol;
@@ -72,6 +87,12 @@ public record KeepAlive(long duration, Units units) {
             this.symbol = symbol;
         }
 
+        /**
+         * Get the units from the given symbol.
+         * 
+         * @param symbol The symbol.
+         * @return The units or {@code null} if not found.
+         */
         public static Units of(String symbol) {
             Objects.requireNonNull(symbol, "symbol cannot be null");
             return Arrays.stream(values()).filter(v -> v.getSymbol().equals(symbol)).findFirst()

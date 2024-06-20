@@ -30,6 +30,7 @@
         <junit.version>5.10.2</junit.version>
         <netty-core.version>1.1.20</netty-core.version>
         <testcontainers.version>1.19.8</testcontainers.version>
+        <okhttp.version>4.12.0</okhttp.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.build.directory}/merged.exec</sonar.jacoco.reportPath>
@@ -210,6 +211,16 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>${okhttp.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
@@ -230,6 +241,12 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>ollama</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.streamsupport</groupId>
+            <artifactId>android-retrofuture</artifactId>
+            <version>1.6.0</version>
         </dependency>
     </dependencies>
 

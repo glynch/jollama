@@ -6,13 +6,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 
+/**
+ * Image encoding and decoding.
+ */
 public class Image {
 
     private Image() {
     }
 
     public static String encode(byte[] image) {
-        return new String(Base64.getEncoder().encode(image));
+        return new String(Base64.getEncoder().encodeToString(image));
     }
 
     public static String encode(Path path) {

@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public enum Model {
 
+    LLAMA_3_LATEST(Name.LLAMA_3, "latest"),
     LLAMA_3_8B(Name.LLAMA_3, "8b"),
     LLAMA_3_70B(Name.LLAMA_3, "70b"),
     PHI_3_LATEST(Name.PHI_3, "latest"),
@@ -31,6 +32,10 @@ public enum Model {
     ORCA_MINI_70B(Name.ORCA_MINI, "70b"),
     NOMIC_EMBED_TEXT_V1_5(Name.NOMIC_EMBED_TEXT, "v1.5"),
     NOMIC_EMBED_TEXT_LATEST(Name.NOMIC_EMBED_TEXT, "latest"),
+    LLAVA_LATEST(Name.LLAVA, "latest"),
+    LLAVA_7B(Name.LLAVA, "7b"),
+    LLAVA_13B(Name.LLAVA, "13b"),
+    LLAVA_34B(Name.LLAVA, "34b"),
     ;
 
     private final Name name;

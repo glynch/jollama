@@ -9,6 +9,19 @@ import com.glynch.jollama.chat.Message;
  * 
  * Can be used to store a history of messages for a chat request.
  * 
+ * <pre>
+ * MessageHistory history = new InMemoryMessageHistory();
+ * client.chat("llama3", "Why is the sky blue?").history(history).stream().subscribe(r -> {
+ *     System.out.print(r.message().content());
+ * });
+ * System.out.println();
+ * client.chat("llama3", "How is that different than mie scattering?").history(history)
+ *         .stream().subscribe(r -> {
+ *             System.out.print(r.message().content());
+ *         });
+ * System.out.println();
+ * </pre>
+ * 
  * @author Graham Lynch
  *
  */

@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.glynch.jollama.JOllamaError;
 import com.glynch.jollama.client.JOllamaClientException;
-import com.glynch.jollama.client.JOllamaClientResponseException;
 
 /**
  * Utility class for handling JSON bodies.
@@ -95,10 +94,9 @@ public class Body {
         public static <T> Function<String, T> exceptionally(ResponseInfo responseInfo) {
             return body -> {
                 try {
-                    throw new JOllamaClientResponseException(objectMapper.readValue(body, JOllamaError.class).error(),
-                            responseInfo.statusCode(), responseInfo.headers());
+                    throw new RuntimeException(objectMapper.readValue(body, JOllamaError.class).error());
                 } catch (JsonProcessingException e) {
-                    throw new JOllamaClientResponseException(body, responseInfo.statusCode(), responseInfo.headers());
+                    throw new RuntimeException(body);
                 }
             };
         }
