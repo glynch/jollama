@@ -118,7 +118,7 @@ public class DefaultJOllamaApi implements JOllamaApi {
     public Response delete(String path, Object body) {
         Request request = new Request.Builder()
                 .url(getUrl(path))
-                .delete(RequestBody.create(body.toString(), APPLICATION_JSON))
+                .delete(json(body))
                 .build();
         return execute(request);
     }

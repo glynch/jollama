@@ -43,7 +43,7 @@ public class TestJOllamaClientBuilder {
         JOllamaClient client = JOllamaClient.builder().connectTimeout(Duration.ofSeconds(5))
                 .build();
 
-        assertEquals(5000, client.getConnectTimeout().get().toMillis());
+        assertEquals(5000, client.getConnectTimeout());
     }
 
     @Test
