@@ -23,6 +23,7 @@ import io.github.glynch.jollama.modelfile.ModelFile;
 import io.github.glynch.jollama.process.ProcessModel;
 import io.github.glynch.jollama.process.ProcessModels;
 import io.github.glynch.jollama.pull.PullResponse;
+import io.github.glynch.jollama.show.ShowResponse;
 import reactor.core.publisher.Flux;
 
 /**
@@ -60,6 +61,8 @@ public interface JOllamaClient {
      * 
      * @param host the Ollama server host for all requests
      * @see #builder(String)
+     * 
+     * @return a new {@link JOllamaClient}
      */
     static JOllamaClient create(String host) {
         return builder(host).build();
@@ -68,6 +71,7 @@ public interface JOllamaClient {
     /**
      * Obtain a builder with the default host.
      * 
+     * @return a new {@link JOllamaClient.Builder builder}
      */
     static Builder builder() {
         return new DefaultJOllamaClientBuilder(DEFAULT_OLLAMA_HOST);
@@ -77,7 +81,7 @@ public interface JOllamaClient {
      * Obtain abuilder with the specified host.
      * 
      * @param host the Ollama server host
-     * @return a new Ollama client builder
+     * @return a new {@link JOllamaClient.Builder builder}
      */
     static Builder builder(String host) {
         return new DefaultJOllamaClientBuilder(host);
@@ -87,6 +91,13 @@ public interface JOllamaClient {
      * A mutable builder for creating a {@link JOllamaClient}.
      */
     interface Builder {
+
+        /**
+         * Log request and response information.
+         * 
+         * @return this builder
+         */
+        Builder log();
 
         /**
          * follow redirects except https to http or http to https
@@ -118,7 +129,7 @@ public interface JOllamaClient {
         /**
          * Set the connect timeout.
          * 
-         * @param duration
+         * @param duration the duration
          * @return this builder
          */
         Builder connectTimeout(Duration duration);
@@ -226,11 +237,19 @@ public interface JOllamaClient {
 
     Optional<ListModel> list(Model name) throws JOllamaClientException;
 
-    BlobsSpec blobs(String digest);
+    // BlobsSpec blobs(String digest);
 
-    ModelFile show(String name) throws JOllamaClientException, InvalidModelFileException;
+    // BlobsSpec blobs(Path path);
 
-    ModelFile show(Model name) throws JOllamaClientException, InvalidModelFileException;
+    BlobsSpec blobs();
+
+    ShowResponse show(String name) throws JOllamaClientException;
+
+    ShowResponse show(String name, boolean verbose) throws JOllamaClientException;
+
+    ShowResponse show(Model name) throws JOllamaClientException;
+
+    ShowResponse show(Model name, boolean verbose) throws JOllamaClientException;
 
     GenerateSpec generate(String model, String prompt);
 
@@ -259,8 +278,6 @@ public interface JOllamaClient {
     EmbeddingsSpec embeddings(String model, String prompt);
 
     EmbeddingsSpec embeddings(Model model, String prompt);
-
-    CreateSpec create(String name, String modelfile) throws InvalidModelFileException;
 
     CreateSpec create(String name, Path path) throws InvalidModelFileException, IOException;
 
@@ -314,9 +331,9 @@ public interface JOllamaClient {
      * A builder for a blobs request.
      */
     interface BlobsSpec {
-        int exists() throws JOllamaClientException;
+        int exists(String digest) throws JOllamaClientException;
 
-        int create() throws JOllamaClientException;
+        int create(Path path) throws JOllamaClientException;
     }
 
     /**
@@ -363,7 +380,7 @@ public interface JOllamaClient {
          * Set the template for this builder.
          * 
          * @param template the template
-         * @return
+         * @return this builder
          */
         GenerateSpec template(String template);
 

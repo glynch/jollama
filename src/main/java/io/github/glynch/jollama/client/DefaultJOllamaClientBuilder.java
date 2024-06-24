@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import io.github.glynch.jollama.client.JOllamaClient.Builder;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 
 final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
 
@@ -13,7 +15,14 @@ final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
 
     DefaultJOllamaClientBuilder(String host) {
         this.host = host;
+    }
 
+    @Override
+    public Builder log() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(Level.BASIC);
+        builder.addInterceptor(logging);
+        return this;
     }
 
     @Override

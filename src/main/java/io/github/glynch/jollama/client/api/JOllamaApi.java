@@ -1,10 +1,17 @@
 package io.github.glynch.jollama.client.api;
 
+import java.nio.file.Path;
+
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 import reactor.core.publisher.Flux;
 
+/**
+ * Low level API for interacting with Ollama.
+ * 
+ * This should not be used directly.
+ */
 public interface JOllamaApi {
 
     Response execute(Request request);
@@ -22,6 +29,8 @@ public interface JOllamaApi {
     Response delete(String path, Object body);
 
     Response post(String path, Object body);
+
+    Response upload(String path, Path filePath);
 
     <T> T post(String path, Object body, Class<T> type);
 

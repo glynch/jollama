@@ -10,7 +10,7 @@ import io.github.glynch.jollama.chat.Message;
  * Can be used to store a history of messages for a chat request.
  * 
  * <pre>
- * MessageHistory history = new InMemoryMessageHistory();
+ * MessageHistory history = MemoryHistory.create();
  * client.chat("llama3", "Why is the sky blue?").history(history).stream().subscribe(r -> {
  *     System.out.print(r.message().content());
  * });
@@ -31,20 +31,55 @@ public interface MessageHistory extends Iterable<Message> {
         return new InMemoryMessageHistory();
     }
 
+    /**
+     * Add a {@link MessageHistory} to this history.
+     * 
+     * @param history The {@code MessageHistory} to add.
+     */
     void add(MessageHistory history);
 
+    /**
+     * Add a list of {@link Message messages} to this history.
+     * 
+     * @param messages The list of messages to add.
+     */
     void add(List<Message> messages);
 
+    /**
+     * Add a {@link Message} to this history.
+     * 
+     * @param message The message to add.
+     */
     void add(Message message);
 
     Message get(int index);
 
-    Message remove(int index);
+    /**
+     * Remove a message from the history at the specified index.
+     * 
+     * @param index The index of the message to remove.
+     * @return The removed message.
+     * @throws IndexOutOfBoundsException If the index is out of bounds.
+     */
+    Message remove(int index) throws IndexOutOfBoundsException;
 
+    /**
+     * Get an immutable list of {@link Message} messages in the history.
+     * 
+     * @return The messages in the history.
+     */
     List<Message> messages();
 
+    /**
+     * Clear the history.
+     */
     void clear();
 
+    /**
+     * Get the size of the history.
+     * 
+     * @return The size of the history.
+     */
     int size();
 
 }

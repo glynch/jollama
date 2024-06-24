@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -136,10 +137,6 @@ public class DefaultJOllamaApi implements JOllamaApi {
                 .url(getUrl(path))
                 .head()
                 .build();
-        Response response = execute(request);
-        if (!response.isSuccessful()) {
-            errorHandler.handleError(response);
-        }
         return execute(request);
     }
 
@@ -147,12 +144,9 @@ public class DefaultJOllamaApi implements JOllamaApi {
     public Response delete(String path, Object body) {
         Request request = new Request.Builder()
                 .url(getUrl(path))
+                .header("Content-type", "application/json")
                 .delete(json(body))
                 .build();
-        Response response = execute(request);
-        if (!response.isSuccessful()) {
-            errorHandler.handleError(response);
-        }
         return execute(request);
     }
 
@@ -164,11 +158,6 @@ public class DefaultJOllamaApi implements JOllamaApi {
                 .header("Content-type", "application/json")
                 .post(json(body))
                 .build();
-        Response response = execute(request);
-        if (!response.isSuccessful()) {
-            errorHandler.handleError(response);
-        }
-
         return execute(request);
     }
 
@@ -185,9 +174,26 @@ public class DefaultJOllamaApi implements JOllamaApi {
     }
 
     @Override
+    public Response upload(String path, Path filePath) {
+
+        InputStreamRequestBody requestBody = new InputStreamRequestBody(filePath,
+                MediaType.parse("application/octet-stream"));
+
+        Request request = new Request.Builder()
+                .url(getUrl(path))
+                .post(requestBody)
+                .build();
+
+        return execute(request);
+    }
+
+    @Override
     public <T> Flux<T> stream(String path, Object body, Class<T> type) {
         Request request = new Request.Builder()
                 .url(getUrl(path))
+                .header("Content-type", "application/json")
+                .header("Accept", "application/json")
+                .header("Accept", "application/ndjson")
                 .post(json(body))
                 .build();
 
@@ -222,7 +228,8 @@ public class DefaultJOllamaApi implements JOllamaApi {
     private static RequestBody json(Object body) {
         RequestBody requestBody = null;
         try {
-            requestBody = RequestBody.create(objectMapper.writeValueAsString(body), APPLICATION_JSON);
+            requestBody = RequestBody.create(objectMapper.writeValueAsString(body),
+                    APPLICATION_JSON);
         } catch (JsonProcessingException e) {
 
         }

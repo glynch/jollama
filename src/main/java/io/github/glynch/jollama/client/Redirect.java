@@ -8,7 +8,7 @@ package io.github.glynch.jollama.client;
  */
 public enum Redirect {
     /**
-     * Always redirect, ecept for HTTPS to HTTP urls.
+     * Always redirect, except for HTTPS to HTTP urls.
      */
     NORMAL,
     /**

@@ -1,7 +1,9 @@
 package io.github.glynch.jollama.client;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +38,7 @@ import io.github.glynch.jollama.pull.PullRequest;
 import io.github.glynch.jollama.pull.PullResponse;
 import io.github.glynch.jollama.show.ShowRequest;
 import io.github.glynch.jollama.show.ShowResponse;
+import io.github.glynch.jollama.support.DigestUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import reactor.core.publisher.Flux;
@@ -156,23 +159,30 @@ final class DefaultJOllamaClient implements JOllamaClient {
     }
 
     @Override
-    public BlobsSpec blobs(String digest) {
-        Objects.requireNonNull(digest, "digest must not be null");
-        return new DefaultBlobsSpec(api, digest);
+    public BlobsSpec blobs() {
+        return new DefaultBlobsSpec(api);
     }
 
     @Override
-    public ModelFile show(String name) throws JOllamaClientException, InvalidModelFileException {
+    public ShowResponse show(String name, boolean verbose) throws JOllamaClientException, InvalidModelFileException {
         Objects.requireNonNull(name, "name must not be null");
-        ShowRequest showRequest = new ShowRequest(name);
-        ShowResponse showResponse = api.post(SHOW_PATH, showRequest, ShowResponse.class);
-        return ModelFile.parse(showResponse.modelfile());
+        ShowRequest showRequest = new ShowRequest(name, verbose);
+        return api.post(SHOW_PATH, showRequest, ShowResponse.class);
     }
 
     @Override
-    public ModelFile show(Model name) throws JOllamaClientException, InvalidModelFileException {
-        Objects.requireNonNull(name, "name must not be null");
+    public ShowResponse show(String name) throws JOllamaClientException, InvalidModelFileException {
+        return show(name, false);
+    }
+
+    @Override
+    public ShowResponse show(Model name) throws JOllamaClientException, InvalidModelFileException {
         return show(name.toString());
+    }
+
+    @Override
+    public ShowResponse show(Model name, boolean verbose) throws JOllamaClientException, InvalidModelFileException {
+        return show(name.toString(), verbose);
     }
 
     @Override
@@ -534,11 +544,11 @@ final class DefaultJOllamaClient implements JOllamaClient {
     }
 
     @Override
-    public CreateSpec create(String name, String modelfile) throws InvalidModelFileException {
+    public CreateSpec create(String name, ModelFile modelfile) {
         Objects.requireNonNull(name, "name must not be null");
         Objects.requireNonNull(modelfile, "modelfile must not be null");
 
-        return new DefaultCreateSpec(api, name, ModelFile.parse(modelfile));
+        return new DefaultCreateSpec(api, name, modelfile);
     }
 
     @Override
@@ -548,37 +558,52 @@ final class DefaultJOllamaClient implements JOllamaClient {
         return new DefaultCreateSpec(api, name, ModelFile.parse(path));
     }
 
-    @Override
-    public CreateSpec create(String name, ModelFile modelFile) {
-        Objects.requireNonNull(name, "name must not be null");
-        Objects.requireNonNull(modelFile, "modelFile must not be null");
-        return new DefaultCreateSpec(api, name, modelFile);
-    }
-
     private class DefaultCreateSpec implements CreateSpec {
 
         private final JOllamaApi api;
         private final String name;
-        private String modelfile;
-        private Path path;
+        private final ModelFile modelfile;
 
         public DefaultCreateSpec(JOllamaApi api, String name, ModelFile modelFile) {
             this.api = api;
             this.name = name;
-            this.modelfile = modelFile.toString();
+            this.modelfile = modelFile;
         }
 
         @Override
         public Flux<CreateResponse> stream() {
-            CreateRequest createRequest = new CreateRequest(name, modelfile, true, path);
+            createBlobs(modelfile);
+            CreateRequest createRequest = new CreateRequest(name, modelfile.toString(), true);
             return api.stream(CREATE_PATH, createRequest, CreateResponse.class);
         }
 
         @Override
         public CreateResponse batch() {
-            CreateRequest createRequest = new CreateRequest(name, modelfile, false, path);
-
+            createBlobs(modelfile);
+            CreateRequest createRequest = new CreateRequest(name, modelfile.toString(), false);
             return api.post(CREATE_PATH, createRequest, CreateResponse.class);
+        }
+
+        private void createBlobs(ModelFile modelFile) {
+            createBlob(modelFile.from());
+            createBlob(modelFile.adapter());
+
+        }
+
+        private void createBlob(String blobPath) {
+            if (blobPath != null) {
+                Path path = Paths.get(blobPath);
+                if (Files.exists(path)) {
+                    String digest = DigestUtils.sha256hex(path);
+                    if (blobs().exists(digest) == 404) {
+                        int status = blobs().create(path);
+                        if (status != 201) {
+                            throw new JOllamaClientException("Failed to create blob: " + blobPath);
+                        }
+                    }
+
+                }
+            }
         }
 
     }
@@ -617,23 +642,31 @@ final class DefaultJOllamaClient implements JOllamaClient {
     private class DefaultBlobsSpec implements BlobsSpec {
 
         private final JOllamaApi api;
-        private final String digest;
 
-        public DefaultBlobsSpec(JOllamaApi api, String digest) {
+        public DefaultBlobsSpec(JOllamaApi api) {
             this.api = api;
-            this.digest = digest;
         }
 
         @Override
-        public int exists() throws JOllamaClientException {
+        public int exists(String digest) throws JOllamaClientException {
+            Objects.requireNonNull(digest, "digest must not be null");
+            if (!digest.startsWith(DigestUtils.SHA256_PREFIX)) {
+                throw new IllegalArgumentException("Invalid digest: " + digest);
+            }
             Response response = api.head(BLOBS_PATH + "/" + digest);
             return response.code();
         }
 
         @Override
-        public int create() throws JOllamaClientException {
-            Response response = api.post(BLOBS_PATH + "/" + digest, digest);
-            return response.code();
+        public int create(Path path) throws JOllamaClientException {
+            Objects.requireNonNull(path, "path must not be null");
+            String digest = DigestUtils.sha256hex(path);
+            int exists = exists(digest);
+            if (exists == 404) {
+                return api.upload(BLOBS_PATH + "/" + digest, path).code();
+            }
+
+            return exists;
 
         }
 

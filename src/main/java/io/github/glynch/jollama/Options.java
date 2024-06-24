@@ -12,11 +12,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import io.github.glynch.jollama.modelfile.ModelFile;
 
-public class Options extends AbstractMap<String, Object> {
+public class Options extends AbstractMap<ParameterKey, Object> {
 
-    private final Map<String, Object> optionsMap = new HashMap<>();
+    private final Map<ParameterKey, Object> optionsMap = new HashMap<>();
 
-    private Options(Map<String, Object> optionsMap) {
+    private Options(Map<ParameterKey, Object> optionsMap) {
         this.optionsMap.putAll(optionsMap);
     }
 
@@ -25,126 +25,126 @@ public class Options extends AbstractMap<String, Object> {
     }
 
     @Override
-    public Set<Entry<String, Object>> entrySet() {
+    public Set<Entry<ParameterKey, Object>> entrySet() {
         return optionsMap.entrySet();
     }
 
     @Override
-    public Object put(String key, Object value) {
+    public Object put(ParameterKey key, Object value) {
         throw new UnsupportedOperationException("'put' is not supported on Options");
     }
 
     public Integer numKeep() {
-        return (Integer) optionsMap.get(Key.NUM_KEEP.getValue());
+        return (Integer) optionsMap.get(Key.NUM_KEEP);
     }
 
     public Integer seed() {
-        return (Integer) optionsMap.get(ModelFile.Key.SEED.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.SEED);
     }
 
     public Integer numPredict() {
-        return (Integer) optionsMap.get(ModelFile.Key.NUM_PREDICT.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.NUM_PREDICT);
     }
 
     public Integer topK() {
-        return (Integer) optionsMap.get(ModelFile.Key.TOP_K.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.TOP_K);
     }
 
     public Float topP() {
-        return (Float) optionsMap.get(ModelFile.Key.TOP_P.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.TOP_P);
     }
 
     public Float getTfsZ() {
-        return (Float) optionsMap.get(ModelFile.Key.TFS_Z.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.TFS_Z);
     }
 
     public Float typicalP() {
-        return (Float) optionsMap.get(Key.TYPICAL_P.getValue());
+        return (Float) optionsMap.get(Key.TYPICAL_P);
     }
 
     public Integer repeatLastN() {
-        return (Integer) optionsMap.get(ModelFile.Key.REPEAT_LAST_N.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.REPEAT_LAST_N);
     }
 
     public Float temperature() {
-        return (Float) optionsMap.get(ModelFile.Key.TEMPERATURE.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.TEMPERATURE);
     }
 
     public Float repeatPenalty() {
-        return (Float) optionsMap.get(ModelFile.Key.REPEAT_PENALTY.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.REPEAT_PENALTY);
     }
 
     public Float presencePenalty() {
-        return (Float) optionsMap.get(Key.PRESENCE_PENALTY.getValue());
+        return (Float) optionsMap.get(Key.PRESENCE_PENALTY);
     }
 
     public Float frequencyPenalty() {
-        return (Float) optionsMap.get(Key.FREQUENCY_PENALTY.getValue());
+        return (Float) optionsMap.get(Key.FREQUENCY_PENALTY);
     }
 
     public Integer miroStat() {
-        return (Integer) optionsMap.get(ModelFile.Key.MIROSTAT.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.MIROSTAT);
     }
 
     public Float miroStatTau() {
-        return (Float) optionsMap.get(ModelFile.Key.MIROSTAT_TAU.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.MIROSTAT_TAU);
     }
 
     public Float miroStatEta() {
-        return (Float) optionsMap.get(ModelFile.Key.MIROSTAT_ETA.getValue());
+        return (Float) optionsMap.get(ModelFile.Key.MIROSTAT_ETA);
     }
 
     public Boolean penalizeNewline() {
-        return (Boolean) optionsMap.get(Key.PENALIZE_NEWLINE.getValue());
+        return (Boolean) optionsMap.get(Key.PENALIZE_NEWLINE);
     }
 
     @SuppressWarnings("unchecked")
     public List<String> stop() {
-        return (List<String>) optionsMap.get(ModelFile.Key.STOP.getValue());
+        return (List<String>) optionsMap.get(ModelFile.Key.STOP);
     }
 
     public Boolean numa() {
-        return (Boolean) optionsMap.get(Key.NUMA.getValue());
+        return (Boolean) optionsMap.get(Key.NUMA);
     }
 
     public Integer numCtx() {
-        return (Integer) optionsMap.get(ModelFile.Key.NUM_CTX.getValue());
+        return (Integer) optionsMap.get(ModelFile.Key.NUM_CTX);
     }
 
     public Integer numBatch() {
-        return (Integer) optionsMap.get(Key.NUM_BATCH.getValue());
+        return (Integer) optionsMap.get(Key.NUM_BATCH);
     }
 
     public Integer numGpu() {
-        return (Integer) optionsMap.get(Key.NUM_GPU.getValue());
+        return (Integer) optionsMap.get(Key.NUM_GPU);
     }
 
     public Integer mainGpu() {
-        return (Integer) optionsMap.get(Key.MAIN_GPU.getValue());
+        return (Integer) optionsMap.get(Key.MAIN_GPU);
     }
 
     public Boolean lowVram() {
-        return (Boolean) optionsMap.get(Key.LOW_VRAM.getValue());
+        return (Boolean) optionsMap.get(Key.LOW_VRAM);
     }
 
     public Boolean f16Kv() {
-        return (Boolean) optionsMap.get(Key.F16_KV.getValue());
+        return (Boolean) optionsMap.get(Key.F16_KV);
     }
 
     public Boolean vocabOnly() {
-        return (Boolean) optionsMap.get(Key.VOCAB_ONLY.getValue());
+        return (Boolean) optionsMap.get(Key.VOCAB_ONLY);
     }
 
     public Boolean useMmap() {
-        return (Boolean) optionsMap.get(Key.USE_MMAP.getValue());
+        return (Boolean) optionsMap.get(Key.USE_MMAP);
     }
 
     public Boolean useMlock() {
-        return (Boolean) optionsMap.get(Key.USE_MLOCK.getValue());
+        return (Boolean) optionsMap.get(Key.USE_MLOCK);
     }
 
     public Integer numThread() {
-        return (Integer) optionsMap.get(Key.NUM_THREAD.getValue());
+        return (Integer) optionsMap.get(Key.NUM_THREAD);
     }
 
     public static Options create() {
@@ -159,7 +159,7 @@ public class Options extends AbstractMap<String, Object> {
      * Builder of {@linkplain Options options}.
      */
     public static class Builder {
-        private final Map<String, Object> options = new HashMap<>();
+        private final Map<ParameterKey, Object> options = new HashMap<>();
 
         public Builder() {
 
@@ -178,7 +178,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder numKeep(Integer numKeep) {
             Objects.requireNonNull(numKeep, "numKeep cannot be null");
-            options.put(Key.NUM_KEEP.getValue(), numKeep);
+            options.put(Key.NUM_KEEP, numKeep);
             return this;
         }
 
@@ -190,7 +190,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder seed(Integer seed) {
             Objects.requireNonNull(seed, "seed cannot be null");
-            options.put(ModelFile.Key.SEED.getValue(), seed);
+            options.put(ModelFile.Key.SEED, seed);
             return this;
         }
 
@@ -201,7 +201,7 @@ public class Options extends AbstractMap<String, Object> {
          * @return this builder
          */
         public Builder numPredict(Integer numPredict) {
-            options.put(ModelFile.Key.NUM_PREDICT.getValue(), numPredict);
+            options.put(ModelFile.Key.NUM_PREDICT, numPredict);
             return this;
         }
 
@@ -214,7 +214,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder topK(Integer topK) {
             Objects.requireNonNull(topK, "topK cannot be null");
-            options.put(ModelFile.Key.TOP_K.getValue(), topK);
+            options.put(ModelFile.Key.TOP_K, topK);
             return this;
         }
 
@@ -231,7 +231,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder topP(Float topP) {
             Objects.requireNonNull(topP, "topP cannot be null");
-            options.put(ModelFile.Key.TOP_P.getValue(), topP);
+            options.put(ModelFile.Key.TOP_P, topP);
             return this;
         }
 
@@ -245,13 +245,13 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder tfsZ(Float tfsZ) {
             Objects.requireNonNull(tfsZ, "tfsZ cannot be null");
-            options.put(ModelFile.Key.TFS_Z.getValue(), tfsZ);
+            options.put(ModelFile.Key.TFS_Z, tfsZ);
             return this;
         }
 
         public Builder typicalP(Float typicalP) {
             Objects.requireNonNull(typicalP, "typicalP cannot be null");
-            options.put(Key.TYPICAL_P.getValue(), typicalP);
+            options.put(Key.TYPICAL_P, typicalP);
             return this;
         }
 
@@ -263,7 +263,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder repeatLastN(Integer repeatLastN) {
             Objects.requireNonNull(repeatLastN, "repeatLastN cannot be null");
-            options.put(ModelFile.Key.REPEAT_LAST_N.getValue(), repeatLastN);
+            options.put(ModelFile.Key.REPEAT_LAST_N, repeatLastN);
             return this;
         }
 
@@ -277,7 +277,7 @@ public class Options extends AbstractMap<String, Object> {
          * @return this builder
          */
         public Builder temperature(Float temperature) {
-            options.put(ModelFile.Key.TEMPERATURE.getValue(), temperature);
+            options.put(ModelFile.Key.TEMPERATURE, temperature);
             return this;
         }
 
@@ -289,19 +289,19 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder repeatPenalty(Float repeatPenalty) {
             Objects.requireNonNull(repeatPenalty, "repeatPenalty cannot be null");
-            options.put(ModelFile.Key.REPEAT_PENALTY.getValue(), repeatPenalty);
+            options.put(ModelFile.Key.REPEAT_PENALTY, repeatPenalty);
             return this;
         }
 
         public Builder presencePenalty(Float presencePenalty) {
             Objects.requireNonNull(presencePenalty, "presencePenalty cannot be null");
-            options.put(Key.PRESENCE_PENALTY.getValue(), presencePenalty);
+            options.put(Key.PRESENCE_PENALTY, presencePenalty);
             return this;
         }
 
         public Builder frequencyPenalty(Float frequencyPenalty) {
             Objects.requireNonNull(frequencyPenalty, "frequencyPenalty cannot be null");
-            options.put(Key.FREQUENCY_PENALTY.getValue(), frequencyPenalty);
+            options.put(Key.FREQUENCY_PENALTY, frequencyPenalty);
             return this;
         }
 
@@ -318,7 +318,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder miroStat(Integer miroStat) {
             Objects.requireNonNull(miroStat, "miroStat cannot be null");
-            options.put(ModelFile.Key.MIROSTAT.getValue(), miroStat);
+            options.put(ModelFile.Key.MIROSTAT, miroStat);
             return this;
         }
 
@@ -330,7 +330,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder miroStatTau(Float miroStatTau) {
             Objects.requireNonNull(miroStatTau, "miroStatTau cannot be null");
-            options.put(ModelFile.Key.MIROSTAT_TAU.getValue(), miroStatTau);
+            options.put(ModelFile.Key.MIROSTAT_TAU, miroStatTau);
             return this;
         }
 
@@ -342,7 +342,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder miroStatEta(Float miroStatEta) {
             Objects.requireNonNull(miroStatEta, "miroStatEta cannot be null");
-            options.put(ModelFile.Key.MIROSTAT_ETA.getValue(), miroStatEta);
+            options.put(ModelFile.Key.MIROSTAT_ETA, miroStatEta);
             return this;
         }
 
@@ -354,7 +354,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder penalizeNewline(Boolean penalizeNewline) {
             Objects.requireNonNull(penalizeNewline, "penalizeNewline cannot be null");
-            options.put(Key.PENALIZE_NEWLINE.getValue(), penalizeNewline);
+            options.put(Key.PENALIZE_NEWLINE, penalizeNewline);
             return this;
         }
 
@@ -366,7 +366,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder stop(List<String> stop) {
             Objects.requireNonNull(stop, "stop cannot be null");
-            options.put(ModelFile.Key.STOP.getValue(), stop);
+            options.put(ModelFile.Key.STOP, stop);
             return this;
         }
 
@@ -378,7 +378,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder numa(Boolean numa) {
             Objects.requireNonNull(numa, "numa cannot be null");
-            options.put(Key.NUMA.getValue(), numa);
+            options.put(Key.NUMA, numa);
             return this;
         }
 
@@ -390,7 +390,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder numCtx(Integer numCtx) {
             Objects.requireNonNull(numCtx, "numCtx cannot be null");
-            options.put(ModelFile.Key.NUM_CTX.getValue(), numCtx);
+            options.put(ModelFile.Key.NUM_CTX, numCtx);
             return this;
         }
 
@@ -402,7 +402,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder numBatch(Integer numBatch) {
             Objects.requireNonNull(numBatch, "numBatch cannot be null");
-            options.put(Key.NUM_BATCH.getValue(), numBatch);
+            options.put(Key.NUM_BATCH, numBatch);
             return this;
         }
 
@@ -415,7 +415,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder numGpu(Integer numGpu) {
             Objects.requireNonNull(numGpu, "numGpu cannot be null");
-            options.put(Key.NUM_GPU.getValue(), numGpu);
+            options.put(Key.NUM_GPU, numGpu);
             return this;
         }
 
@@ -429,7 +429,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder mainGpu(Integer mainGpu) {
             Objects.requireNonNull(mainGpu, "mainGpu cannot be null");
-            options.put(Key.MAIN_GPU.getValue(), mainGpu);
+            options.put(Key.MAIN_GPU, mainGpu);
             return this;
         }
 
@@ -443,19 +443,19 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder lowVram(Boolean lowVram) {
             Objects.requireNonNull(lowVram, "lowVram cannot be null");
-            options.put(Key.LOW_VRAM.getValue(), lowVram);
+            options.put(Key.LOW_VRAM, lowVram);
             return this;
         }
 
         public Builder f16Kv(Boolean f16Kv) {
             Objects.requireNonNull(f16Kv, "f16Kv cannot be null");
-            options.put(Key.F16_KV.getValue(), f16Kv);
+            options.put(Key.F16_KV, f16Kv);
             return this;
         }
 
         public Builder vocabOnly(Boolean vocabOnly) {
             Objects.requireNonNull(vocabOnly, "vocabOnly cannot be null");
-            options.put(Key.VOCAB_ONLY.getValue(), vocabOnly);
+            options.put(Key.VOCAB_ONLY, vocabOnly);
             return this;
         }
 
@@ -468,7 +468,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder useMmap(Boolean useMmap) {
             Objects.requireNonNull(useMmap, "useMmap cannot be null");
-            options.put(Key.USE_MMAP.getValue(), useMmap);
+            options.put(Key.USE_MMAP, useMmap);
             return this;
         }
 
@@ -481,7 +481,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder useMlock(Boolean useMlock) {
             Objects.requireNonNull(useMlock, "useMlock cannot be null");
-            options.put(Key.USE_MLOCK.getValue(), useMlock);
+            options.put(Key.USE_MLOCK, useMlock);
             return this;
         }
 
@@ -494,7 +494,7 @@ public class Options extends AbstractMap<String, Object> {
          */
         public Builder numThread(Integer numThread) {
             Objects.requireNonNull(numThread, "numThread cannot be null");
-            options.put(Key.NUM_THREAD.getValue(), numThread);
+            options.put(Key.NUM_THREAD, numThread);
             return this;
         }
 
@@ -509,7 +509,7 @@ public class Options extends AbstractMap<String, Object> {
 
     }
 
-    public enum Key {
+    public enum Key implements ParameterKey {
         NUM_KEEP("num_keep"),
         NUM_PREDICT("num_predict"),
         TYPICAL_P("typical_p"),

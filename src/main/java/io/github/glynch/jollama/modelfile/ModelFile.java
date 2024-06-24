@@ -15,9 +15,22 @@ import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import io.github.glynch.jollama.ParameterKey;
 import io.github.glynch.jollama.chat.Message;
 import io.github.glynch.jollama.chat.Role;
 
+/**
+ * Model file.
+ * 
+ * @param from       The model name or path.
+ * @param adapter    The adapter.
+ * @param template   The template.
+ * @param system     The system.
+ * @param messages   The messages.
+ * @param parameters The parameters.
+ * @param license    The license.
+ * 
+ */
 public record ModelFile(String from, String adapter, String template, String system, List<Message> messages,
         Map<String, Object> parameters,
         String license) {
@@ -85,7 +98,13 @@ public record ModelFile(String from, String adapter, String template, String sys
         return builder.toString();
     }
 
-    public enum Key {
+    /**
+     * Enumeration of model file paramter keys.
+     * 
+     * @see <a href=
+     *      "https://github.com/ollama/ollama/blob/main/docs/modelfile.md#parameters">Parameters</a>
+     */
+    public enum Key implements ParameterKey {
 
         SEED("seed"),
         NUM_PREDICT("num_predict"),
@@ -134,7 +153,7 @@ public record ModelFile(String from, String adapter, String template, String sys
      * 
      * @param modelfile The model file
      * @return the {@code ModelFile}
-     * @throws InvalidModelFileException
+     * @throws InvalidModelFileException If the model file is invalid
      */
     public static ModelFile parse(String modelfile) throws InvalidModelFileException {
         Objects.requireNonNull(modelfile, "modelfile cannot be null");
@@ -206,8 +225,8 @@ public record ModelFile(String from, String adapter, String template, String sys
      * 
      * @param path The path to the model file
      * @return the {@code ModelFile}
-     * @throws InvalidModelFileException
-     * @throws UncheckedIOException
+     * @throws InvalidModelFileException If the model file is invalid
+     * @throws UncheckedIOException      If an I/O error occurs
      */
     public static ModelFile parse(Path path) throws InvalidModelFileException, UncheckedIOException {
         Objects.requireNonNull(path, "path cannot be null");
@@ -222,6 +241,16 @@ public record ModelFile(String from, String adapter, String template, String sys
 
     public static Builder from(String from) {
         return new DefaultModelFileBuilder(from);
+    }
+
+    public static Builder from(Path path) {
+        Objects.requireNonNull(path, "path cannot be null");
+        if (!Files.exists(path)) {
+            throw new IllegalArgumentException("path does not exist");
+        }
+
+        return from(path.toString());
+
     }
 
     public Float temperature() {
@@ -280,6 +309,8 @@ public record ModelFile(String from, String adapter, String template, String sys
         Builder system(String system);
 
         Builder adapter(String adapter);
+
+        Builder adapter(Path path);
 
         Builder license(String license);
 
@@ -348,6 +379,15 @@ public record ModelFile(String from, String adapter, String template, String sys
             Objects.requireNonNull(adapter, "adapter cannot be null");
             this.adapter = adapter;
             return this;
+        }
+
+        @Override
+        public Builder adapter(Path path) {
+            Objects.requireNonNull(path, "path cannot be null");
+            if (!Files.exists(path)) {
+                throw new IllegalArgumentException("path does not exist");
+            }
+            return adapter(path.toString());
         }
 
         @Override

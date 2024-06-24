@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.glynch.jollama.create.CreateResponse;
+import io.github.glynch.jollama.modelfile.ModelFile;
 
 class CreateModelIT extends AbstractJOllamaIT {
 
@@ -20,9 +21,14 @@ class CreateModelIT extends AbstractJOllamaIT {
 
     @Test
     void createModel() {
+        ModelFile modelFile = ModelFile.from("phi3")
+                .system("You are mario from Super Mario Bros.")
+                .temperature(0f)
+                .seed(42)
+                .build();
         CreateResponse response = client
                 .create("mario-test",
-                        "FROM phi3\nSYSTEM You are mario from Super Mario Bros.\nPARAMETER temperature 0\nPARAMETER seed 42")
+                        modelFile)
                 .batch();
 
         assertAll(

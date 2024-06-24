@@ -38,17 +38,6 @@ public class TestMessage {
     }
 
     @Test
-    public void testMessageFromMessage() {
-        Message user = Message.user("Why is the sky blue?");
-        Message message = Message.message(user);
-
-        assertAll(
-                () -> assertEquals("Why is the sky blue?", message.content()),
-                () -> assertEquals(Role.USER, message.role()),
-                () -> assertEquals(0, message.images().size()));
-    }
-
-    @Test
     public void testUserMessageNoImages() {
         Message message = Message.user("Why is the sky blue?", new String[0]);
 

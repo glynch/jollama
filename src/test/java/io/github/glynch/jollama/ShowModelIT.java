@@ -1,14 +1,13 @@
 package io.github.glynch.jollama;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.glynch.jollama.modelfile.ModelFile;
+import io.github.glynch.jollama.show.ShowResponse;
 
 class ShowModelIT extends AbstractJOllamaIT {
 
@@ -21,10 +20,10 @@ class ShowModelIT extends AbstractJOllamaIT {
 
     @Test
     void showModel() {
-        ModelFile modelFile = client.show(Model.PHI_3_MINI);
+        ShowResponse showResponse = client.show(Model.PHI_3_MINI, false);
         assertAll(
-                () -> assertTrue(modelFile.license().contains("MIT License")),
-                () -> assertEquals(1, modelFile.parameters().size()));
+                () -> assertTrue(showResponse.license().contains("MIT License")),
+                () -> assertTrue(!showResponse.parameters().isEmpty()));
 
     }
 

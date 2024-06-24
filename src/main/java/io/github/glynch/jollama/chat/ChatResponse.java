@@ -27,18 +27,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 
  * @author Graham Lynch
  * 
- *
  */
 public record ChatResponse(
-                String model,
-                @JsonIgnore @JsonProperty("created_at") Instant createdAt,
-                Message message,
-                @JsonProperty("done_reason") String doneReason,
-                boolean done,
-                @JsonProperty("total_duration") Long totalDuration,
-                @JsonProperty("load_duration") Long loadDuration,
-                @JsonProperty("prompt_eval_count") Long promptEvalCount,
-                @JsonProperty("prompt_eval_duration") Long promptEvalDuration,
-                @JsonProperty("eval_count") Long evalCount,
-                @JsonProperty("eval_duration") Long evalDuration) {
+        String model,
+        @JsonIgnore @JsonProperty("created_at") Instant createdAt,
+        Message message,
+        @JsonProperty("done_reason") String doneReason,
+        boolean done,
+        @JsonProperty("total_duration") Long totalDuration,
+        @JsonProperty("load_duration") Long loadDuration,
+        @JsonProperty("prompt_eval_count") Long promptEvalCount,
+        @JsonProperty("prompt_eval_duration") Long promptEvalDuration,
+        @JsonProperty("eval_count") Long evalCount,
+        @JsonProperty("eval_duration") Long evalDuration) {
 }

@@ -17,7 +17,7 @@ class BlobsIT extends AbstractJOllamaIT {
 
     @Test
     void blobExists() {
-        int status = client.blobs("sha256:b26e6713dc749dda35872713fa19a568040f475cc71cb132cff332fe7e216462").exists();
+        int status = client.blobs().exists("sha256:b26e6713dc749dda35872713fa19a568040f475cc71cb132cff332fe7e216462");
         assertEquals(200, status);
     }
 

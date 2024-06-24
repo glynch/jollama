@@ -3,6 +3,11 @@ package io.github.glynch.jollama;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Enumeration for the possible models.
+ * 
+ * @see <a href="https://ollama.com/library">Ollama Model Library</a>
+ */
 public enum Model {
 
     LLAMA_3_LATEST(Name.LLAMA_3, "latest"),

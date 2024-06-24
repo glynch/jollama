@@ -22,13 +22,12 @@ class TestRequests {
     void testCreateRequest() {
 
         String modelFile = "FROM llaam3\nSYSTEM";
-        CreateRequest request = new CreateRequest("glynch/llama3", modelFile, true, null);
+        CreateRequest request = new CreateRequest("glynch/llama3", modelFile, true);
 
         assertAll(
                 () -> assertEquals("glynch/llama3", request.name()),
                 () -> assertEquals(modelFile, request.modelfile()),
-                () -> assertEquals(true, request.stream()),
-                () -> assertEquals(null, request.path()));
+                () -> assertEquals(true, request.stream()));
 
     }
 
@@ -49,7 +48,7 @@ class TestRequests {
 
     @Test
     void showRequest() {
-        ShowRequest request = new ShowRequest("llama3:latest");
+        ShowRequest request = new ShowRequest("llama3:latest", false);
 
         assertAll(
                 () -> assertEquals("llama3:latest", request.name()));
