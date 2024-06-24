@@ -4,6 +4,8 @@ The Ollama4j Java library provides a fluent Java API for interacting with Ollama
 
 See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
 
+![Maven Central](https://img.shields.io/maven-central/v/io.github.glynch/jollama)
+
 ## Usage
 
 ### Create a JOllama Client
