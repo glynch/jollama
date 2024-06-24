@@ -4,7 +4,7 @@
 
     <groupId>io.github.glynch</groupId>
     <artifactId>jollama</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
 
     <name>jollama</name>
     <description>Java Fluent Client API fpr Ollama REST</description>
@@ -21,7 +21,7 @@
         <connection>scm:git:git@github.com:glynch/jollama.git</connection>
         <developerConnection>scm:git:https://github.com/glynch/jollama.git</developerConnection>
         <url>https://github.com/glynch/jollama</url>
-      <tag>v0.1.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <developers>
