@@ -26,3 +26,5 @@ See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
 ### Examples
 
 See [Examples](https://github.com/glynch/jollama/blob/main/examples.md)
+
+![Stream Chat](https://github.com/glynch/jollama/blob/main/stream_chat1.gif)
