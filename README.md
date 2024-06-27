@@ -23,6 +23,12 @@ See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
     </dependency>
 ```
 
+### Gradle
+
+```gradle
+implementation 'io.github.glynch:jollama:0.1.0'
+```
+
 ### Examples
 
 See [Examples](https://github.com/glynch/jollama/blob/main/examples.md)
