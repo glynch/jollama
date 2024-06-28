@@ -35,19 +35,24 @@ public record ModelFile(String from, String adapter, String template, String sys
         Map<String, Object> parameters,
         String license) {
 
-    private static final Pattern FROM_PATTERN = Pattern.compile("^FROM\\s+(.*?)$", Pattern.MULTILINE);
+    private static final Pattern FROM_PATTERN = Pattern.compile("^FROM\\s+(.*?)\\s*$",
+            Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+
     private static final Pattern TEMPLATE_PATTERN = Pattern.compile(
-            "^(TEMPLATE)(\\s+)(.*?)(\\s+)(?=(^PARAMETER|^MESSAGE^|^SYSTEM|^LICENSE|^FROM|^ADAPTER))",
-            Pattern.DOTALL | Pattern.MULTILINE);
+            "^TEMPLATE\\s+((.*?)(?=^(PARAMETER|MESSAGE|SYSTEM|FROM|ADAPTER|LICENSE))|(.*$))",
+            Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
     private static final Pattern MESSAGE_PATTERN = Pattern.compile("^MESSAGE\\s+(user|system|assistant)?\\s+(.*)$",
-            Pattern.MULTILINE);
-    private static final Pattern PARAMETER_PATTERN = Pattern.compile("^PARAMETER\\s+([a-zA-z0-9.]+)?\\s+(.*)$",
-            Pattern.MULTILINE);
+            Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+    private static final Pattern PARAMETER_PATTERN = Pattern.compile("^PARAMETER\\s+(.*?)\\s+(.*?)$",
+            Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
+    private static final Pattern SYSTEM_PATTERN = Pattern.compile("^SYSTEM\\s+(.*?)$",
+            Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+    private static final Pattern ADAPTER_PATTERN = Pattern.compile("^ADAPTER\\s+(.*?)\\s*$",
+            Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
     private static final Pattern LICENSE_PATTERN = Pattern.compile(
-            "^\\s*?LICENSE\\s+((\\\"(.+)\\\")|(.+)(?=(^PARAMETER|^MESSAGE|^SYSTEM|^TEMPLATE|^FROM|^ADAPTER)))",
-            Pattern.DOTALL | Pattern.MULTILINE);
-    private static final Pattern SYSTEM_PATTERN = Pattern.compile("^SYSTEM\\s+(.*?)$", Pattern.MULTILINE);
-    private static final Pattern ADAPTER_PATTERN = Pattern.compile("^ADAPTER\\s+(.*?)$", Pattern.MULTILINE);
+            "^LICENSE\\s+((.*?)(?=^(PARAMETER|MESSAGE|SYSTEM|FROM|ADAPTER|TEMPLATE))|(.*$))",
+            Pattern.DOTALL | Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
 
     /**
      * String representation of the model file.
@@ -173,7 +178,7 @@ public record ModelFile(String from, String adapter, String template, String sys
 
         Matcher templateMatcher = TEMPLATE_PATTERN.matcher(modelfile);
         if (templateMatcher.find()) {
-            template = templateMatcher.group(3).replaceAll("\"", "");
+            template = templateMatcher.group(1);
         }
 
         Matcher messageMatcher = MESSAGE_PATTERN.matcher(modelfile);
@@ -186,6 +191,7 @@ public record ModelFile(String from, String adapter, String template, String sys
 
         Matcher parameterMatcher = PARAMETER_PATTERN.matcher(modelfile);
         while (parameterMatcher.find()) {
+            System.out.println(parameterMatcher.group(1) + " " + parameterMatcher.group(2));
             Key key = Key.of(parameterMatcher.group(1));
             if (key != null) {
                 if (key == Key.STOP) {
@@ -198,7 +204,7 @@ public record ModelFile(String from, String adapter, String template, String sys
 
         Matcher licenseMatcher = LICENSE_PATTERN.matcher(modelfile);
         if (licenseMatcher.find()) {
-            license = licenseMatcher.group(3);
+            license = licenseMatcher.group(1);
         }
 
         Matcher systemMatcher = SYSTEM_PATTERN.matcher(modelfile);

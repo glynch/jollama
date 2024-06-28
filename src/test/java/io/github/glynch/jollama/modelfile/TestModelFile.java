@@ -15,7 +15,7 @@ import io.github.glynch.jollama.chat.Message;
 
 public class TestModelFile {
 
-    private static final String LICENSE_STRING = "META LLAMA 3 COMMUNITY LICENSE AGREEMENT\n\nMeta Llama 3 Version Release Date: April 18, 2024\n“Agreement” means the terms and conditions for use, reproduction, distribution and modification of the Llama Materials set forth herein.";
+    private static final String LICENSE_STRING = "\"META LLAMA 3 COMMUNITY LICENSE AGREEMENT\n\nMeta Llama 3 Version Release Date: April 18, 2024\n“Agreement” means the terms and conditions for use, reproduction, distribution and modification of the Llama Materials set forth herein.\"\n";
 
     ModelFile.Builder builder;
 
@@ -35,6 +35,7 @@ public class TestModelFile {
                 () -> assertEquals(LICENSE_STRING, modelFile.license()),
                 () -> assertEquals(user, modelFile.messages().get(0)),
                 () -> assertEquals(assistant, modelFile.messages().get(1)));
+
     }
 
     @Test
