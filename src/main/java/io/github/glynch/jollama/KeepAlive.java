@@ -150,9 +150,27 @@ public record KeepAlive(long duration, Units units) {
     }
 
     /**
-     * Create a keep alive from the given value.
      * 
+     * Obtains a {@code KeepAlive} from a text string such as {@code 500s}.
      * 
+     * <p>
+     * This will parse a texttual represntation of a keep alive value.
+     * including the string produced by {@code toString()}.
+     * </p>
+     * 
+     * Examples:
+     * 
+     * <pre>
+     *  "-1" -> {@link KeepAlive#FOREVER forever}
+     *  "0" -> {@link KeepAlive#NEVER never}
+     *  "500s" -> 500 seconds
+     *  "1m" -> 1 minute
+     *  "1h" -> 1 hour
+     *  "1d" -> 1 day
+     *  "500" -> 500 seconds
+     * 
+     * </pre>
+     *
      * 
      * @param value The value of the keep alive.
      * @return A keep alive representing the given value.

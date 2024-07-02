@@ -41,6 +41,20 @@ public enum Model {
     LLAVA_7B(Name.LLAVA, "7b"),
     LLAVA_13B(Name.LLAVA, "13b"),
     LLAVA_34B(Name.LLAVA, "34b"),
+    GEMMA_2_LATEST(Name.GEMMA_2, "latest"),
+    GEMMA_2_9B(Name.GEMMA_2, "9b"),
+    GEMMA_2_27B(Name.GEMMA_2, "27b"),
+    CODE_LLAMA_LATEST(Name.CODE_LLAMA, "latest"),
+    CODE_LLAMA_7B(Name.CODE_LLAMA, "7b"),
+    CODE_LLAMA_13B(Name.CODE_LLAMA, "13b"),
+    CODE_LLAMA_34B(Name.CODE_LLAMA, "34b"),
+    CODE_LLAMA_70B(Name.CODE_LLAMA, "70b"),
+    DOLPHIN_MIXTRAL_LATEST(Name.DOLPHIN_MIXTRAL, "latest"),
+    DOLPHIN_MIXTRAL_8x7B(Name.DOLPHIN_MIXTRAL, "8x7b"),
+    DOLPHIN_MIXTRAL_8x22B(Name.DOLPHIN_MIXTRAL, "8x22b"),
+    LLAMA_2_UNCENSORED_LATEST(Name.LLAMA_2_UNCENSORED, "latest"),
+    LLAMA_2_UNCENSORED_7B(Name.LLAMA_2_UNCENSORED, "7b"),
+    LLAMA_2_UNCENSORED_70B(Name.LLAMA_2_UNCENSORED, "70b"),
     ;
 
     private final Name name;
@@ -125,7 +139,9 @@ public enum Model {
         STABLE_LM2("stablelm2"),
         STARLING_LM("starling-lm"),
         DOLPHIN_CODER("dolphincoder"),
-        NOUS_HERMES_2("nous-hermes2"),;
+        NOUS_HERMES_2("nous-hermes2"),
+        GEMMA_2("gemma2"),
+        DEEPSEEK_CODER_V2("deepseek-coder-v2"),;
 
         private final String name;
 

@@ -14,6 +14,7 @@ final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
     private String host;
 
     DefaultJOllamaClientBuilder(String host) {
+        Objects.requireNonNull(host, "host cannot be null");
         this.host = host;
     }
 

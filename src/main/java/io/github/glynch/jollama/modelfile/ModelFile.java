@@ -32,7 +32,7 @@ import io.github.glynch.jollama.chat.Role;
  * 
  */
 public record ModelFile(String from, String adapter, String template, String system, List<Message> messages,
-        Map<String, Object> parameters,
+        Map<ParameterKey, Object> parameters,
         String license) {
 
     private static final Pattern FROM_PATTERN = Pattern.compile("^FROM\\s+(.*?)\\s*$",
@@ -80,17 +80,15 @@ public record ModelFile(String from, String adapter, String template, String sys
         }
         if (parameters != null) {
             parameters.forEach((k, v) -> {
-                Key key = Key.of(k);
-                if (key != null) {
-                    if (List.class.isAssignableFrom(v.getClass())) {
-                        @SuppressWarnings("unchecked")
-                        List<String> list = (List<String>) v;
-                        list.forEach(
-                                value -> builder.append("PARAMETER ").append(key).append(" ").append(value)
-                                        .append("\n"));
-                    } else {
-                        builder.append("PARAMETER ").append(k).append(" ").append(v).append("\n");
-                    }
+
+                if (List.class.isAssignableFrom(v.getClass())) {
+                    @SuppressWarnings("unchecked")
+                    List<String> list = (List<String>) v;
+                    list.forEach(
+                            value -> builder.append("PARAMETER ").append(k).append(" ").append(value)
+                                    .append("\n"));
+                } else {
+                    builder.append("PARAMETER ").append(k).append(" ").append(v).append("\n");
                 }
 
             });
@@ -164,7 +162,7 @@ public record ModelFile(String from, String adapter, String template, String sys
         Objects.requireNonNull(modelfile, "modelfile cannot be null");
         String from = null;
         String template = null;
-        Map<String, Object> parameters = new HashMap<>();
+        Map<ParameterKey, Object> parameters = new HashMap<>();
         List<String> stops = new ArrayList<>();
         String system = null;
         String adapter = null;
@@ -197,7 +195,7 @@ public record ModelFile(String from, String adapter, String template, String sys
                 if (key == Key.STOP) {
                     stops.add(parameterMatcher.group(2));
                 } else {
-                    parameters.put(parameterMatcher.group(1), parameterMatcher.group(2));
+                    parameters.put(key, parameterMatcher.group(2));
                 }
             }
         }
@@ -217,7 +215,7 @@ public record ModelFile(String from, String adapter, String template, String sys
             adapter = adapterMatcher.group(1);
         }
 
-        parameters.put(Key.STOP.getValue(), stops);
+        parameters.put(Key.STOP, stops);
 
         if (from == null) {
             throw new InvalidModelFileException("FROM is required");
@@ -260,52 +258,52 @@ public record ModelFile(String from, String adapter, String template, String sys
     }
 
     public Float temperature() {
-        return (Float) parameters.get(Key.TEMPERATURE.getValue());
+        return (Float) parameters.get(Key.TEMPERATURE);
     }
 
     public Integer seed() {
-        return (Integer) parameters.get(Key.SEED.getValue());
+        return (Integer) parameters.get(Key.SEED);
     }
 
     public Float mirostat() {
-        return (Float) parameters.get(Key.MIROSTAT.getValue());
+        return (Float) parameters.get(Key.MIROSTAT);
     }
 
     public Float mirostatTau() {
-        return (Float) parameters.get(Key.MIROSTAT_TAU.getValue());
+        return (Float) parameters.get(Key.MIROSTAT_TAU);
     }
 
     public Float mirostatEta() {
-        return (Float) parameters.get(Key.MIROSTAT_ETA.getValue());
+        return (Float) parameters.get(Key.MIROSTAT_ETA);
     }
 
     public Integer numCtx() {
-        return (Integer) parameters.get(Key.NUM_CTX.getValue());
+        return (Integer) parameters.get(Key.NUM_CTX);
     }
 
     public Integer repeatLastN() {
-        return (Integer) parameters.get(Key.REPEAT_LAST_N.getValue());
+        return (Integer) parameters.get(Key.REPEAT_LAST_N);
     }
 
     public Float repeatPenalty() {
-        return (Float) parameters.get(Key.REPEAT_PENALTY.getValue());
+        return (Float) parameters.get(Key.REPEAT_PENALTY);
     }
 
     public Integer topK() {
-        return (Integer) parameters.get(Key.TOP_K.getValue());
+        return (Integer) parameters.get(Key.TOP_K);
     }
 
     public Float topP() {
-        return (Float) parameters.get(Key.TOP_P.getValue());
+        return (Float) parameters.get(Key.TOP_P);
     }
 
     public Float tfsZ() {
-        return (Float) parameters.get(Key.TFS_Z.getValue());
+        return (Float) parameters.get(Key.TFS_Z);
     }
 
     @SuppressWarnings("unchecked")
     public List<String> stop() {
-        return (List<String>) parameters.get(Key.STOP.getValue());
+        return (List<String>) parameters.get(Key.STOP);
     }
 
     public interface Builder {
@@ -355,7 +353,7 @@ public record ModelFile(String from, String adapter, String template, String sys
 
         private final String from;
         private String template;
-        private Map<String, Object> parameters = new HashMap<>();
+        private Map<ParameterKey, Object> parameters = new HashMap<>();
         private String system;
         private String adapter;
         private String license;
@@ -420,77 +418,77 @@ public record ModelFile(String from, String adapter, String template, String sys
         @Override
         public Builder seed(Integer seed) {
             Objects.requireNonNull(seed, "seed cannot be null");
-            parameters.put(Key.SEED.getValue(), seed);
+            parameters.put(Key.SEED, seed);
             return this;
         }
 
         @Override
         public Builder mirostat(Float mirostat) {
             Objects.requireNonNull(mirostat, "mirostat cannot be null");
-            parameters.put(Key.MIROSTAT.getValue(), mirostat);
+            parameters.put(Key.MIROSTAT, mirostat);
             return this;
         }
 
         @Override
         public Builder mirostatTau(Float mirostatTau) {
             Objects.requireNonNull(mirostatTau, "mirostatTau cannot be null");
-            parameters.put(Key.MIROSTAT_TAU.getValue(), mirostatTau);
+            parameters.put(Key.MIROSTAT_TAU, mirostatTau);
             return this;
         }
 
         @Override
         public Builder mirostatEta(Float mirostatEta) {
             Objects.requireNonNull(mirostatEta, "mirostatEta cannot be null");
-            parameters.put(Key.MIROSTAT_ETA.getValue(), mirostatEta);
+            parameters.put(Key.MIROSTAT_ETA, mirostatEta);
             return this;
         }
 
         @Override
         public Builder numCtx(Integer numCtx) {
             Objects.requireNonNull(numCtx, "numCtx cannot be null");
-            parameters.put(Key.NUM_CTX.getValue(), numCtx);
+            parameters.put(Key.NUM_CTX, numCtx);
             return this;
         }
 
         @Override
         public Builder repeatLastN(Integer repeatLastN) {
             Objects.requireNonNull(repeatLastN, "repeatLastN cannot be null");
-            parameters.put(Key.REPEAT_LAST_N.getValue(), repeatLastN);
+            parameters.put(Key.REPEAT_LAST_N, repeatLastN);
             return this;
         }
 
         @Override
         public Builder repeatPenalty(Float repeatPenalty) {
             Objects.requireNonNull(repeatPenalty, "repeatPenalty cannot be null");
-            parameters.put(Key.REPEAT_PENALTY.getValue(), repeatPenalty);
+            parameters.put(Key.REPEAT_PENALTY, repeatPenalty);
             return this;
         }
 
         @Override
         public Builder temperature(Float temperature) {
             Objects.requireNonNull(temperature, "temperature cannot be null");
-            parameters.put(Key.TEMPERATURE.getValue(), temperature);
+            parameters.put(Key.TEMPERATURE, temperature);
             return this;
         }
 
         @Override
         public Builder topK(Integer topK) {
             Objects.requireNonNull(topK, "topK cannot be null");
-            parameters.put(Key.TOP_K.getValue(), topK);
+            parameters.put(Key.TOP_K, topK);
             return this;
         }
 
         @Override
         public Builder topP(Float topP) {
             Objects.requireNonNull(topP, "topP cannot be null");
-            parameters.put(Key.TOP_P.getValue(), topP);
+            parameters.put(Key.TOP_P, topP);
             return this;
         }
 
         @Override
         public Builder tfsZ(Float tfsZ) {
             Objects.requireNonNull(tfsZ, "tfsZ cannot be null");
-            parameters.put(Key.TFS_Z.getValue(), tfsZ);
+            parameters.put(Key.TFS_Z, tfsZ);
             return this;
         }
 
@@ -498,7 +496,7 @@ public record ModelFile(String from, String adapter, String template, String sys
         public Builder stop(String stop) {
             Objects.requireNonNull(stop, "stop cannot be null");
             stops.add(stop);
-            parameters.put(Key.STOP.getValue(), stops);
+            parameters.put(Key.STOP, stops);
             return this;
         }
 
