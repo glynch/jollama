@@ -17,7 +17,7 @@ import io.github.glynch.jollama.process.ProcessModel;
 class LoadModelIT extends AbstractJOllamaIT {
 
         static final Logger LOGGER = LoggerFactory.getLogger(LoadModelIT.class);
-        static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.42";
+        static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.48";
         static final Model MODEL = Model.PHI_3_MINI;
         static final String MODEL_NAME = MODEL.toString();
 

@@ -13,7 +13,7 @@ import io.github.glynch.jollama.pull.PullResponse;
 class PullModelIT extends AbstractJOllamaIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PullModelIT.class);
-    static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.42";
+    static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.48";
 
     PullModelIT() {
         super(IMAGE_NAME, LOGGER);

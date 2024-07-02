@@ -12,7 +12,7 @@ import io.github.glynch.jollama.show.ShowResponse;
 class ShowModelIT extends AbstractJOllamaIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ShowModelIT.class);
-    private static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.42";
+    private static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.48";
 
     ShowModelIT() {
         super(IMAGE_NAME, LOGGER);
@@ -20,10 +20,11 @@ class ShowModelIT extends AbstractJOllamaIT {
 
     @Test
     void showModel() {
-        ShowResponse showResponse = client.show(Model.PHI_3_MINI, false);
+        ShowResponse showResponse = client.show(Model.PHI_3_MINI, true);
         assertAll(
                 () -> assertTrue(showResponse.license().contains("MIT License")),
-                () -> assertTrue(!showResponse.parameters().isEmpty()));
+                () -> assertTrue(!showResponse.parameters().isEmpty()),
+                () -> assertTrue(showResponse.modelInfo().tokenizerGgmlTokens().size() > 0));
 
     }
 

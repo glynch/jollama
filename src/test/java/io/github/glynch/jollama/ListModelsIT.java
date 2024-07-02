@@ -10,7 +10,7 @@ class ListModelsIT extends AbstractJOllamaIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ListModelsIT.class);
 
-    private static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.42";
+    private static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.48";
 
     ListModelsIT() {
         super(IMAGE_NAME, LOGGER);

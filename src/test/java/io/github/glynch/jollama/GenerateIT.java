@@ -13,7 +13,7 @@ import io.github.glynch.jollama.generate.GenerateResponse;
 class GenerateIT extends AbstractJOllamaIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateIT.class);
-    static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.42";
+    static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.48";
 
     GenerateIT() {
         super(IMAGE_NAME, LOGGER);

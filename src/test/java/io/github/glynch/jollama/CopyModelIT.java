@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 class CopyModelIT extends AbstractJOllamaIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CopyModelIT.class);
-    static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.42";
+    static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.48";
 
     CopyModelIT() {
         super(IMAGE_NAME, LOGGER);

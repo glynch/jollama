@@ -27,7 +27,8 @@ abstract class AbstractJOllamaIT {
     @BeforeAll
     void beforeAll() {
         ollama.start();
-        client = JOllamaClient.builder(ollama.getEndpoint()).followRedirectsAlways().readTimeout(Duration.ofSeconds(60))
+        client = JOllamaClient.builder(ollama.getEndpoint()).followRedirectsAlways()
+                .readTimeout(Duration.ofSeconds(300))
                 .build();
     }
 

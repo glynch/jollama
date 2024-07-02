@@ -11,7 +11,7 @@ import io.github.glynch.jollama.embeddings.EmbeddingsResponse;
 class EmbeddingsIT extends AbstractJOllamaIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddingsIT.class);
-    static final String IMAGE_NAME = "grahamlynch/jollama-nomic-embed-text:0.1.42";
+    static final String IMAGE_NAME = "grahamlynch/jollama-nomic-embed-text:0.1.48";
 
     EmbeddingsIT() {
         super(IMAGE_NAME, LOGGER);

@@ -14,7 +14,7 @@ class DeleteModelIT extends AbstractJOllamaIT {
     }
 
     private static Logger LOGGER = LoggerFactory.getLogger(DeleteModelIT.class);
-    private static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.42";
+    private static final String IMAGE_NAME = "grahamlynch/jollama-phi3:0.1.48";
 
     @Test
     void deleteModel() {
