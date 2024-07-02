@@ -22,6 +22,8 @@ See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
 
 [![Java CI with Maven](https://github.com/glynch/jollama/actions/workflows/maven-package.yml/badge.svg)](https://github.com/glynch/jollama/actions/workflows/maven-package.yml)
 
+[![codecov](https://codecov.io/github/glynch/jollama/graph/badge.svg?token=G2CV421S22)](https://codecov.io/github/glynch/jollama)
+
 ## Usage
 
 ### Maven
