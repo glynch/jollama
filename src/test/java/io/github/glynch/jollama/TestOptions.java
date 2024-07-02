@@ -3,6 +3,7 @@ package io.github.glynch.jollama;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -170,6 +171,14 @@ class TestOptions {
         Key key = Key.of("num_keep");
         assertEquals(Key.NUM_KEEP, key);
         assertEquals("num_keep", key.toString());
+
+    }
+
+    @Test
+    void optionsPutThrowsException() {
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> options.put(Key.NUM_KEEP, 1));
 
     }
 
