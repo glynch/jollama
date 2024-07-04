@@ -40,13 +40,6 @@ const config: Config = {
           editUrl:
             'https://github.com/glynch/jollama/tree/main/packages/create-docusaurus/templates/shared/',
         },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/glynch/jollama/tree/main/packages/create-docusaurus/templates/shared/',
-        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -60,17 +53,11 @@ const config: Config = {
     navbar: {
       title: 'JOllama',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'JOllama Logo',
         src: 'img/logo.svg',
       },
       items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Tutorial',
-        },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/examples', label: 'Examples', position: 'left'},
         {
           href: 'https://github.com/glynch/jollama',
           label: 'GitHub',
@@ -85,8 +72,8 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Examples',
+              to: '/docs/examples',
             },
           ],
         },
@@ -107,17 +94,13 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'Examples',
-              to: '/examples',
-            },
-            {
               label: 'GitHub',
               href: 'https://github.com/glynch/jollama',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} JOllama. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
