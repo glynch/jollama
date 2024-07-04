@@ -6,8 +6,18 @@ name: Java CI with Maven
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+      - "docs/**"
+      - "LICENSE"
+      - "*.md"
+      - ".github/*.yaml"
   pull_request:
     branches: ["main"]
+    paths-ignore:
+      - "docs/**"
+      - "LICENSE"
+      - "*.md"
+      - ".github/*.yaml"
 
 jobs:
   build:
