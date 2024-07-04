@@ -57,7 +57,8 @@ const config: Config = {
         src: 'img/logo.svg',
       },
       items: [
-        {to: '/examples', label: 'Examples', position: 'left'},
+        {to: '/docs/examples', label: 'Examples', position: 'left'},
+        {to: '/apidocs', label: 'Javadoc', position: 'left'},
         {
           href: 'https://github.com/glynch/jollama',
           label: 'GitHub',
