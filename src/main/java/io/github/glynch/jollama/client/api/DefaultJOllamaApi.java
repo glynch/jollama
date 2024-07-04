@@ -27,6 +27,8 @@ import okhttp3.Response;
 import reactor.core.publisher.Flux;
 
 public class DefaultJOllamaApi implements JOllamaApi {
+    private static final String CONTENT_TYPE_HEADER = "Content-type";
+    private static final String ACCEPT_HEADER = "Accept";
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final JavaTimeModule javaTimeModule = new JavaTimeModule();
 
@@ -37,6 +39,7 @@ public class DefaultJOllamaApi implements JOllamaApi {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
     }
     private static final MediaType APPLICATION_JSON = MediaType.parse("application/json");
+    private static final MediaType APPLICATION_OCTET_STREAM = MediaType.parse("application/octet-stream");
     private static final ResponseStatusErrorHandler errorHandler = new DefaultResponseStatusErrorHandler(objectMapper);
 
     private final OkHttpClient client;
@@ -115,7 +118,7 @@ public class DefaultJOllamaApi implements JOllamaApi {
     public Response get(String path) {
         Request request = new Request.Builder()
                 .url(getUrl(path))
-                .header("Accept", "application/json")
+                .header(ACCEPT_HEADER, APPLICATION_JSON.toString())
                 .get()
                 .build();
         return execute(request);
@@ -125,7 +128,7 @@ public class DefaultJOllamaApi implements JOllamaApi {
     public <T> T get(String path, Class<T> type) {
         Request request = new Request.Builder()
                 .url(getUrl(path))
-                .header("Accept", "application/json")
+                .header(ACCEPT_HEADER, "application/json")
                 .get()
                 .build();
         return execute(request, type);
@@ -144,7 +147,7 @@ public class DefaultJOllamaApi implements JOllamaApi {
     public Response delete(String path, Object body) {
         Request request = new Request.Builder()
                 .url(getUrl(path))
-                .header("Content-type", "application/json")
+                .header(CONTENT_TYPE_HEADER, "application/json")
                 .delete(json(body))
                 .build();
         return execute(request);
@@ -154,8 +157,8 @@ public class DefaultJOllamaApi implements JOllamaApi {
     public Response post(String path, Object body) {
         Request request = new Request.Builder()
                 .url(getUrl(path))
-                .header("Accept", "application/json")
-                .header("Content-type", "application/json")
+                .header(ACCEPT_HEADER, "application/json")
+                .header(CONTENT_TYPE_HEADER, "application/json")
                 .post(json(body))
                 .build();
         return execute(request);
@@ -165,8 +168,8 @@ public class DefaultJOllamaApi implements JOllamaApi {
     public <T> T post(String path, Object body, Class<T> type) {
         Request request = new Request.Builder()
                 .url(getUrl(path))
-                .header("Accept", "application/json")
-                .header("Content-type", "application/json")
+                .header(ACCEPT_HEADER, "application/json")
+                .header(CONTENT_TYPE_HEADER, "application/json")
                 .post(json(body))
                 .build();
 
@@ -177,7 +180,7 @@ public class DefaultJOllamaApi implements JOllamaApi {
     public Response upload(String path, Path filePath) {
 
         InputStreamRequestBody requestBody = new InputStreamRequestBody(filePath,
-                MediaType.parse("application/octet-stream"));
+                APPLICATION_OCTET_STREAM);
 
         Request request = new Request.Builder()
                 .url(getUrl(path))
@@ -191,9 +194,9 @@ public class DefaultJOllamaApi implements JOllamaApi {
     public <T> Flux<T> stream(String path, Object body, Class<T> type) {
         Request request = new Request.Builder()
                 .url(getUrl(path))
-                .header("Content-type", "application/json")
-                .header("Accept", "application/json")
-                .header("Accept", "application/ndjson")
+                .header(CONTENT_TYPE_HEADER, "application/json")
+                .header(ACCEPT_HEADER, "application/json")
+                .header(ACCEPT_HEADER, "application/ndjson")
                 .post(json(body))
                 .build();
 

@@ -172,17 +172,21 @@ final class DefaultJOllamaClient implements JOllamaClient {
 
     @Override
     public ShowResponse show(String name) throws JOllamaClientException, InvalidModelFileException {
+        Objects.requireNonNull(name, "name must not be null");
         return show(name, false);
     }
 
     @Override
-    public ShowResponse show(Model name) throws JOllamaClientException, InvalidModelFileException {
-        return show(name.toString());
+    public ShowResponse show(Model model) throws JOllamaClientException, InvalidModelFileException {
+        Objects.requireNonNull(model, "model must not be null");
+        return show(model.toString());
     }
 
     @Override
-    public ShowResponse show(Model name, boolean verbose) throws JOllamaClientException, InvalidModelFileException {
-        return show(name.toString(), verbose);
+    public ShowResponse show(Model model, boolean verbose) throws JOllamaClientException, InvalidModelFileException {
+        Objects.requireNonNull(model, "model must not be null");
+        Objects.requireNonNull(verbose, "verbose must not be null");
+        return show(model.toString(), verbose);
     }
 
     @Override

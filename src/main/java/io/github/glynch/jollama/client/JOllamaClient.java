@@ -46,6 +46,14 @@ public interface JOllamaClient {
      */
     String DEFAULT_OLLAMA_HOST = "http://localhost:11434";
 
+    static String getOllamaHost() {
+        String ollamaHost = System.getenv("OLLAMA_HOST");
+        if (ollamaHost != null && !ollamaHost.isEmpty()) {
+            return ollamaHost;
+        }
+        return DEFAULT_OLLAMA_HOST;
+    }
+
     /**
      * Create a new {@link JOllamaClient} with the default host of
      * {@link #DEFAULT_OLLAMA_HOST}.
@@ -74,11 +82,11 @@ public interface JOllamaClient {
      * @return a new {@link JOllamaClient.Builder builder}
      */
     static Builder builder() {
-        return new DefaultJOllamaClientBuilder(DEFAULT_OLLAMA_HOST);
+        return new DefaultJOllamaClientBuilder(getOllamaHost());
     }
 
     /**
-     * Obtain abuilder with the specified host.
+     * Obtain a builder with the specified host.
      * 
      * @param host the Ollama server host
      * @return a new {@link JOllamaClient.Builder builder}
@@ -134,6 +142,12 @@ public interface JOllamaClient {
          */
         Builder connectTimeout(Duration duration);
 
+        /**
+         * Set the read timeout.
+         * 
+         * @param duration the duration
+         * @return this builder
+         */
         Builder readTimeout(Duration duration);
 
         JOllamaClient build();
@@ -147,6 +161,11 @@ public interface JOllamaClient {
      */
     String getHost();
 
+    /**
+     * Get the redirect.
+     * 
+     * @return the {@link Redirect redirect}
+     */
     Redirect getRedirect();
 
     /**
@@ -180,7 +199,7 @@ public interface JOllamaClient {
      * Get the running model with the specified name.
      * 
      * @param name the name of the model
-     * @return the running model with the specified name
+     * @return an {@link Optional} running model with the specified name
      * @throws JOllamaClientException in case of request or response errors
      */
 
@@ -191,11 +210,19 @@ public interface JOllamaClient {
      * 
      * @param model the name of the model. This should include the tag. If there is
      *              no tag it defaults to latest
-     * @return the running model with the specified name
+     * @return an {@link Optional} for loaded model with the specified name
      * @throws JOllamaClientException in case of request or response errors
      */
     Optional<ProcessModel> load(String model) throws JOllamaClientException;
 
+    /**
+     * Load the model with the specified name.
+     * 
+     * @param model     then name of the model.
+     * @param keepAlive the keep alive {@link KeepAlive}
+     * @return an {@link Optional} for loaded model with the specified name
+     * @throws JOllamaClientException in case of request or response errors
+     */
     Optional<ProcessModel> load(String model, KeepAlive keepAlive) throws JOllamaClientException;
 
     /**
@@ -208,6 +235,14 @@ public interface JOllamaClient {
      */
     Optional<ProcessModel> load(Model model) throws JOllamaClientException;
 
+    /**
+     * Load the model with the specified name.
+     * 
+     * @param model     the model {@link Model}
+     * @param keepAlive the keep alive {@link KeepAlive}
+     * @return the loaded model
+     * @throws JOllamaClientException in case of request or response errors
+     */
     Optional<ProcessModel> load(Model model, KeepAlive keepAlive) throws JOllamaClientException;
 
     /**
@@ -235,21 +270,59 @@ public interface JOllamaClient {
      */
     Optional<ListModel> list(String name) throws JOllamaClientException;
 
-    Optional<ListModel> list(Model name) throws JOllamaClientException;
+    /**
+     * List the model with the specified name.
+     * 
+     * @param model the {@link Model} to list
+     * @return an {@link Optional} for the model with the specified name
+     * @throws JOllamaClientException in case of request or response errors
+     */
+    Optional<ListModel> list(Model model) throws JOllamaClientException;
 
-    // BlobsSpec blobs(String digest);
-
-    // BlobsSpec blobs(Path path);
-
+    /**
+     * A builder for a blobs request.
+     * 
+     * @return a {@link BlobsSpec}
+     */
     BlobsSpec blobs();
 
+    /**
+     * Show the model with the specified name.
+     * 
+     * @param name the name of the model
+     * @return a {@link ShowResponse} for the model
+     * @throws JOllamaClientException in case of request or response errors
+     */
     ShowResponse show(String name) throws JOllamaClientException;
 
+    /**
+     * Show the model with the specified name.
+     * 
+     * @param name    the name of the model
+     * @param verbose whether to show verbose information
+     * @return a {@link ShowResponse} for the model
+     * @throws JOllamaClientException in case of request or response errors
+     */
     ShowResponse show(String name, boolean verbose) throws JOllamaClientException;
 
-    ShowResponse show(Model name) throws JOllamaClientException;
+    /**
+     * Show the {@code Model model} with the specified name.
+     * 
+     * @param model the {@link Model model} to show
+     * @return a {@link ShowResponse} for the model
+     * @throws JOllamaClientException in case of request or response errors
+     */
+    ShowResponse show(Model model) throws JOllamaClientException;
 
-    ShowResponse show(Model name, boolean verbose) throws JOllamaClientException;
+    /**
+     * Show the {@code Model model} with the specified name.
+     * 
+     * @param model   the {@link Model model} to show
+     * @param verbose whether to show verbose information
+     * @return a {@link ShowResponse} for the model
+     * @throws JOllamaClientException in case of request or response errors
+     */
+    ShowResponse show(Model model, boolean verbose) throws JOllamaClientException;
 
     GenerateSpec generate(String model, String prompt);
 
@@ -275,6 +348,13 @@ public interface JOllamaClient {
 
     ChatSpec chat(Model model, String prompt, List<String> images);
 
+    /**
+     * Obtains a builder for an embeddings request.
+     * 
+     * @param model  The model to use
+     * @param prompt The prompt
+     * @return a {@link EmbeddingsSpec}
+     */
     EmbeddingsSpec embeddings(String model, String prompt);
 
     EmbeddingsSpec embeddings(Model model, String prompt);
@@ -460,6 +540,9 @@ public interface JOllamaClient {
 
     }
 
+    /**
+     * A builder for an embeddings request.
+     */
     interface EmbeddingsSpec {
 
         EmbeddingsSpec options(Options options);

@@ -10,8 +10,14 @@ import okhttp3.logging.HttpLoggingInterceptor.Level;
 
 final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
 
+    private static final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+
+    static {
+        logging.setLevel(Level.BASIC);
+    }
+
     private final OkHttpClient.Builder builder = new OkHttpClient.Builder();
-    private String host;
+    private final String host;
 
     DefaultJOllamaClientBuilder(String host) {
         Objects.requireNonNull(host, "host cannot be null");
@@ -20,8 +26,6 @@ final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
 
     @Override
     public Builder log() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(Level.BASIC);
         builder.addInterceptor(logging);
         return this;
     }
