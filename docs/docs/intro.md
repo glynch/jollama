@@ -20,6 +20,4 @@ sidebar_position: 1
 implementation 'io.github.glynch:jollama:0.1.0'
 ```
 
-### Examples
-
 ![Stream Chat](stream_chat1.gif)
