@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+title: Introduction
 ---
 
 ## Usage
@@ -20,4 +20,4 @@ sidebar_position: 1
 implementation 'io.github.glynch:jollama:0.1.0'
 ```
 
-![Stream Chat](stream_chat1.gif)
+![Stream Chat](/img/stream_chat1.gif)

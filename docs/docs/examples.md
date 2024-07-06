@@ -1,3 +1,7 @@
+---
+title: Examples
+---
+
 # Examples
 
 ### Create a JOllama Client
