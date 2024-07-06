@@ -58,7 +58,7 @@ const config: Config = {
       },
       items: [
         {to: '/docs/examples', label: 'Examples', position: 'left'},
-        {to: '/apidocs', label: 'Javadoc', position: 'left'},
+        {to: 'https://glynch.github.io/jollama/apidocs/index.html', label: 'Javadoc', position: 'left'},
         {
           href: 'https://github.com/glynch/jollama',
           label: 'GitHub',
