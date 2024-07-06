@@ -23,4 +23,4 @@ jobs:
           token: ${{ secrets.TC_CLOUD_TOKEN }}
 
       - name: Test
-        run: ./mvnw -B -U --failt-at-end verify
+        run: ./mvnw -B -U --fail-at-end verify
