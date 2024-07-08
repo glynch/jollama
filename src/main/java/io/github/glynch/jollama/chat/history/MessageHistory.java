@@ -1,6 +1,7 @@
 package io.github.glynch.jollama.chat.history;
 
 import java.util.List;
+import java.util.Optional;
 
 import io.github.glynch.jollama.chat.Message;
 
@@ -28,8 +29,17 @@ import io.github.glynch.jollama.chat.Message;
 public interface MessageHistory extends Iterable<Message> {
 
     static MessageHistory create() {
-        return new InMemoryMessageHistory();
+        return new DefaultMessageHistory();
     }
+
+    /**
+     * Add a system message
+     * 
+     * @param message the message
+     */
+    void system(String message);
+
+    Optional<Message> system();
 
     /**
      * Add a {@link MessageHistory} to this history.

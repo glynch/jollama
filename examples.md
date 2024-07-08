@@ -231,8 +231,8 @@ Chat with a model using the history of previous messages.
 
 ```java
 
-    MessageHistory history = new InMemoryMessageHistory();
-    client.chat("llama3", "Why is the sky blue?").history(history).stream().subscribe(r -> {
+    MessageHistory history = MessageHistory.create();
+    client.chat("llama3", "Why is the sky blue?").system("You are meteorological expert").history(history).stream().subscribe(r -> {
         System.out.print(r.message().content());
     });
     System.out.println();

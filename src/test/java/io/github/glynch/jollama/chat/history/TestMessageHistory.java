@@ -16,7 +16,7 @@ public class TestMessageHistory {
 
     @BeforeEach
     public void init() {
-        history = new InMemoryMessageHistory();
+        history = new DefaultMessageHistory();
     }
 
     @Test
@@ -35,7 +35,7 @@ public class TestMessageHistory {
         Message message = Message.user("Why is the sky blue?");
         history.add(message);
 
-        MessageHistory history2 = new InMemoryMessageHistory();
+        MessageHistory history2 = new DefaultMessageHistory();
         history2.add(history);
 
         assertAll(
@@ -75,7 +75,7 @@ public class TestMessageHistory {
         Message message = Message.user("Why is the sky blue?");
         history.add(message);
 
-        MessageHistory history2 = new InMemoryMessageHistory(history);
+        MessageHistory history2 = new DefaultMessageHistory(history);
 
         assertAll(
                 () -> assertEquals(1, history2.size()),
@@ -88,7 +88,7 @@ public class TestMessageHistory {
         Message message = Message.user("Why is the sky blue?");
         history.add(message);
 
-        MessageHistory history2 = new InMemoryMessageHistory(history.messages());
+        MessageHistory history2 = new DefaultMessageHistory(history.messages());
 
         assertAll(
                 () -> assertEquals(1, history2.size()),

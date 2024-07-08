@@ -189,7 +189,6 @@ public record ModelFile(String from, String adapter, String template, String sys
 
         Matcher parameterMatcher = PARAMETER_PATTERN.matcher(modelfile);
         while (parameterMatcher.find()) {
-            System.out.println(parameterMatcher.group(1) + " " + parameterMatcher.group(2));
             Key key = Key.of(parameterMatcher.group(1));
             if (key != null) {
                 if (key == Key.STOP) {

@@ -16,7 +16,7 @@ import io.github.glynch.jollama.Options;
 import io.github.glynch.jollama.chat.ChatRequest;
 import io.github.glynch.jollama.chat.ChatResponse;
 import io.github.glynch.jollama.chat.Message;
-import io.github.glynch.jollama.chat.history.InMemoryMessageHistory;
+import io.github.glynch.jollama.chat.history.DefaultMessageHistory;
 import io.github.glynch.jollama.chat.history.MessageHistory;
 import io.github.glynch.jollama.client.api.DefaultJOllamaApi;
 import io.github.glynch.jollama.client.api.JOllamaApi;
@@ -456,7 +456,7 @@ final class DefaultJOllamaClient implements JOllamaClient {
         private final String model;
         private final Message message;
         private String system;
-        private MessageHistory history = new InMemoryMessageHistory();
+        private MessageHistory history = new DefaultMessageHistory();
         private Format format;
         private Options options;
         private String keepAlive;
