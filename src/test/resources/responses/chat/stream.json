@@ -1,0 +1,8 @@
+{"model":"llama3","created_at":"2024-07-08T21:46:56.475291Z","message":{"role":"assistant","content":"The"},"done":false}
+{"model":"llama3","created_at":"2024-07-08T21:46:56.492947Z","message":{"role":"assistant","content":" capital"},"done":false}
+{"model":"llama3","created_at":"2024-07-08T21:46:56.510512Z","message":{"role":"assistant","content":" of"},"done":false}
+{"model":"llama3","created_at":"2024-07-08T21:46:56.528137Z","message":{"role":"assistant","content":" Australia"},"done":false}
+{"model":"llama3","created_at":"2024-07-08T21:46:56.545783Z","message":{"role":"assistant","content":" is"},"done":false}
+{"model":"llama3","created_at":"2024-07-08T21:46:56.563398Z","message":{"role":"assistant","content":" Canberra"},"done":false}
+{"model":"llama3","created_at":"2024-07-08T21:46:56.58092Z","message":{"role":"assistant","content":"."},"done":false}
+{"model":"llama3","created_at":"2024-07-08T21:46:56.598562Z","message":{"role":"assistant","content":""},"done_reason":"stop","done":true,"total_duration":282146417,"load_duration":2215375,"prompt_eval_count":18, "prompt_eval_duration":155181000,"eval_count":8,"eval_duration":123235000}

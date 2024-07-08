@@ -1,28 +1,33 @@
 package io.github.glynch.jollama.chat;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import io.github.glynch.jollama.client.JOllamaClient;
+import io.github.glynch.jollama.client.JOllamaClientResponseException;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 class TestChatResponse {
 
-    MockWebServer server;
-    JOllamaClient client;
+    static MockWebServer server;
+    static JOllamaClient client;
 
-    @BeforeEach
-    void setUp() throws IOException {
+    @BeforeAll
+    static void setUp() throws IOException {
         server = new MockWebServer();
         server.start();
         String url = server.url("/api/chat").toString();
@@ -30,27 +35,78 @@ class TestChatResponse {
     }
 
     @Test
-    void test() throws IOException {
-        MockResponse response = new MockResponse();
+    void batchChatResponse() throws IOException {
+        MockResponse mockResponse = new MockResponse();
         String json = Files.readString(Path.of("src/test/resources/responses/chat/batch.json"));
-        response.setBody(json);
-        server.enqueue(response);
-        ChatResponse chatResponse = client.chat("llama3", "Why is the sky blue?").batch();
+        mockResponse.setBody(json);
+        server.enqueue(mockResponse);
+        ChatResponse chatResponse = client.chat("llama3", "What is the capital of Australia?").batch();
         assertAll(
-                () -> assertTrue(chatResponse.message().content().contains("A classic question")),
                 () -> assertEquals(chatResponse.model(), "llama3"),
-                () -> assertEquals(chatResponse.message().role(), Role.ASSISTANT),
-                () -> assertEquals(chatResponse.evalCount(), 395L),
-                () -> assertEquals(chatResponse.promptEvalDuration(), 105731000L),
-                () -> assertEquals(chatResponse.evalDuration(), 7285219000L),
-                () -> assertEquals(chatResponse.promptEvalCount(), 17L),
-                () -> assertEquals(chatResponse.doneReason(), "stop"),
-                () -> assertTrue(chatResponse.done()));
+                () -> assertEquals("The capital of Australia is Canberra.", chatResponse.message().content()),
+                () -> assertEquals(Role.ASSISTANT, chatResponse.message().role()),
+                () -> assertEquals(Instant.parse("2024-07-08T22:42:47.753936Z"), chatResponse.createdAt()),
+                () -> assertEquals("stop", chatResponse.doneReason()),
+                () -> assertTrue(chatResponse.done()),
+                () -> assertEquals(2522590708L, chatResponse.totalDuration()),
+                () -> assertEquals(2293286875L, chatResponse.loadDuration()),
+                () -> assertEquals(18L, chatResponse.promptEvalCount()),
+                () -> assertEquals(97960000L, chatResponse.promptEvalDuration()),
+                () -> assertEquals(8L, chatResponse.evalCount()),
+                () -> assertEquals(129317000L, chatResponse.evalDuration()));
 
     }
 
-    @AfterEach
-    void tearDown() throws IOException {
+    @Test
+    void throwsException404() throws IOException {
+        MockResponse mockResponse = new MockResponse();
+        mockResponse.setResponseCode(404);
+        String json = Files.readString(Path.of("src/test/resources/responses/chat/404-error.json"));
+        mockResponse.setBody(json);
+        server.enqueue(mockResponse);
+        JOllamaClientResponseException exception = assertThrows(JOllamaClientResponseException.class,
+                () -> client.chat("llama31", "Why is the sky blue?").batch());
+
+        assertEquals(404, exception.getStatusCode());
+    }
+
+    @Test
+    void streamChatResponse() throws IOException {
+        // ChatResponse last = new ChatResponse("llama3",
+        // Instant.parse("2024-07-08T21:46:56.598562Z"),
+        // Message.assistant("", (String) null), "stop", true, 282146417L, 2215375L,
+        // 18L, 155181000L, 8L, 123235000L);
+        MockResponse mockResponse = new MockResponse();
+        String json = Files.readString(Path.of("src/test/resources/responses/chat/stream.json"));
+        mockResponse.setBody(json);
+        server.enqueue(mockResponse);
+        Flux<ChatResponse> response = client.chat("llama3", "What is the capital of Australia?").stream();
+        StepVerifier.create(response)
+                .assertNext(
+                        r -> assertEquals("The", r.message().content()))
+                .assertNext(
+                        r -> assertEquals(" capital", r.message().content()))
+                .assertNext(
+                        r -> assertEquals(" of", r.message().content()))
+                .assertNext(
+                        r -> assertEquals(" Australia", r.message().content()))
+                .assertNext(
+                        r -> assertEquals(" is", r.message().content()))
+                .assertNext(
+                        r -> assertEquals(" Canberra", r.message().content()))
+                .assertNext(
+                        r -> assertEquals(".", r.message().content()))
+                .assertNext(r -> assertAll(
+                        () -> assertEquals("llama3", r.model()),
+                        () -> assertEquals("", r.message().content()),
+                        () -> assertEquals(Role.ASSISTANT, r.message().role()),
+                        () -> assertEquals(Instant.parse("2024-07-08T21:46:56.598562Z"), r.createdAt())))
+                .verifyComplete();
+
+    }
+
+    @AfterAll
+    static void tearDown() throws IOException {
         server.shutdown();
     }
 
