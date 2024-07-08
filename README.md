@@ -20,7 +20,7 @@ See [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)
 [lib]: https://central.sonatype.com/artifact/io.github.glynch/jollama
 [lib-shield]: https://img.shields.io/badge/jollama-get_latest_version-blue.svg?style=just-the-message&labelColor=gray
 
-[![Java CI with Maven](https://github.com/glynch/jollama/actions/workflows/ci.yml/badge.svg)](https://github.com/glynch/jollama/actions/workflows/ci.yml)
+[![Java CI with Maven](https://github.com/glynch/jollama/actions/workflows/ci.yaml/badge.svg)](https://github.com/glynch/jollama/actions/workflows/ci.yaml)
 
 [![codecov](https://codecov.io/github/glynch/jollama/graph/badge.svg?token=G2CV421S22)](https://codecov.io/github/glynch/jollama)
 
