@@ -15,9 +15,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import io.github.glynch.jollama.client.JOllamaClient;
+import io.github.glynch.jollama.client.JOllamaClientRequestException;
 import io.github.glynch.jollama.client.JOllamaClientResponseException;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.SocketPolicy;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -100,8 +102,29 @@ class TestChatResponse {
                         () -> assertEquals("llama3", r.model()),
                         () -> assertEquals("", r.message().content()),
                         () -> assertEquals(Role.ASSISTANT, r.message().role()),
-                        () -> assertEquals(Instant.parse("2024-07-08T21:46:56.598562Z"), r.createdAt())))
+                        () -> assertEquals(Instant.parse("2024-07-08T21:46:56.598562Z"), r.createdAt()),
+                        () -> assertEquals("stop", r.doneReason()),
+                        () -> assertTrue(r.done()),
+                        () -> assertEquals(282146417L, r.totalDuration()),
+                        () -> assertEquals(2215375L, r.loadDuration()),
+                        () -> assertEquals(18L, r.promptEvalCount()),
+                        () -> assertEquals(155181000L, r.promptEvalDuration()),
+                        () -> assertEquals(8L, r.evalCount()),
+                        () -> assertEquals(123235000L, r.evalDuration())))
+
                 .verifyComplete();
+
+    }
+
+    @Test
+    void slowResponse() {
+        MockResponse mockResponse = new MockResponse();
+        mockResponse.setSocketPolicy(SocketPolicy.NO_RESPONSE);
+        server.enqueue(mockResponse);
+
+        assertThrows(
+                JOllamaClientRequestException.class,
+                () -> client.chat("llama3", "What is the capital of Australia?").batch());
 
     }
 
