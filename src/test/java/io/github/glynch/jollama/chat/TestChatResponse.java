@@ -14,6 +14,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import io.github.glynch.jollama.Model;
 import io.github.glynch.jollama.client.JOllamaClient;
 import io.github.glynch.jollama.client.JOllamaClientRequestException;
 import io.github.glynch.jollama.client.JOllamaClientResponseException;
@@ -42,7 +43,7 @@ class TestChatResponse {
         String json = Files.readString(Path.of("src/test/resources/responses/chat/batch.json"));
         mockResponse.setBody(json);
         server.enqueue(mockResponse);
-        ChatResponse chatResponse = client.chat("llama3", "What is the capital of Australia?").batch();
+        ChatResponse chatResponse = client.chat(Model.LLAMA_3_LATEST, "What is the capital of Australia?").batch();
         assertAll(
                 () -> assertEquals(chatResponse.model(), "llama3"),
                 () -> assertEquals("The capital of Australia is Canberra.",
@@ -80,7 +81,7 @@ class TestChatResponse {
         String json = Files.readString(Path.of("src/test/resources/responses/chat/stream.json"));
         mockResponse.setBody(json);
         server.enqueue(mockResponse);
-        Flux<ChatResponse> response = client.chat("llama3", "What is the capital of Australia?").stream();
+        Flux<ChatResponse> response = client.chat(Model.LLAMA_3_LATEST, "What is the capital of Australia?").stream();
         StepVerifier.create(response)
                 .assertNext(
                         r -> assertEquals("The", r.message().content()))

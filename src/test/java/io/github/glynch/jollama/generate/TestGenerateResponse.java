@@ -14,6 +14,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import io.github.glynch.jollama.Model;
 import io.github.glynch.jollama.client.JOllamaClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -37,7 +38,8 @@ class TestGenerateResponse {
         String json = Files.readString(Path.of("src/test/resources/responses/generate/batch.json"));
         mockResponse.setBody(json);
         server.enqueue(mockResponse);
-        GenerateResponse generateResponse = client.generate("llama3", "What is the capital of Australia?").batch();
+        GenerateResponse generateResponse = client.generate(Model.LLAMA_3_LATEST, "What is the capital of Australia?")
+                .batch();
         List<Integer> context = List.of(128006,
                 882,
                 128007,
