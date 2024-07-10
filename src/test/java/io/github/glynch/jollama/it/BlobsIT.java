@@ -1,4 +1,4 @@
-package io.github.glynch.jollama;
+package io.github.glynch.jollama.it;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

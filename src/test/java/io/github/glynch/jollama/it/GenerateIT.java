@@ -1,4 +1,4 @@
-package io.github.glynch.jollama;
+package io.github.glynch.jollama.it;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.glynch.jollama.Model;
 import io.github.glynch.jollama.generate.GenerateResponse;
 
 class GenerateIT extends AbstractJOllamaIT {

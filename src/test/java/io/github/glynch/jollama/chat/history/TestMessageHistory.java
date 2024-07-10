@@ -128,4 +128,19 @@ public class TestMessageHistory {
 
     }
 
+    @Test
+    void windowMessageHistory() {
+        MessageHistory history = new WindowMessageHistory(2);
+        history.add(Message.user("What is the capital of Australia?"));
+        history.add(Message.assistant("The capital of Australia is Canberra"));
+        history.system("You are geographical expert");
+
+        assertEquals(2, history.size());
+        history.add(Message.user("What is the capital of France?"));
+        assertAll(
+                () -> assertEquals(2, history.size()),
+                () -> assertEquals("What is the capital of France?", history.get(1).content()));
+
+    }
+
 }

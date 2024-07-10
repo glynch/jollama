@@ -1,10 +1,12 @@
-package io.github.glynch.jollama;
+package io.github.glynch.jollama.it;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.github.glynch.jollama.Model;
 
 class ListModelsIT extends AbstractJOllamaIT {
 

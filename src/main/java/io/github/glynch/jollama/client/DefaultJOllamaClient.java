@@ -310,7 +310,7 @@ final class DefaultJOllamaClient implements JOllamaClient {
         private Boolean raw;
         private String keepAlive;
 
-        public DefaultGenerateSpec(JOllamaApi api, String model, String prompt) {
+        private DefaultGenerateSpec(JOllamaApi api, String model, String prompt) {
             this.api = api;
             this.model = model;
             this.prompt = prompt;
@@ -422,7 +422,7 @@ final class DefaultJOllamaClient implements JOllamaClient {
         private Options options;
         private String keepAlive;
 
-        public DefaultEmbeddingsSpec(JOllamaApi api, String model, String prompt) {
+        private DefaultEmbeddingsSpec(JOllamaApi api, String model, String prompt) {
             this.api = api;
             this.model = model;
             this.prompt = prompt;
@@ -461,7 +461,7 @@ final class DefaultJOllamaClient implements JOllamaClient {
         private Options options;
         private String keepAlive;
 
-        public DefaultChatSpec(JOllamaApi api, String model, Message message) {
+        private DefaultChatSpec(JOllamaApi api, String model, Message message) {
             this.api = api;
             this.model = model;
             this.message = message;
@@ -618,7 +618,7 @@ final class DefaultJOllamaClient implements JOllamaClient {
         private final String name;
         private Boolean insecure;
 
-        public DefaultPullSpec(JOllamaApi api, String name) {
+        private DefaultPullSpec(JOllamaApi api, String name) {
             this.api = api;
             this.name = name;
         }
@@ -647,7 +647,7 @@ final class DefaultJOllamaClient implements JOllamaClient {
 
         private final JOllamaApi api;
 
-        public DefaultBlobsSpec(JOllamaApi api) {
+        private DefaultBlobsSpec(JOllamaApi api) {
             this.api = api;
         }
 

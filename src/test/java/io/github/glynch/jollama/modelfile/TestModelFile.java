@@ -26,7 +26,7 @@ public class TestModelFile {
 
     @Test
     void modelFileValidPath() {
-        ModelFile modelFile = ModelFile.parse(Path.of("src/test/resources/test.modelfile"));
+        ModelFile modelFile = ModelFile.parse(Path.of("src/test/resources/modelfiles/test.modelfile"));
         Message user = Message.user("This is a user message.", List.of());
         Message assistant = Message.assistant("This is the assistant answer.", List.of());
         assertAll(
@@ -41,7 +41,7 @@ public class TestModelFile {
     @Test
     void modelFileInValidPath() {
         assertThrows(UncheckedIOException.class,
-                () -> ModelFile.parse(Path.of("src/test/resources/invalid-path.modelfile")));
+                () -> ModelFile.parse(Path.of("src/test/resources/modelfiles/invalid-path.modelfile")));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class TestModelFile {
 
         assertThrows(
                 InvalidModelFileException.class,
-                () -> ModelFile.parse(Path.of("src/test/resources/invalid.modelfile")));
+                () -> ModelFile.parse(Path.of("src/test/resources/modelfiles/invalid.modelfile")));
     }
 
     @Test

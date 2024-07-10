@@ -1,8 +1,8 @@
 package io.github.glynch.jollama.chat;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -45,9 +45,11 @@ class TestChatResponse {
         ChatResponse chatResponse = client.chat("llama3", "What is the capital of Australia?").batch();
         assertAll(
                 () -> assertEquals(chatResponse.model(), "llama3"),
-                () -> assertEquals("The capital of Australia is Canberra.", chatResponse.message().content()),
+                () -> assertEquals("The capital of Australia is Canberra.",
+                        chatResponse.message().content()),
                 () -> assertEquals(Role.ASSISTANT, chatResponse.message().role()),
-                () -> assertEquals(Instant.parse("2024-07-08T22:42:47.753936Z"), chatResponse.createdAt()),
+                () -> assertEquals(Instant.parse("2024-07-08T22:42:47.753936Z"),
+                        chatResponse.createdAt()),
                 () -> assertEquals("stop", chatResponse.doneReason()),
                 () -> assertTrue(chatResponse.done()),
                 () -> assertEquals(2522590708L, chatResponse.totalDuration()),
@@ -74,10 +76,6 @@ class TestChatResponse {
 
     @Test
     void streamChatResponse() throws IOException {
-        // ChatResponse last = new ChatResponse("llama3",
-        // Instant.parse("2024-07-08T21:46:56.598562Z"),
-        // Message.assistant("", (String) null), "stop", true, 282146417L, 2215375L,
-        // 18L, 155181000L, 8L, 123235000L);
         MockResponse mockResponse = new MockResponse();
         String json = Files.readString(Path.of("src/test/resources/responses/chat/stream.json"));
         mockResponse.setBody(json);
