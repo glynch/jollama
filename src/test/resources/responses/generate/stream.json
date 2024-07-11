@@ -5,4 +5,4 @@
 {"model":"llama3","created_at":"2024-07-10T12:15:24.026788Z","response":" is","done":false}
 {"model":"llama3","created_at":"2024-07-10T12:15:24.044328Z","response":" Canberra","done":false}
 {"model":"llama3","created_at":"2024-07-10T12:15:24.06195Z","response":".","done":false}
-{"model":"llama3","created_at":"2024-07-10T12:15:24.079566Z","response":"","done":true,"done_reason":"stop","context":[128006,882,128007,198,198,3923,374,220,279,6864,315,8494,30,128009,128006,78191,128007,198,198,791,6864,315,8494,374,69890,13,128009],"total_duration":281984958,"load_duration":2609041,"prompt_eval_duration":153221000,"eval_count":8,"eval_duration":124506000}
+{"model":"llama3","created_at":"2024-07-10T12:15:24.079566Z","response":"","done":true,"done_reason":"stop","context":[128006,882,128007,198,198,3923,374,220,279,6864,315,8494,30,128009,128006,78191,128007,198,198,791,6864,315,8494,374,69890,13,128009],"total_duration":281984958,"load_duration":2609041,"prompt_eval_count": 19,"prompt_eval_duration":153221000,"eval_count":8,"eval_duration":124506000}

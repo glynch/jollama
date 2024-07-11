@@ -12,10 +12,6 @@ final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
 
     private static final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 
-    static {
-        logging.setLevel(Level.BASIC);
-    }
-
     private final OkHttpClient.Builder builder = new OkHttpClient.Builder();
     private final String host;
 
@@ -26,6 +22,14 @@ final class DefaultJOllamaClientBuilder implements JOllamaClient.Builder {
 
     @Override
     public Builder log() {
+        logging.setLevel(Level.BASIC);
+        builder.addInterceptor(logging);
+        return this;
+    }
+
+    @Override
+    public Builder verbose() {
+        logging.setLevel(Level.BODY);
         builder.addInterceptor(logging);
         return this;
     }

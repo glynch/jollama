@@ -44,7 +44,11 @@ class TestShowResponse {
                 () -> assertEquals("gguf", showResponse.details().format()),
                 () -> assertEquals("3.8B", showResponse.details().parameterSize()),
                 () -> assertEquals("Q4_K_M", showResponse.details().quantizationLevel()),
-                () -> assertEquals("phi3", showResponse.modelInfo().generalArchitecture()));
+                () -> assertEquals("phi3", showResponse.modelInfo().get("general.architecture")),
+                () -> assertEquals(3821079552L, showResponse.modelInfo().get("general.parameter_count")),
+                () -> assertEquals(2, showResponse.modelInfo().get("general.quantization_version")),
+                () -> assertEquals(15, showResponse.modelInfo().get("general.file_type")),
+                () -> assertEquals(32, showResponse.modelInfo().get("phi3.attention.head_count")));
     }
 
     @AfterAll

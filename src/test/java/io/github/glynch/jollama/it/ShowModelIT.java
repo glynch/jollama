@@ -24,8 +24,7 @@ class ShowModelIT extends AbstractJOllamaIT {
         ShowResponse showResponse = client.show(Model.PHI_3_MINI, true);
         assertAll(
                 () -> assertTrue(showResponse.license().contains("MIT License")),
-                () -> assertTrue(!showResponse.parameters().isEmpty()),
-                () -> assertTrue(showResponse.modelInfo().tokenizerGgmlTokens().size() > 0));
+                () -> assertTrue(!showResponse.parameters().isEmpty()));
 
     }
 

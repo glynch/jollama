@@ -108,6 +108,13 @@ public interface JOllamaClient {
         Builder log();
 
         /**
+         * Log verbose request and response information.
+         * 
+         * @return this builder
+         */
+        Builder verbose();
+
+        /**
          * follow redirects except https to http or http to https
          * 
          * @return this builder

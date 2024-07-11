@@ -1,0 +1,22 @@
+{
+    "models": [
+      {
+        "name": "phi3:latest",
+        "model": "phi3:latest",
+        "size": 3912400384,
+        "digest": "64c1188f2485448235b2d371639a127fc0e4dc2cd3c041152368883c42eb2bd1",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "phi3",
+          "families": [
+            "phi3"
+          ],
+          "parameter_size": "3.8B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2024-07-11T15:03:25.460044+07:00",
+        "size_vram": 3912400384
+      }
+    ]
+  }

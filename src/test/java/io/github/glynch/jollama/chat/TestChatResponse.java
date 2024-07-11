@@ -34,7 +34,7 @@ class TestChatResponse {
         server = new MockWebServer();
         server.start();
         String url = server.url("/api/chat").toString();
-        client = JOllamaClient.create(url);
+        client = JOllamaClient.builder(url).build();
     }
 
     @Test
