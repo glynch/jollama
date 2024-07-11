@@ -134,6 +134,26 @@ class TestChatResponse {
     }
 
     @Test
+    void chatResponseStreamhWithHistory() throws IOException {
+        MockResponse mockResponse = new MockResponse();
+        String json = Files.readString(Path.of("src/test/resources/responses/chat/stream.json"));
+        mockResponse.setBody(json);
+        server.enqueue(mockResponse);
+        MessageHistory history = MessageHistory.create();
+        client.chat(Model.LLAMA_3_LATEST, "What is the capital of Australia?")
+                .system("You are a geographical expert").history(history).stream().subscribe();
+
+        assertAll(
+                () -> assertEquals("You are a geographical expert",
+                        history.system().get().content()),
+                () -> assertEquals("What is the capital of Australia?",
+                        history.get(0).content()),
+                () -> assertEquals("The capital of Australia is Canberra.",
+                        history.get(1).content()));
+
+    }
+
+    @Test
     void slowResponse() {
         MockResponse mockResponse = new MockResponse();
         mockResponse.setSocketPolicy(SocketPolicy.NO_RESPONSE);
