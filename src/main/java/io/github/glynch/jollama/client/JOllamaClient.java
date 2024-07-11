@@ -11,7 +11,6 @@ import io.github.glynch.jollama.KeepAlive;
 import io.github.glynch.jollama.Model;
 import io.github.glynch.jollama.Options;
 import io.github.glynch.jollama.chat.ChatResponse;
-import io.github.glynch.jollama.chat.Message;
 import io.github.glynch.jollama.chat.history.MessageHistory;
 import io.github.glynch.jollama.create.CreateResponse;
 import io.github.glynch.jollama.embeddings.EmbeddingsResponse;
@@ -517,10 +516,6 @@ public interface JOllamaClient {
         ChatSpec system(String system);
 
         ChatSpec history(MessageHistory history);
-
-        ChatSpec history(List<Message> messages);
-
-        ChatSpec history(Message... messages);
 
         ChatSpec format(Format format);
 

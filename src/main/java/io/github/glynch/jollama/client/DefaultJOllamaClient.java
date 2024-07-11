@@ -475,20 +475,6 @@ final class DefaultJOllamaClient implements JOllamaClient {
         }
 
         @Override
-        public ChatSpec history(Message... messages) {
-            Objects.requireNonNull(messages, "messages must not be null");
-            history.add(List.of(messages));
-            return this;
-        }
-
-        @Override
-        public ChatSpec history(List<Message> messages) {
-            Objects.requireNonNull(messages, "messages must not be null");
-            history.add(messages);
-            return this;
-        }
-
-        @Override
         public ChatSpec history(MessageHistory history) {
             Objects.requireNonNull(history, "history must not be null");
             this.history = history;
