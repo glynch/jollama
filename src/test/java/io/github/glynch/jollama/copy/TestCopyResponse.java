@@ -36,6 +36,18 @@ class TestCopyResponse {
         assertEquals(200, statusCode);
     }
 
+    @Test
+    void copyResponse404() {
+        MockResponse mockResponse = new MockResponse();
+        mockResponse.setBody("{\"error\":\"model \"phi31:latest\" not found\"}");
+        mockResponse.setResponseCode(404);
+        server.enqueue(mockResponse);
+
+        int statusCode = client.copy("phi31:latest", "mario-test");
+        assertEquals(404, statusCode);
+
+    }
+
     @AfterAll
     static void tearDown() throws IOException {
         server.shutdown();

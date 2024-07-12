@@ -19,6 +19,7 @@ import io.github.glynch.jollama.chat.history.MessageHistory;
 import io.github.glynch.jollama.client.JOllamaClient;
 import io.github.glynch.jollama.client.JOllamaClientRequestException;
 import io.github.glynch.jollama.client.JOllamaClientResponseException;
+import io.github.glynch.jollama.support.Image;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.SocketPolicy;
@@ -134,7 +135,7 @@ class TestChatResponse {
     }
 
     @Test
-    void chatResponseStreamhWithHistory() throws IOException {
+    void chatResponseStreamWithHistory() throws IOException {
         MockResponse mockResponse = new MockResponse();
         String json = Files.readString(Path.of("src/test/resources/responses/chat/stream.json"));
         mockResponse.setBody(json);
@@ -150,6 +151,35 @@ class TestChatResponse {
                         history.get(0).content()),
                 () -> assertEquals("The capital of Australia is Canberra.",
                         history.get(1).content()));
+
+    }
+
+    @Test
+    void chatWithImages() throws IOException {
+        MockResponse mockResponse = new MockResponse();
+        String json = Files.readString(Path.of("src/test/resources/responses/chat/images.json"));
+        mockResponse.setBody(json);
+        server.enqueue(mockResponse);
+        ChatResponse chatResponse = client
+                .chat("llava", "Describe this image?",
+                        Image.encode(Path.of("src/test/resources/pig.png")))
+                .batch();
+
+        assertAll(
+                () -> assertEquals(chatResponse.model(), "llava"),
+                () -> assertEquals("The image shows a cartoon of an animated character.",
+                        chatResponse.message().content()),
+                () -> assertEquals(Role.ASSISTANT, chatResponse.message().role()),
+                () -> assertEquals(Instant.parse("2024-07-12T08:29:25.801002Z"),
+                        chatResponse.createdAt()),
+                () -> assertEquals("stop", chatResponse.doneReason()),
+                () -> assertTrue(chatResponse.done()),
+                () -> assertEquals(3704443042L, chatResponse.totalDuration()),
+                () -> assertEquals(6142834L, chatResponse.loadDuration()),
+                () -> assertEquals(1L, chatResponse.promptEvalCount()),
+                () -> assertEquals(1582787000L, chatResponse.promptEvalDuration()),
+                () -> assertEquals(118L, chatResponse.evalCount()),
+                () -> assertEquals(2107969000L, chatResponse.evalDuration()));
 
     }
 

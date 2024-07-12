@@ -1,1 +1,16 @@
-{"model":"llama3","created_at":"2024-07-08T22:42:47.753936Z","message":{"role":"assistant","content":"The capital of Australia is Canberra."},"done_reason":"stop","done":true,"total_duration":2522590708,"load_duration":2293286875,"prompt_eval_count":18,"prompt_eval_duration":97960000,"eval_count":8,"eval_duration":129317000}
+{
+  "model": "llama3",
+  "created_at": "2024-07-08T22:42:47.753936Z",
+  "message": {
+    "role": "assistant",
+    "content": "The capital of Australia is Canberra."
+  },
+  "done_reason": "stop",
+  "done": true,
+  "total_duration": 2522590708,
+  "load_duration": 2293286875,
+  "prompt_eval_count": 18,
+  "prompt_eval_duration": 97960000,
+  "eval_count": 8,
+  "eval_duration": 129317000
+}

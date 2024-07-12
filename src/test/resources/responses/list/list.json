@@ -1,0 +1,173 @@
+{
+  "models": [
+    {
+      "name": "mario-test:latest",
+      "model": "mario-test:latest",
+      "modified_at": "2024-07-11T18:08:55.778279488+07:00",
+      "size": 2393232963,
+      "digest": "64c1188f2485448235b2d371639a127fc0e4dc2cd3c041152368883c42eb2bd1",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "phi3",
+        "families": [
+          "phi3"
+        ],
+        "parameter_size": "3.8B",
+        "quantization_level": "Q4_K_M"
+      }
+    },
+    {
+      "name": "mario-test2:latest",
+      "model": "mario-test2:latest",
+      "modified_at": "2024-06-23T00:40:55.576584194+07:00",
+      "size": 2719243098,
+      "digest": "2adaf9ceabd36465f7751152653a6ea646d45362d78914767d971c8b267703df",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "llama",
+        "families": [
+          "llama"
+        ],
+        "parameter_size": "7.2B",
+        "quantization_level": "Q2_K"
+      }
+    },
+    {
+      "name": "orca-mini:latest",
+      "model": "orca-mini:latest",
+      "modified_at": "2024-06-21T02:06:29.703083868+07:00",
+      "size": 1979947443,
+      "digest": "2dbd9f439647093cf773c325b0b3081a11f1b1426d61dee8b946f8f6555a1755",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "llama",
+        "families": null,
+        "parameter_size": "3B",
+        "quantization_level": "Q4_0"
+      }
+    },
+    {
+      "name": "phi3:latest",
+      "model": "phi3:latest",
+      "modified_at": "2024-06-08T10:42:15.657579306+07:00",
+      "size": 2393232963,
+      "digest": "64c1188f2485448235b2d371639a127fc0e4dc2cd3c041152368883c42eb2bd1",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "phi3",
+        "families": [
+          "phi3"
+        ],
+        "parameter_size": "3.8B",
+        "quantization_level": "Q4_K_M"
+      }
+    },
+    {
+      "name": "nomic-embed-text:latest",
+      "model": "nomic-embed-text:latest",
+      "modified_at": "2024-06-06T00:05:13.694332263+07:00",
+      "size": 274302450,
+      "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "nomic-bert",
+        "families": [
+          "nomic-bert"
+        ],
+        "parameter_size": "137M",
+        "quantization_level": "F16"
+      }
+    },
+    {
+      "name": "llava:latest",
+      "model": "llava:latest",
+      "modified_at": "2024-05-04T13:04:56.687314811+07:00",
+      "size": 4733363377,
+      "digest": "8dd30f6b0cb19f555f2c7a7ebda861449ea2cc76bf1f44e262931f45fc81d081",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "llama",
+        "families": [
+          "llama",
+          "clip"
+        ],
+        "parameter_size": "7B",
+        "quantization_level": "Q4_0"
+      }
+    },
+    {
+      "name": "llama3:latest",
+      "model": "llama3:latest",
+      "modified_at": "2024-04-21T05:34:17.070524726+07:00",
+      "size": 4661224596,
+      "digest": "71a106a910165bc11d43aa128d99e32576a91cbd3e272016abd049f7a09b3235",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "llama",
+        "families": [
+          "llama"
+        ],
+        "parameter_size": "8B",
+        "quantization_level": "Q4_0"
+      }
+    },
+    {
+      "name": "llama2:text",
+      "model": "llama2:text",
+      "modified_at": "2024-04-17T06:30:00.987114908+07:00",
+      "size": 3826792515,
+      "digest": "53b394a404fd4d4e14083f9b2d82f03fc787e9330fcc3885261eb3d5f14a3ef1",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "llama",
+        "families": [
+          "llama"
+        ],
+        "parameter_size": "7B",
+        "quantization_level": "Q4_0"
+      }
+    },
+    {
+      "name": "mario-llama2:latest",
+      "model": "mario-llama2:latest",
+      "modified_at": "2024-04-11T10:26:47.032857181+07:00",
+      "size": 3826793843,
+      "digest": "ce546cfc78afeada513cb5a9ad74677c41296f2d1e02917e2d3bd02d8cb77a63",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "llama",
+        "families": [
+          "llama"
+        ],
+        "parameter_size": "7B",
+        "quantization_level": "Q4_0"
+      }
+    },
+    {
+      "name": "llama2:latest",
+      "model": "llama2:latest",
+      "modified_at": "2024-04-10T22:30:34.128173733+07:00",
+      "size": 3826793677,
+      "digest": "78e26419b4469263f75331927a00a0284ef6544c1975b826b15abdaef17bb962",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "llama",
+        "families": [
+          "llama"
+        ],
+        "parameter_size": "7B",
+        "quantization_level": "Q4_0"
+      }
+    }
+  ]
+}
