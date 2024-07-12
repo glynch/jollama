@@ -1,0 +1,8 @@
+{"status":"using existing layer sha256:00e1317cbf74d901080d7100f57580ba8dd8de57203072dc6f668324ba545f29"}
+{"status":"using existing layer sha256:4fa551d4f938f68b8c1e6afa9d28befb70e3f33f75d0753248d530364aeea40f"}
+{"status":"using existing layer sha256:8ab4849b038cf0abc5b1c9b8ee1443dca6b93a045c2272180d985126eb40bf6f"}
+{"status":"creating new layer sha256:1741cf59ce26ff01ac614d31efc700e21e44dd96aed60a7c91ab3f47e440ef94"}
+{"status":"using existing layer sha256:c0aac7c7f00d8a81a8ef397cd78664957fbe0e09f87b08bc7afa8d627a8da87f"}
+{"status":"creating new layer sha256:6ae2b1aa7aa884a6f332ac8fc6731eddf939f5acb6dde3cf9b2ae75b9749f68a"}
+{"status":"writing manifest"}
+{"status":"success"}
