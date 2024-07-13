@@ -20,9 +20,4 @@ class TestDigestUtils {
 
     }
 
-    // @Test
-    // void decode() {
-    // assertEquals(value, SHA256);
-    // }
-
 }

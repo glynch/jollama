@@ -180,14 +180,16 @@ public record KeepAlive(long duration, Units units) {
     public static KeepAlive of(String value) {
         Objects.requireNonNull(value, "value cannot be null");
         Matcher neverForeverMatcher = NEVER_FOREVER_PATTERN.matcher(value);
+
         if (neverForeverMatcher.matches()) {
             if (value.equals("0")) {
                 return KeepAlive.NEVER;
+            } else if (value.equals("-1")) {
+                return KeepAlive.FOREVER;
+            } else {
+                // Do nothing should not get here
             }
 
-            if (value.equals("-1")) {
-                return KeepAlive.FOREVER;
-            }
         }
         Matcher durationMatcher = DURATION_PATTERN.matcher(value);
         if (durationMatcher.matches()) {

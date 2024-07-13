@@ -138,9 +138,15 @@ class TestKeepAlive {
     }
 
     @Test
-    void keepAliveToString() {
+    void keepAliveToStringWithUnits() {
         KeepAlive keepAlive = KeepAlive.DEFAULT;
         assertEquals("5m", keepAlive.toString());
+    }
+
+    @Test
+    void keepAliveToStringWithNoUnits() {
+        KeepAlive keepAlive = KeepAlive.FOREVER;
+        assertEquals("-1", keepAlive.toString());
     }
 
 }
