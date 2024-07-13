@@ -14,6 +14,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import io.github.glynch.jollama.KeepAlive;
 import io.github.glynch.jollama.Model;
 import io.github.glynch.jollama.client.JOllamaClient;
 import io.github.glynch.jollama.process.ProcessModel;
@@ -38,6 +39,30 @@ class TestLoadResponse {
     @Test
     void loadResponse() {
         Optional<ProcessModel> response = client.load(Model.PHI_3_LATEST);
+        if (response.isPresent()) {
+            ProcessModel ps = response.get();
+            assertAll(
+                    () -> assertEquals(Model.PHI_3_LATEST.toString(), ps.model()),
+                    () -> assertEquals(3912400384L, ps.size()),
+                    () -> assertEquals("64c1188f2485448235b2d371639a127fc0e4dc2cd3c041152368883c42eb2bd1",
+                            ps.digest()),
+                    () -> assertEquals("",
+                            ps.details().parentModel()),
+                    () -> assertEquals("gguf", ps.details().format()),
+                    () -> assertEquals("phi3", ps.details().family()),
+                    () -> assertEquals(List.of("phi3"), ps.details().families()),
+                    () -> assertEquals("3.8B", ps.details().parameterSize()),
+                    () -> assertEquals("Q4_K_M", ps.details().quantizationLevel()),
+                    () -> assertEquals(3912400384L, ps.sizeVram()));
+        } else {
+            fail("Failed in loadResponse");
+        }
+
+    }
+
+    @Test
+    void loadResponseWithKeepAlive() {
+        Optional<ProcessModel> response = client.load(Model.PHI_3_LATEST, KeepAlive.DEFAULT);
         if (response.isPresent()) {
             ProcessModel ps = response.get();
             assertAll(

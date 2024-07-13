@@ -47,6 +47,14 @@ public class TestJOllamaClientBuilder {
     }
 
     @Test
+    void builderReadTimeout() {
+        JOllamaClient client = JOllamaClient.builder().readTimeout(Duration.ofSeconds(5))
+                .build();
+
+        assertEquals(5000, client.getReadTimeout());
+    }
+
+    @Test
     void builderFollowRedirects() {
         JOllamaClient client = JOllamaClient.builder().followRedirects()
                 .build();

@@ -551,6 +551,8 @@ public interface JOllamaClient {
 
         EmbeddingsSpec keepAlive(String keepAlive);
 
+        EmbeddingsSpec keepAlive(KeepAlive keepAlive);
+
         EmbeddingsResponse get() throws JOllamaClientException;
     }
 

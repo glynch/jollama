@@ -420,7 +420,7 @@ final class DefaultJOllamaClient implements JOllamaClient {
         private String model;
         private String prompt;
         private Options options;
-        private String keepAlive;
+        private KeepAlive keepAlive;
 
         private DefaultEmbeddingsSpec(JOllamaApi api, String model, String prompt) {
             this.api = api;
@@ -438,13 +438,20 @@ final class DefaultJOllamaClient implements JOllamaClient {
         @Override
         public EmbeddingsSpec keepAlive(String keepAlive) {
             Objects.requireNonNull(keepAlive, "keepAlive must not be null");
+            this.keepAlive = KeepAlive.of(keepAlive);
+            return this;
+        }
+
+        @Override
+        public EmbeddingsSpec keepAlive(KeepAlive keepAlive) {
+            Objects.requireNonNull(keepAlive, "keepAlive must not be null");
             this.keepAlive = keepAlive;
             return this;
         }
 
         @Override
         public EmbeddingsResponse get() throws JOllamaClientException {
-            EmbeddingsRequest request = new EmbeddingsRequest(model, prompt, options, keepAlive);
+            EmbeddingsRequest request = new EmbeddingsRequest(model, prompt, options, keepAlive.toString());
             return api.post(EMBEDDINGS_PATH, request, EmbeddingsResponse.class);
         }
 

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -161,8 +162,37 @@ class TestChatResponse {
         mockResponse.setBody(json);
         server.enqueue(mockResponse);
         ChatResponse chatResponse = client
-                .chat("llava", "Describe this image?",
+                .chat(Model.LLAVA_LATEST, "Describe this image?",
                         Image.encode(Path.of("src/test/resources/pig.png")))
+                .batch();
+
+        assertAll(
+                () -> assertEquals(chatResponse.model(), "llava"),
+                () -> assertEquals("The image shows a cartoon of an animated character.",
+                        chatResponse.message().content()),
+                () -> assertEquals(Role.ASSISTANT, chatResponse.message().role()),
+                () -> assertEquals(Instant.parse("2024-07-12T08:29:25.801002Z"),
+                        chatResponse.createdAt()),
+                () -> assertEquals("stop", chatResponse.doneReason()),
+                () -> assertTrue(chatResponse.done()),
+                () -> assertEquals(3704443042L, chatResponse.totalDuration()),
+                () -> assertEquals(6142834L, chatResponse.loadDuration()),
+                () -> assertEquals(1L, chatResponse.promptEvalCount()),
+                () -> assertEquals(1582787000L, chatResponse.promptEvalDuration()),
+                () -> assertEquals(118L, chatResponse.evalCount()),
+                () -> assertEquals(2107969000L, chatResponse.evalDuration()));
+
+    }
+
+    @Test
+    void chatWithListImages() throws IOException {
+        MockResponse mockResponse = new MockResponse();
+        String json = Files.readString(Path.of("src/test/resources/responses/chat/images.json"));
+        mockResponse.setBody(json);
+        server.enqueue(mockResponse);
+        ChatResponse chatResponse = client
+                .chat(Model.LLAVA_LATEST, "Describe this image?",
+                        List.of(Image.encode(Path.of("src/test/resources/pig.png"))))
                 .batch();
 
         assertAll(

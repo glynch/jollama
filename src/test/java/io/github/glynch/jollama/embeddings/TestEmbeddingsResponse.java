@@ -12,7 +12,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import io.github.glynch.jollama.KeepAlive;
 import io.github.glynch.jollama.Model;
+import io.github.glynch.jollama.Options;
 import io.github.glynch.jollama.client.JOllamaClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -39,9 +41,10 @@ class TestEmbeddingsResponse {
         String json = Files.readString(Path.of("src/test/resources/responses/embeddings/embeddings.json"));
         mockResponse.setBody(json);
         server.enqueue(mockResponse);
-
+        Options options = Options.builder().temperature(0f).seed(42).build();
         EmbeddingsResponse embeddingsResponse = client
-                .embeddings(Model.NOMIC_EMBED_TEXT_LATEST, "What is the capital of Australia").get();
+                .embeddings(Model.NOMIC_EMBED_TEXT_LATEST, "What is the capital of Australia").options(options)
+                .keepAlive(KeepAlive.DEFAULT).get();
         assertAll(
                 () -> assertEquals(768, embeddingsResponse.embedding().size()),
                 () -> assertEquals(embeddings, embeddings.subList(0, 9)));
