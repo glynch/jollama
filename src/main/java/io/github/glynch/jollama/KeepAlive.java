@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 public record KeepAlive(long duration, Units units) {
 
     private static final Pattern PATTERN = Pattern.compile("^((0|-1)|(([1-9]\\d*)([smhd])?))$");
+    private static final Pattern NEVER_FOREVER_PATTERN = Pattern.compile("^(0|-1)$");
+    private static final Pattern DURATION_PATTERN = Pattern.compile("^([1-9]\\d*)([smhd])?$");
 
     /**
      * Default keep alive of 5 minutes.
@@ -177,32 +179,26 @@ public record KeepAlive(long duration, Units units) {
      */
     public static KeepAlive of(String value) {
         Objects.requireNonNull(value, "value cannot be null");
-        Matcher matcher = PATTERN.matcher(value);
-        if (matcher.matches()) {
-            // [1-9]\d*(s|m|h|d) i.e 500s, 1m, 1h, 1d
-            if (matcher.group(5) != null) {
-                return new KeepAlive(Long.parseLong(matcher.group(4)), Units.of(matcher.group(5)));
-                // [1-9]\d* i.e 500
-            } else if (matcher.group(4) != null) {
-                return seconds(Long.parseLong(matcher.group(4)));
-                // 0 or -1
-            } else if (matcher.group(2) != null) {
-                if (matcher.group(2).equals("0")) {
-                    return NEVER;
-                } else if (matcher.group(2).equals("-1")) {
-                    return FOREVER;
-                } else {
-                    throw new IllegalArgumentException("Invalid keep alive value: " + value);
-                }
-
-            } else {
-                throw new IllegalArgumentException("Invalid keep alive value: " + value);
+        Matcher neverForeverMatcher = NEVER_FOREVER_PATTERN.matcher(value);
+        if (neverForeverMatcher.matches()) {
+            if (value.equals("0")) {
+                return KeepAlive.NEVER;
             }
 
+            if (value.equals("-1")) {
+                return KeepAlive.FOREVER;
+            }
+        }
+        Matcher durationMatcher = DURATION_PATTERN.matcher(value);
+        if (durationMatcher.matches()) {
+            if (durationMatcher.group(2) != null) {
+                return new KeepAlive(Long.parseLong(durationMatcher.group(1)), Units.of(durationMatcher.group(2)));
+            } else {
+                return seconds(Long.parseLong(durationMatcher.group(1)));
+            }
         } else {
             throw new IllegalArgumentException("Invalid keep alive value: " + value);
         }
-
     }
 
     @Override
@@ -210,6 +206,8 @@ public record KeepAlive(long duration, Units units) {
         StringBuilder sb = new StringBuilder(String.valueOf(duration));
         if (units != null) {
             sb.append(units);
+        } else {
+            // Do nothing
         }
         return sb.toString();
     }

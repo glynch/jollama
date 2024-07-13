@@ -47,6 +47,8 @@ public class StringPromptTemplate implements PromptTemplate {
         }
         if (lastIndex < template.length()) {
             output.append(template, lastIndex, template.length());
+        } else {
+            // Do nothing
         }
         return output.toString();
     }
@@ -71,6 +73,8 @@ public class StringPromptTemplate implements PromptTemplate {
         }
         if (lastIndex < template.length()) {
             output.append(template, lastIndex, template.length());
+        } else {
+            // Do nothing
         }
         return output.toString();
     }
