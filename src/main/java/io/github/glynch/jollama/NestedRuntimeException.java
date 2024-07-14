@@ -1,6 +1,6 @@
 package io.github.glynch.jollama;
 
-public class NestedRuntimeException extends RuntimeException {
+public abstract class NestedRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public NestedRuntimeException(String message) {

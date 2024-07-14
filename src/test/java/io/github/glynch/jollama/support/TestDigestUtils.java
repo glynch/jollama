@@ -3,6 +3,8 @@ package io.github.glynch.jollama.support;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
 
 class TestDigestUtils {
@@ -11,13 +13,18 @@ class TestDigestUtils {
     static String value = "What is the capital of Australia?";
 
     @Test
-    void encode() {
+    void encodeString() {
 
         assertAll(
                 () -> assertEquals(SHA256,
                         DigestUtils.sha256hex(value)),
                 () -> assertEquals(SHA256, DigestUtils.sha256hex(value.getBytes())));
 
+    }
+
+    @Test
+    void encodePath() {
+        assertEquals(SHA256, DigestUtils.sha256hex(Path.of("src/test/resources/digest.txt")));
     }
 
 }
