@@ -9,8 +9,10 @@ import java.util.regex.Pattern;
 
 public class StringPromptTemplate implements PromptTemplate {
 
-    private static final Pattern VARIABLES_PATTERN = Pattern.compile("\\{(.*?)\\}", Pattern.DOTALL | Pattern.MULTILINE);
-    private static final Pattern REPLACE_PATTERN = Pattern.compile("(\\{(.*?)\\})", Pattern.DOTALL | Pattern.MULTILINE);
+    private static final Pattern VARIABLES_PATTERN = Pattern.compile("\\{([^}\"]*?)\\}",
+            Pattern.DOTALL | Pattern.MULTILINE);
+    private static final Pattern REPLACE_PATTERN = Pattern.compile("(\\{([^}\"]*?)\\})",
+            Pattern.DOTALL | Pattern.MULTILINE);
     private final String template;
     private final List<String> variables = new ArrayList<>();
 
