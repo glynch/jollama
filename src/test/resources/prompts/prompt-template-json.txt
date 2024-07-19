@@ -1,0 +1,1 @@
+som0e text {"functionName": "function name", "parameters": [{"parameterName": "name of parameter", "parameterValue": "value of parameter"}]} {var1} some text
