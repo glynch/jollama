@@ -96,4 +96,11 @@ public class TestPromptTemplate {
                 () -> PromptTemplate.template(Path.of("src/test/resources/invalid-prompt-template.txt")));
     }
 
+    @Test
+    void promtTemplateJSON() {
+        PromptTemplate template = PromptTemplate
+                .template(Path.of("src/test/resources/prompts/prompt-template-json.txt"));
+        assertEquals(1, template.variables().size());
+    }
+
 }
